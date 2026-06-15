@@ -1,0 +1,1 @@
+"""DETAS servis paketi."""

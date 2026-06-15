@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>DETAS Kontrol Paneli</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+    <link rel="stylesheet" href="/static/css/style.css?v=sekme1">
+</head>
+
+<body>
+<div class="app-shell">
+
+    <!-- SOL SIDEBAR -->
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">D</div>
+            <div>
+                <h2>DETAS</h2>
+                <span>Afet Analiz Sistemi</span>
+            </div>
+        </div>
+
+        <nav class="side-menu">
+            <button class="side-link active" data-target="overview">▣ Genel Bakış</button>
+            <button class="side-link" data-target="cameraSection">▣ Canlı Kamera</button>
+            <button class="side-link" data-target="thermalSection">♨ Termal</button>
+            <button class="side-link" data-target="mapSection">▧ Harita</button>
+            <button class="side-link" data-target="cubeSection">✈ Uçuş Kontrol</button>
+            <button class="side-link" data-target="logsSection">☰ Loglar</button>
+        </nav>
+
+        <div class="operator-box">
+            <span class="status-dot"></span>
+            <strong>Operatör</strong>
+            <small>DETAS-001</small>
+            <small>v1.2.3</small>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+            <div>
+                <h1>DETAS Kontrol Paneli</h1>
+                <p>Deprem erken tespit, İHA görev yönetimi, canlı görüntü analizi ve termal keşif sistemi</p>
+            </div>
+
+            <div class="top-right">
+                <div class="top-item">
+                    <span>📅</span>
+                    <div>
+                        <small>Tarih / Saat</small>
+                        <strong id="dateBox">-</strong>
+                    </div>
+                </div>
+
+                <div class="top-item">
+                    <span>🛡</span>
+                    <div>
+                        <small>Sistem Durumu</small>
+                        <strong id="systemStatus">Aktif</strong>
+                    </div>
+                </div>
+
+                <div class="top-item">
+                    <span>📡</span>
+                    <div>
+                        <small>Bağlantı Durumu</small>
+                        <strong id="connectionStatus">Bağlı</strong>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- ÜST HIZLI KARTLAR -->
+        <section class="stats-row">
+            <div id="eqCard" class="stat-card">
+                <span>Deprem Durumu</span>
+                <h3 id="eqStatusText">NORMAL</h3>
+                <small id="eqStatusSmall">Sarsıntı yok</small>
+            </div>
+
+            <div class="stat-card">
+                <span>Hareket Değeri</span>
+                <h3 id="movementValue">0.00</h3>
+                <small>Anlık sarsıntı</small>
+            </div>
+
+            <div class="stat-card">
+                <span>Eşik Değeri</span>
+                <h3 id="thresholdValue">0.00</h3>
+                <small>Deprem tetikleme eşiği</small>
+            </div>
+
+            <div class="stat-card">
+                <span>Tespit Edilen Nesne</span>
+                <h3 id="detectedCount">0</h3>
+                <small>AI HAT YOLO</small>
+            </div>
+
+            <div class="stat-card">
+                <span>Termal Maksimum</span>
+                <h3 id="thermalMaxCard">0.0°C</h3>
+                <small id="hotspotText">Sıcak nokta yok</small>
+            </div>
+        </section>
+
+        <!-- SAYFALAR -->
+        <section class="pages">
+
+            <!-- GENEL BAKIŞ -->
+            <div id="overview" class="page active">
+                <div class="page-title">
+                    <h2>Genel Bakış</h2>
+                    <p>Sistemin en kritik görev, deprem ve bağlantı durumları</p>
+                </div>
+
+                <div class="overview-grid">
+                    <div class="panel mission-panel mission-card">
+    <div class="mission-header">
+        <div>
+            <h3>Görev Durumu</h3>
+            
+        </div>
+        <span id="missionBadge" class="mission-badge waiting">BEKLEMEDE</span>
+    </div>
+
+    <!-- Eski dashboard.js uyumluluğu için gizli tutuluyor -->
+    
+
+    <div class="mission-current-status" id="missionCurrentStatus">
+        <div class="mission-status-icon">●</div>
+        <div class="mission-status-text">
+            <span>Anlık Durum</span>
+            <strong id="missionStatusText"></strong>
+        </div>
+    </div>
+
+    <div class="mission-steps">
+        <div class="mission-step active" id="step-waiting">
+            <i></i>
+            <span>BEKLEMEDE</span>
+        </div>
+
+        <div class="mission-step" id="step-earthquake">
+            <i></i>
+            <span>DEPREM ALGILANDI</span>
+        </div>
+
+        <div class="mission-step" id="step-arm">
+            <i></i>
+            <span>ARM KOMUTU</span>
+        </div>
+
+        <div class="mission-step" id="step-active">
+            <i></i>
+            <span>GÖREVDE</span>
+        </div>
+
+        <div class="mission-step" id="step-motor-ready">
+            <i></i>
+            <span>MOTOR HAZIR</span>
+        </div>
+
+        <div class="mission-step" id="step-stopped">
+            <i></i>
+            <span>DURDURULDU</span>
+        </div>
+    </div>
+
+    <div class="mission-actions mission-actions-pro">
+        <button id="missionArmBtn" class="mission-btn green" onclick="missionArm()">Motorları Çalıştır / ARM</button>
+        <button id="missionStopBtn" class="mission-btn red" onclick="missionStop()">Motorları Durdur / DISARM</button>
+        <button id="missionResetBtn" class="mission-btn blue" onclick="missionReset()">Görevi Sıfırla</button>
+        <button id="missionMotorTestBtn" class="mission-btn dark" onclick="missionMotorTest()">Motor Test</button>
+    </div>
+
+    <div class="mission-warning">
+        ⚠ Pervane yokken motor test kullanın
+    </div>
+</div>
+
+                    <div class="panel quake-panel">
+                        <div class="panel-head">
+                            <div>
+                                <h3>Sarsıntı Grafiği</h3>
+                                <p>İstasyon telemetri verisi</p>
+                            </div>
+                            <span class="badge live">CANLI</span>
+                        </div>
+
+                        <div class="chart-wrap">
+                            <canvas id="movementChart"></canvas>
+                        </div>
+
+                        <div class="mini-info-row">
+                            <div>
+                                <span>Maks. Hareket</span>
+                                <strong id="maxMovementValue">0.00</strong>
+                            </div>
+                            <div>
+                                <span>Paket</span>
+                                <strong id="telemetryPacketCount">0</strong>
+                            </div>
+                            <div>
+                                <span>Mute</span>
+                                <strong id="muteValue">0</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel quick-panel operation-summary-card">
+    <h3>Bugünkü Operasyon Özeti</h3>
+
+    <div class="operation-summary-list">
+        <div class="operation-summary-row">
+            <span class="operation-summary-label">İstasyon verisi</span>
+            <span class="operation-summary-value ok" id="telemetryStatus">Bağlı</span>
+        </div>
+
+        <div class="operation-summary-row">
+            <span class="operation-summary-label">Cube bağlantısı</span>
+            <span class="operation-summary-value info" id="cubeConnectedText">-</span>
+        </div>
+
+        <div class="operation-summary-row">
+            <span class="operation-summary-label">ARM durumu</span>
+            <span class="operation-summary-value info" id="cubeArmStatusMirror">DISARMED</span>
+        </div>
+
+        <div class="operation-summary-row">
+            <span class="operation-summary-label">Termal durum</span>
+            <span class="operation-summary-value warn" id="thermalHotspot">YOK</span>
+        </div>
+    </div>
+</div>
+                </div>
+            </div>
+
+            <!-- CANLI KAMERA -->
+            <div id="cameraSection" class="page">
+                <div class="page-title">
+                    <h2>Canlı Kamera + YOLO</h2>
+                    <p>Kamera görüntüsü, YOLO tespitleri, pan-tilt ve tarama modları</p>
+                </div>
+
+                <div class="camera-page-grid">
+                    <div class="panel camera-panel">
+                        <div class="panel-head">
+                            <div>
+                                <h3>Canlı Kamera</h3>
+                                <p>AI HAT hızlandırmalı görüntü akışı</p>
+                            </div>
+
+                            <div class="camera-buttons">
+                                <span>Kamera:</span>
+                                <button id="cam0Btn" class="camera-btn active" onclick="setCamera(0)">CAM0</button>
+                                <button id="cam1Btn" class="camera-btn" onclick="setCamera(1)">CAM1</button>
+                                <button id="zoomOutBtn" class="camera-btn" onclick="cameraZoomOut()">Zoom -</button>
+                                <button id="zoomResetBtn" class="camera-btn" onclick="cameraZoomReset()">Zoom 1.00x</button>
+                                <button id="zoomInBtn" class="camera-btn" onclick="cameraZoomIn()">Zoom +</button>
+                            </div>
+                        </div>
+
+                        <div class="camera-viewport">
+                            <img id="cameraFeed" src="/video" alt="Canlı Kamera">
+                        </div>
+                    </div>
+
+                    <div id="aiSection" class="panel camera-ai-panel">
+                        <div class="panel-head">
+                            <div>
+                                <h3>AI Analiz Paneli</h3>
+                                <p>AI HAT, YOLO postprocess ve canlı tespit özeti</p>
+                            </div>
+                            <span class="badge live">AI AKTİF</span>
+                        </div>
+
+                        <div class="camera-ai-content">
+                            <div class="ai-circle small-ai-circle">
+                                <strong>AI</strong>
+                                <span>AKTİF</span>
+                            </div>
+
+                            <div class="camera-ai-info">
+                                <div>
+                                    <span>AI HAT aktif mi?</span>
+                                    <b>Evet</b>
+                                </div>
+                                <div>
+                                    <span>Kamera akışı canlı mı?</span>
+                                    <b>Evet</b>
+                                </div>
+                                <div>
+                                    <span>YOLO postprocess aktif mi?</span>
+                                    <b>Evet</b>
+                                </div>
+                                <div>
+                                    <span>Tespit edilen nesne sayısı</span>
+                                    <b id="detectedCountDonut">0</b>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="camera-side">
+                        <div class="panel">
+                            <h3>Son Tespitler</h3>
+                            <div id="detectionsList" class="detections-list">
+                                <div>Henüz nesne algılanmadı</div>
+                            </div>
+                        </div>
+
+                        <div class="panel servo-panel">
+                            <h3>Pan-Tilt Kamera Kontrol</h3>
+
+                            <div class="servo-box">
+                                <div class="servo-title">
+                                    <strong>PAN / Sağ-Sol</strong>
+                                    <span id="panValue">1300</span>
+                                </div>
+                                <input id="panSlider" type="range" min="450" max="2500" value="1300" step="25"
+                                       oninput="previewServoValue('pan')" onchange="sendServoValue('pan')">
+                                <div class="servo-buttons">
+                                    <button onclick="servoLeft()">Sol</button>
+                                    <button onclick="servoCenter()">Merkez</button>
+                                    <button onclick="servoRight()">Sağ</button>
+                                </div>
+                            </div>
+
+                            <div class="servo-box">
+                                <div class="servo-title">
+                                    <strong>TILT / Yukarı-Aşağı</strong>
+                                    <span id="tiltValue">1500</span>
+                                </div>
+                                <input id="tiltSlider" type="range" min="650" max="2000" value="1500" step="25"
+                                       oninput="previewServoValue('tilt')" onchange="sendServoValue('tilt')">
+                                <div class="servo-buttons">
+                                    <button onclick="servoUp()">Yukarı</button>
+                                    <button onclick="servoCenter()">Merkez</button>
+                                    <button onclick="servoDown()">Aşağı</button>
+                                </div>
+                            </div>
+
+                            <small class="note">PAN servo güvenli aralık filtresi aktif</small>
+                        </div>
+
+                        <div class="panel scan-panel">
+                            <div class="panel-head">
+                                <div>
+                                    <h3>Tarama Modları</h3>
+                                    <p>Otomatik kamera hareketleri</p>
+                                </div>
+                                <span class="badge live">Aktif</span>
+                            </div>
+
+                            <div class="scan-grid">
+                                <button onclick="servoCenter()">Merkeze Al</button>
+                                <button class="btn-red" onclick="servoStop()">Taramayı Durdur</button>
+                                <button onclick="servoScanPanSlow()">Sağ-Sol Tarama</button>
+                                <button onclick="servoScanTiltSlow()">Yukarı-Aşağı Tarama</button>
+                                <button onclick="servoScanFullSlow()">Tam Tarama</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI ANALİZ -->
+            
+
+
+
+            <!-- TERMAL -->
+            <div id="thermalSection" class="page">
+                <div class="page-title">
+                    <h2>Termal Analiz</h2>
+                    <p>AMG8833 8x8 sıcaklık matrisi ve sıcak nokta takibi</p>
+                </div>
+
+                <div class="thermal-page-grid">
+                    <div class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <h3>Termal Harita</h3>
+                                <p>8x8 sıcaklık matrisi</p>
+                            </div>
+                            <span id="thermalBadge" class="badge live">NORMAL</span>
+                        </div>
+
+                        <div id="thermalGrid" class="thermal-grid"></div>
+                    </div>
+
+                    <div class="panel">
+                        <h3>Termal İstatistikler</h3>
+                        <div class="info-list">
+                            <p><span>Maksimum sıcaklık</span><b id="thermalMax">0.0°C</b></p>
+                            <p><span>Minimum sıcaklık</span><b id="thermalMin">0.0°C</b></p>
+                            <p><span>Sensör sıcaklığı</span><b id="thermalSensorTemp">0.0°C</b></p>
+                            <p><span>Sıcak nokta</span><b id="thermalHotspotText">YOK</b></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HARİTA -->
+            <div id="mapSection" class="page">
+                <div class="page-title">
+                    <h2>Operasyon Haritası</h2>
+                    <p>İstasyon, İHA rotası ve risk bölgeleri</p>
+                </div>
+
+                <div class="panel">
+                    <div id="map"></div>
+
+                    <div class="legend">
+                        <span><i class="dot blue"></i>İstasyon</span>
+                        <span><i class="dot red"></i>Riskli bölge</span>
+                        <span><i class="dot green"></i>Güvenli alan</span>
+                        <span><i class="line yellow"></i>İHA rotası</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- UÇUŞ KONTROL -->
+            <div id="cubeSection" class="page">
+                <div class="page-title">
+                    <h2>Orange Cube / Uçuş Kontrol</h2>
+                    <p>MAVLink canlı uçuş verileri</p>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-head">
+                        <div>
+                            <h3>Cube Durumu</h3>
+                            <p>Uçuş kontrolcü bağlantı ve sensör bilgileri</p>
+                        </div>
+                        <span id="cubeConnectionBadge" class="cube-badge offline">BAĞLANTI YOK</span>
+                    </div>
+
+                    <div class="cube-grid">
+                        <div><span>Uçuş Modu</span><strong id="cubeMode">-</strong></div>
+                        <div><span>ARM</span><strong id="cubeArmStatus">-</strong></div>
+                        <div><span>Batarya</span><strong id="cubeBattery">-</strong></div>
+                        <div><span>GPS</span><strong id="cubeGps">-</strong></div>
+                        <div><span>Uydu</span><strong id="cubeSatellites">-</strong></div>
+                        <div><span>İrtifa</span><strong id="cubeAltitude">-</strong></div>
+                        <div><span>Heading</span><strong id="cubeHeading">-</strong></div>
+                        <div><span>Throttle</span><strong id="cubeThrottle">-</strong></div>
+                        <div><span>Roll</span><strong id="cubeRoll">-°</strong></div>
+                        <div><span>Pitch</span><strong id="cubePitch">-°</strong></div>
+                        <div><span>Yaw</span><strong id="cubeYaw">-°</strong></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LOGLAR -->
+            <div id="logsSection" class="page">
+                <div class="page-title">
+                    <h2>Sistem Logları</h2>
+                    <p>Canlı olay kayıtları</p>
+                </div>
+
+                <div class="panel">
+                    <div id="logsList" class="logs-list">
+                        <div>Log bekleniyor...</div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="/static/js/dashboard.js"></script>
+
+<script>
+function switchPage(targetId) {
+    document.querySelectorAll(".page").forEach(page => {
+        page.classList.remove("active");
+    });
+
+    const target = document.getElementById(targetId);
+    if (target) {
+        target.classList.add("active");
+    }
+
+    document.querySelectorAll(".side-link").forEach(btn => {
+        btn.classList.remove("active");
+    });
+
+    const activeBtn = document.querySelector('.side-link[data-target="' + targetId + '"]');
+    if (activeBtn) {
+        activeBtn.classList.add("active");
+    }
+
+    setTimeout(() => {
+        window.dispatchEvent(new Event("resize"));
+    }, 250);
+}
+
+document.querySelectorAll(".side-link").forEach(btn => {
+    btn.addEventListener("click", () => {
+        switchPage(btn.dataset.target);
+    });
+});
+
+function missionMotorTest() {
+    fetch("/mission/motor_test", { method: "POST" })
+        .then(r => r.json())
+        .then(data => console.log("Motor test:", data))
+        .catch(err => console.error("Motor test hata:", err));
+}
+</script>
+    <script src="/static/js/dashboard_compat.js?v=compat1"></script>
+    <script src="/static/js/detas_servo_slider_rebuild.js?v=1781528801"></script>
+    <script src="/static/js/detas_mission_map_overlay.js?v=1781542366"></script>
+    <script src="/static/js/detas_camera_thermal_mission.js?v=1781542643"></script>
+    <script src="/static/js/detas_event_timeline.js?v=1781543274"></script>
+</body>
+</html>

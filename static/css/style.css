@@ -1,0 +1,2276 @@
+:root {
+    --bg: #06111f;
+    --sidebar: #04101d;
+    --panel: #11191d;
+    --panel2: #0b1626;
+    --border: rgba(56, 189, 248, 0.25);
+    --text: #f8fafc;
+    --muted: #9fb4c8;
+    --cyan: #22d3ee;
+    --green: #65e572;
+    --red: #ef4444;
+    --orange: #f59e0b;
+    --blue: #0ea5e9;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: radial-gradient(circle at 20% 0%, rgba(14, 165, 233, 0.12), transparent 35%), var(--bg);
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.app-shell {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+}
+
+.sidebar {
+    background: linear-gradient(180deg, #061827, #020914);
+    border-right: 1px solid var(--border);
+    padding: 22px 18px;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-icon {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #1cb7c9, #1780a6);
+    font-weight: 900;
+}
+
+.brand h2 {
+    margin: 0;
+    font-size: 30px;
+    letter-spacing: 1px;
+}
+
+.brand span {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.side-menu {
+    display: grid;
+    gap: 9px;
+}
+
+.side-link {
+    border: 0;
+    text-align: left;
+    padding: 14px 14px;
+    border-radius: 10px;
+    color: #dbeafe;
+    background: transparent;
+    cursor: pointer;
+    font-weight: 900;
+    font-size: 15px;
+}
+
+.side-link.active,
+.side-link:hover {
+    background: linear-gradient(90deg, #0ea5b7, #0f766e);
+    color: white;
+}
+
+.operator-box {
+    margin-top: auto;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    display: grid;
+    gap: 6px;
+}
+
+.operator-box small {
+    color: var(--muted);
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    background: var(--green);
+    border-radius: 50%;
+}
+
+.main {
+    padding: 18px 20px;
+    min-width: 0;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 14px;
+}
+
+.topbar h1 {
+    margin: 0;
+    font-size: 31px;
+}
+
+.topbar p {
+    margin: 4px 0 0;
+    color: var(--muted);
+}
+
+.top-right {
+    display: flex;
+    gap: 16px;
+}
+
+.top-item {
+    display: flex;
+    gap: 9px;
+    align-items: center;
+    padding-left: 14px;
+    border-left: 1px solid var(--border);
+}
+
+.top-item small {
+    display: block;
+    color: var(--muted);
+}
+
+.top-item strong {
+    color: var(--green);
+}
+
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+    margin: 14px 0;
+}
+
+.stat-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    min-height: 105px;
+}
+
+.stat-card span {
+    color: #cbd5e1;
+    font-size: 14px;
+}
+
+.stat-card h3 {
+    margin: 8px 0;
+    color: var(--green);
+    font-size: 28px;
+}
+
+.stat-card small {
+    color: var(--muted);
+}
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+.page-title {
+    margin-bottom: 12px;
+}
+
+.page-title h2 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.page-title p {
+    margin: 4px 0 0;
+    color: var(--muted);
+}
+
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+    min-width: 0;
+}
+
+.panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.panel-head h3,
+.panel h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.panel-head p {
+    margin: 4px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.badge,
+.cube-badge {
+    background: rgba(34, 197, 94, 0.16);
+    color: var(--green);
+    padding: 7px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.overview-grid {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 14px;
+}
+
+.quick-panel {
+    grid-column: 1 / -1;
+}
+
+.mission-state {
+    background: linear-gradient(90deg, #16a34a, #22c55e);
+    color: white;
+    border-radius: 12px;
+    padding: 22px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 900;
+    margin-bottom: 12px;
+}
+
+.mission-actions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 9px;
+}
+
+button {
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    border-radius: 9px;
+    background: #142238;
+    color: white;
+    padding: 10px 12px;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.btn-green { background: linear-gradient(90deg, #15803d, #22c55e); }
+.btn-red { background: linear-gradient(90deg, #991b1b, #ef4444); }
+.btn-blue { background: linear-gradient(90deg, #075985, #0ea5e9); }
+.btn-dark { background: linear-gradient(90deg, #1e293b, #334155); }
+
+.warn,
+.note {
+    margin-top: 10px;
+    color: var(--orange);
+    font-weight: 800;
+    font-size: 13px;
+}
+
+.chart-wrap {
+    height: 320px;
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.mini-info-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 9px;
+    margin-top: 10px;
+}
+
+.mini-info-row div {
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.mini-info-row span {
+    display: block;
+    color: var(--muted);
+}
+
+.mini-info-row strong {
+    color: var(--green);
+    font-size: 18px;
+}
+
+.quick-list,
+.info-list {
+    display: grid;
+    gap: 8px;
+}
+
+.quick-list p,
+.info-list p {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+    padding: 8px 0;
+    margin: 0;
+}
+
+.quick-list span,
+.info-list span {
+    color: #cbd5e1;
+}
+
+.quick-list b,
+.info-list b {
+    color: var(--green);
+}
+
+.camera-page-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 380px;
+    gap: 14px;
+    align-items: start;
+}
+
+.camera-panel {
+    min-height: 650px;
+}
+
+.camera-buttons {
+    display: flex;
+    gap: 7px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.camera-buttons span {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.camera-btn.active {
+    background: #0e7490;
+}
+
+.camera-viewport {
+    height: 560px;
+    background: #020617;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.camera-viewport img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.camera-side {
+    display: grid;
+    gap: 14px;
+}
+
+.detections-list {
+    height: 220px;
+    overflow-y: auto;
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px;
+    margin-top: 10px;
+}
+
+.detections-list > div {
+    padding: 8px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.servo-panel {
+    display: grid;
+    gap: 12px;
+}
+
+.servo-box {
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+}
+
+.servo-title {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.servo-title span {
+    color: var(--cyan);
+    font-weight: 900;
+}
+
+.servo-box input {
+    width: 100%;
+}
+
+.servo-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 7px;
+    margin-top: 8px;
+}
+
+.scan-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 9px;
+}
+
+.scan-grid button {
+    min-height: 54px;
+}
+
+.scan-grid button:last-child {
+    grid-column: 1 / -1;
+}
+
+.two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.ai-big {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
+.ai-circle {
+    width: 140px;
+    height: 140px;
+    border-radius: 999px;
+    border: 9px solid var(--green);
+    display: grid;
+    place-items: center;
+    background: radial-gradient(circle, #0f172a 48%, rgba(34,197,94,0.25) 50%);
+}
+
+.ai-circle strong {
+    font-size: 34px;
+}
+
+.ai-circle span {
+    color: var(--green);
+    font-weight: 900;
+}
+
+.thermal-page-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 14px;
+}
+
+.thermal-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 7px;
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+}
+
+.thermal-cell {
+    min-height: 48px;
+    border-radius: 7px;
+    display: grid;
+    place-items: center;
+    color: white;
+    font-weight: 900;
+}
+
+#map {
+    height: 620px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+}
+
+.legend {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    color: var(--muted);
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    border-radius: 999px;
+    margin-right: 4px;
+}
+
+.dot.blue { background: #38bdf8; }
+.dot.red { background: #ef4444; }
+.dot.green { background: #22c55e; }
+
+.line.yellow {
+    width: 18px;
+    height: 3px;
+    display: inline-block;
+    background: #facc15;
+    margin-right: 4px;
+}
+
+.cube-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.cube-grid div {
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+}
+
+.cube-grid span {
+    color: var(--muted);
+    display: block;
+    margin-bottom: 6px;
+}
+
+.cube-grid strong {
+    color: white;
+    font-size: 20px;
+}
+
+.logs-list {
+    height: 620px;
+    overflow-y: auto;
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px;
+}
+
+.logs-list > div {
+    padding: 8px 10px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+}
+
+@media (max-width: 1200px) {
+    .app-shell {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        position: relative;
+        height: auto;
+    }
+
+    .stats-row,
+    .overview-grid,
+    .camera-page-grid,
+    .thermal-page-grid,
+    .two-col,
+    .cube-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .topbar,
+    .top-right {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+
+/* ===== DETAS MISSION UI REVISION START ===== */
+
+/* Genel bakışta görev kartı grafiğin boyuna gereksiz uzamasın */
+.overview-grid {
+    align-items: start !important;
+}
+
+/* Görev kartı */
+.mission-card {
+    background:
+        radial-gradient(circle at 15% 0%, rgba(34, 197, 94, 0.08), transparent 35%),
+        rgba(12, 21, 25, 0.98) !important;
+    border: 1px solid rgba(56, 189, 248, 0.28) !important;
+    border-radius: 18px !important;
+    padding: 18px !important;
+    min-height: auto !important;
+    height: auto !important;
+    box-shadow: 0 0 24px rgba(0, 160, 255, 0.08) !important;
+}
+
+/* Başlık */
+.mission-card .mission-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    gap: 14px !important;
+    margin-bottom: 16px !important;
+}
+
+.mission-card .mission-header h3 {
+    margin: 0 !important;
+    font-size: 26px !important;
+    line-height: 1.1 !important;
+    font-weight: 900 !important;
+    color: #ffffff !important;
+}
+
+.mission-card .mission-header p {
+    margin: 6px 0 0 !important;
+    color: #9fb4c8 !important;
+    font-size: 14px !important;
+}
+
+/* Eski js uyumluluk kutusu görünmesin */
+.mission-legacy-state {
+    display: none !important;
+}
+
+/* Rozet */
+.mission-badge {
+    padding: 9px 16px !important;
+    border-radius: 999px !important;
+    font-size: 13px !important;
+    font-weight: 900 !important;
+    white-space: nowrap !important;
+    border: 1px solid transparent !important;
+}
+
+.mission-badge.waiting {
+    background: rgba(34, 197, 94, 0.16) !important;
+    color: #57f287 !important;
+    border-color: rgba(34, 197, 94, 0.34) !important;
+}
+
+.mission-badge.alert {
+    background: rgba(245, 158, 11, 0.16) !important;
+    color: #facc15 !important;
+    border-color: rgba(245, 158, 11, 0.34) !important;
+}
+
+.mission-badge.active {
+    background: rgba(59, 130, 246, 0.16) !important;
+    color: #60a5fa !important;
+    border-color: rgba(59, 130, 246, 0.34) !important;
+}
+
+.mission-badge.stop {
+    background: rgba(239, 68, 68, 0.16) !important;
+    color: #f87171 !important;
+    border-color: rgba(239, 68, 68, 0.34) !important;
+}
+
+/* Anlık durum kutusu */
+.mission-current-status {
+    display: flex !important;
+    align-items: center !important;
+    gap: 14px !important;
+    padding: 16px !important;
+    margin-bottom: 16px !important;
+    border-radius: 15px !important;
+    background: linear-gradient(135deg, rgba(21, 128, 61, 0.20), rgba(22, 163, 74, 0.07)) !important;
+    border: 1px solid rgba(34, 197, 94, 0.30) !important;
+}
+
+.mission-status-icon {
+    width: 38px !important;
+    height: 38px !important;
+    display: grid !important;
+    place-items: center !important;
+    border-radius: 999px !important;
+    color: #57f287 !important;
+    background: rgba(34, 197, 94, 0.12) !important;
+    border: 1px solid rgba(34, 197, 94, 0.26) !important;
+    font-size: 22px !important;
+}
+
+.mission-status-text span {
+    display: block !important;
+    color: #9fb4c8 !important;
+    font-size: 12px !important;
+    margin-bottom: 4px !important;
+}
+
+.mission-status-text strong {
+    color: #ffffff !important;
+    font-size: 25px !important;
+    letter-spacing: 0.5px !important;
+    line-height: 1.1 !important;
+}
+
+/* Görev aşamaları */
+.mission-steps {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    margin-bottom: 18px !important;
+}
+
+.mission-step {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 12px 13px !important;
+    border-radius: 12px !important;
+    background: rgba(11, 22, 34, 0.92) !important;
+    border: 1px solid rgba(70, 110, 140, 0.25) !important;
+    color: #b7c7d6 !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    min-height: 44px !important;
+}
+
+.mission-step i {
+    width: 10px !important;
+    height: 10px !important;
+    border-radius: 50% !important;
+    background: #4b5563 !important;
+    flex-shrink: 0 !important;
+}
+
+.mission-step.active {
+    border-color: rgba(34, 197, 94, 0.45) !important;
+    background: rgba(34, 197, 94, 0.13) !important;
+    color: #ffffff !important;
+}
+
+.mission-step.active i {
+    background: #57f287 !important;
+    box-shadow: 0 0 11px rgba(87, 242, 135, 0.75) !important;
+}
+
+/* Butonlar */
+.mission-actions-pro {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+    margin-bottom: 14px !important;
+}
+
+.mission-btn {
+    min-height: 52px !important;
+    border: none !important;
+    border-radius: 13px !important;
+    padding: 12px 14px !important;
+    color: #ffffff !important;
+    font-size: 15px !important;
+    font-weight: 900 !important;
+    cursor: pointer !important;
+    transition: transform 0.15s ease, filter 0.15s ease !important;
+}
+
+.mission-btn:hover {
+    transform: translateY(-1px) !important;
+    filter: brightness(1.06) !important;
+}
+
+.mission-btn.green {
+    background: linear-gradient(135deg, #15803d, #22c55e) !important;
+    box-shadow: 0 8px 16px rgba(34, 197, 94, 0.16) !important;
+}
+
+.mission-btn.red {
+    background: linear-gradient(135deg, #b91c1c, #ef4444) !important;
+    box-shadow: 0 8px 16px rgba(239, 68, 68, 0.16) !important;
+}
+
+.mission-btn.blue {
+    background: linear-gradient(135deg, #0369a1, #0ea5e9) !important;
+    box-shadow: 0 8px 16px rgba(14, 165, 233, 0.16) !important;
+}
+
+.mission-btn.dark {
+    background: linear-gradient(135deg, #1e293b, #475569) !important;
+    box-shadow: 0 8px 16px rgba(71, 85, 105, 0.16) !important;
+}
+
+/* Uyarı */
+.mission-warning {
+    color: #fbbf24 !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    padding: 11px 12px !important;
+    border-radius: 12px !important;
+    background: rgba(251, 191, 36, 0.08) !important;
+    border: 1px solid rgba(251, 191, 36, 0.20) !important;
+}
+
+/* Duruma göre anlık kutu */
+.mission-current-status.state-waiting {
+    background: linear-gradient(135deg, rgba(21, 128, 61, 0.20), rgba(22, 163, 74, 0.07)) !important;
+    border-color: rgba(34, 197, 94, 0.30) !important;
+}
+
+.mission-current-status.state-alert {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), rgba(251, 191, 36, 0.07)) !important;
+    border-color: rgba(245, 158, 11, 0.32) !important;
+}
+
+.mission-current-status.state-active {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.18), rgba(59, 130, 246, 0.07)) !important;
+    border-color: rgba(59, 130, 246, 0.32) !important;
+}
+
+.mission-current-status.state-stop {
+    background: linear-gradient(135deg, rgba(220, 38, 38, 0.18), rgba(239, 68, 68, 0.07)) !important;
+    border-color: rgba(239, 68, 68, 0.32) !important;
+}
+
+@media (max-width: 900px) {
+    .mission-card .mission-header {
+        flex-direction: column !important;
+    }
+
+    .mission-steps,
+    .mission-actions-pro {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* ===== DETAS MISSION UI REVISION END ===== */
+
+
+
+
+
+/* ===== DETAS CAMERA PAGE CLEANUP START ===== */
+
+/* Kamera sayfasında sağ tarafta eski/kaçak scan panel görünmesin */
+.page:not(#cameraSection) .scan-panel {
+    display: none !important;
+}
+
+/* Doğru scan panel sadece kamera sayfasındaki camera-side içinde görünsün */
+#cameraSection .camera-side .scan-panel {
+    display: block !important;
+}
+
+/* Kamera sayfası iki kolon daha dengeli olsun */
+.camera-page-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 390px !important;
+    gap: 16px !important;
+    align-items: start !important;
+}
+
+/* Kamera paneli solda tam genişlikte kalsın */
+#cameraSection .camera-panel {
+    width: 100% !important;
+    min-width: 0 !important;
+}
+
+/* Sağ kolon sadece Son Tespitler + PanTilt + Tarama olarak aksın */
+#cameraSection .camera-side {
+    display: grid !important;
+    gap: 14px !important;
+    align-content: start !important;
+}
+
+/* Tarama butonları doğru panelde düzgün görünsün */
+#cameraSection .camera-side .scan-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 9px !important;
+}
+
+#cameraSection .camera-side .scan-grid button:last-child {
+    grid-column: 1 / -1 !important;
+}
+
+/* ===== DETAS CAMERA PAGE CLEANUP END ===== */
+
+/* =========================================================
+   DETAS AI PANEL CAMERA PAGE MOVE
+   AI Analiz ayrı menü yerine Canlı Kamera altında
+   ========================================================= */
+
+/* AI menüsü görünür kaldıysa gizle */
+.side-link[data-target="aiSection"] {
+    display: none !important;
+}
+
+/* Kamera sayfası düzeni: solda kamera + AI, sağda kontroller */
+.camera-page-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 390px !important;
+    gap: 14px !important;
+    align-items: start !important;
+}
+
+/* Sol taraf: kamera ve AI alt alta */
+#cameraSection .camera-panel {
+    grid-column: 1 / 2 !important;
+    grid-row: 1 / 2 !important;
+}
+
+#cameraSection .camera-ai-panel {
+    grid-column: 1 / 2 !important;
+    grid-row: 2 / 3 !important;
+}
+
+/* Sağ taraf: tespitler + servo + tarama yukarıdan aşağı */
+#cameraSection .camera-side {
+    grid-column: 2 / 3 !important;
+    grid-row: 1 / 3 !important;
+    display: grid !important;
+    gap: 14px !important;
+    align-content: start !important;
+}
+
+/* AI panel görünümü */
+.camera-ai-panel {
+    margin-top: 0 !important;
+    background:
+        radial-gradient(circle at 10% 0%, rgba(34, 197, 94, 0.10), transparent 35%),
+        var(--panel) !important;
+    border: 1px solid rgba(56, 189, 248, 0.25) !important;
+    border-radius: 12px !important;
+    padding: 14px !important;
+}
+
+.camera-ai-content {
+    display: grid !important;
+    grid-template-columns: 120px minmax(0, 1fr) !important;
+    gap: 18px !important;
+    align-items: center !important;
+}
+
+.small-ai-circle {
+    width: 105px !important;
+    height: 105px !important;
+    border-width: 8px !important;
+}
+
+.small-ai-circle strong {
+    font-size: 28px !important;
+}
+
+.small-ai-circle span {
+    font-size: 13px !important;
+}
+
+.camera-ai-info {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+}
+
+.camera-ai-info > div {
+    background: var(--panel2) !important;
+    border: 1px solid rgba(56, 189, 248, 0.22) !important;
+    border-radius: 10px !important;
+    padding: 12px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    align-items: center !important;
+}
+
+.camera-ai-info span {
+    color: #cbd5e1 !important;
+    font-size: 14px !important;
+}
+
+.camera-ai-info b {
+    color: var(--green) !important;
+    font-size: 16px !important;
+}
+
+/* Sağdaki gereksiz/kaçak AI veya tarama paneli varsa gizle */
+.page:not(#cameraSection)#aiSection {
+    display: none !important;
+}
+
+/* Kamera alanı çok aşağı uzamasın */
+#cameraSection .camera-panel {
+    min-height: auto !important;
+}
+
+/* Kamera görüntüsü profesyonel oran */
+#cameraSection .camera-viewport {
+    height: 540px !important;
+}
+
+/* Sağ panel çok aşağı taşmasın */
+#cameraSection .detections-list {
+    height: 190px !important;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .camera-page-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    #cameraSection .camera-panel,
+    #cameraSection .camera-ai-panel,
+    #cameraSection .camera-side {
+        grid-column: auto !important;
+        grid-row: auto !important;
+    }
+
+    .camera-ai-info {
+        grid-template-columns: 1fr !important;
+    }
+
+    .camera-ai-content {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+
+/* ===== DETAS CAMERA AI PANEL BEAUTY START ===== */
+
+/* Kamera altındaki AI paneli daha ferah ve profesyonel */
+#cameraSection .camera-ai-panel {
+    margin-top: 18px !important;
+    padding: 20px !important;
+    border-radius: 18px !important;
+    background:
+        radial-gradient(circle at 8% 10%, rgba(34, 197, 94, 0.16), transparent 30%),
+        linear-gradient(135deg, rgba(10, 30, 28, 0.98), rgba(8, 18, 31, 0.98)) !important;
+    border: 1px solid rgba(34, 197, 94, 0.28) !important;
+    box-shadow:
+        0 16px 30px rgba(0, 0, 0, 0.22),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.02) !important;
+}
+
+/* Başlık satırı daha dengeli */
+#cameraSection .camera-ai-panel .panel-head {
+    margin-bottom: 18px !important;
+    align-items: center !important;
+}
+
+#cameraSection .camera-ai-panel .panel-head h3 {
+    font-size: 22px !important;
+    letter-spacing: 0.2px !important;
+}
+
+#cameraSection .camera-ai-panel .panel-head p {
+    font-size: 14px !important;
+    color: #a9bdd0 !important;
+}
+
+/* AI aktif rozeti */
+#cameraSection .camera-ai-panel .badge {
+    padding: 9px 16px !important;
+    border-radius: 999px !important;
+    background: rgba(34, 197, 94, 0.18) !important;
+    color: #57f287 !important;
+    border: 1px solid rgba(34, 197, 94, 0.35) !important;
+    font-size: 13px !important;
+    font-weight: 900 !important;
+}
+
+/* İç düzen: sol AI daire, sağ bilgiler */
+#cameraSection .camera-ai-content {
+    display: grid !important;
+    grid-template-columns: 145px minmax(0, 1fr) !important;
+    gap: 22px !important;
+    align-items: stretch !important;
+}
+
+/* AI daire alanı ayrı kart gibi dursun */
+#cameraSection .small-ai-circle {
+    width: 124px !important;
+    height: 124px !important;
+    align-self: center !important;
+    justify-self: center !important;
+    border: 9px solid rgba(87, 242, 135, 0.92) !important;
+    background:
+        radial-gradient(circle at center, #111827 45%, rgba(34, 197, 94, 0.20) 47%) !important;
+    box-shadow:
+        0 0 22px rgba(34, 197, 94, 0.22),
+        inset 0 0 18px rgba(34, 197, 94, 0.08) !important;
+}
+
+#cameraSection .small-ai-circle strong {
+    font-size: 34px !important;
+    line-height: 1 !important;
+}
+
+#cameraSection .small-ai-circle span {
+    font-size: 14px !important;
+    color: #57f287 !important;
+    font-weight: 900 !important;
+}
+
+/* Sağdaki bilgi kutuları */
+#cameraSection .camera-ai-info {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+    align-content: center !important;
+}
+
+/* Her bilgi kutusu daha yüksek ve okunaklı */
+#cameraSection .camera-ai-info > div {
+    min-height: 62px !important;
+    padding: 14px 16px !important;
+    border-radius: 14px !important;
+    background:
+        linear-gradient(135deg, rgba(15, 30, 48, 0.95), rgba(9, 22, 36, 0.95)) !important;
+    border: 1px solid rgba(56, 189, 248, 0.24) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 14px !important;
+}
+
+/* Sol açıklama */
+#cameraSection .camera-ai-info span {
+    color: #d5e3f0 !important;
+    font-size: 15px !important;
+    line-height: 1.25 !important;
+}
+
+/* Sağ değer */
+#cameraSection .camera-ai-info b {
+    color: #57f287 !important;
+    font-size: 17px !important;
+    font-weight: 900 !important;
+    white-space: nowrap !important;
+}
+
+/* Nesne sayısı kutusu hafif vurgulu */
+#cameraSection .camera-ai-info > div:last-child {
+    border-color: rgba(34, 197, 94, 0.32) !important;
+    background:
+        linear-gradient(135deg, rgba(20, 83, 45, 0.28), rgba(9, 22, 36, 0.96)) !important;
+}
+
+#cameraSection .camera-ai-info > div:last-child b {
+    font-size: 22px !important;
+}
+
+/* Kamera paneli ile AI panel arasında güzel boşluk */
+#cameraSection .camera-panel {
+    margin-bottom: 0 !important;
+}
+
+/* Responsive görünüm */
+@media (max-width: 1200px) {
+    #cameraSection .camera-ai-content {
+        grid-template-columns: 1fr !important;
+    }
+
+    #cameraSection .camera-ai-info {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* ===== DETAS CAMERA AI PANEL BEAUTY END ===== */
+
+
+/* =========================================================
+   DETAS AI CIRCLE CLEAN FIX
+   Gradient yok, taşma yok, sade görünüm
+   ========================================================= */
+
+#cameraSection .camera-ai-panel {
+    background: #11191d !important;
+    border: 1px solid rgba(56, 189, 248, 0.25) !important;
+    border-radius: 14px !important;
+    padding: 16px !important;
+    overflow: hidden !important;
+    box-shadow: none !important;
+}
+
+#cameraSection .camera-ai-content {
+    display: grid !important;
+    grid-template-columns: 115px minmax(0, 1fr) !important;
+    gap: 18px !important;
+    align-items: center !important;
+    overflow: hidden !important;
+}
+
+#cameraSection .small-ai-circle,
+#cameraSection .ai-circle {
+    width: 92px !important;
+    height: 92px !important;
+    min-width: 92px !important;
+    min-height: 92px !important;
+    max-width: 92px !important;
+    max-height: 92px !important;
+    border-radius: 50% !important;
+    border: 7px solid #57f287 !important;
+    background: #101827 !important;
+    box-shadow: none !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    justify-self: center !important;
+    align-self: center !important;
+    padding: 0 !important;
+}
+
+#cameraSection .small-ai-circle strong,
+#cameraSection .ai-circle strong {
+    font-size: 27px !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: #ffffff !important;
+}
+
+#cameraSection .small-ai-circle span,
+#cameraSection .ai-circle span {
+    font-size: 12px !important;
+    line-height: 1 !important;
+    margin-top: 8px !important;
+    padding: 0 !important;
+    color: #57f287 !important;
+    font-weight: 900 !important;
+}
+
+/* AI bilgi kutuları da düz olsun */
+#cameraSection .camera-ai-info > div {
+    background: #0b1626 !important;
+    border: 1px solid rgba(56, 189, 248, 0.22) !important;
+    box-shadow: none !important;
+}
+
+/* Son nesne kutusunda da gradient olmasın */
+#cameraSection .camera-ai-info > div:last-child {
+    background: #0b1626 !important;
+    border: 1px solid rgba(34, 197, 94, 0.30) !important;
+}
+
+/* Küçük ekranda taşmayı engelle */
+@media (max-width: 1200px) {
+    #cameraSection .camera-ai-content {
+        grid-template-columns: 1fr !important;
+    }
+
+    #cameraSection .small-ai-circle,
+    #cameraSection .ai-circle {
+        justify-self: start !important;
+    }
+}
+
+
+/* =========================================================
+   DETAS MISSION EXTRA TEXT FIX
+   Görev Durumu içinde fazladan görünen eski BEKLEMEDE yazısını gizler
+   ========================================================= */
+
+#missionStatusBox,
+.mission-legacy-state {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    overflow: hidden !important;
+    line-height: 0 !important;
+    font-size: 0 !important;
+}
+
+
+/* =========================================================
+   DETAS EXTRA DESCRIPTION CLEANUP
+   Başlık altındaki açıklama / küçük bilgi yazılarını gizler
+   ========================================================= */
+
+/* Ana başlık altı açıklama */
+.topbar p {
+    display: none !important;
+}
+
+/* Sayfa başlıklarının altındaki açıklamalar */
+.page-title p {
+    display: none !important;
+}
+
+/* Panel başlıklarının altındaki açıklamalar */
+.panel-head p {
+    display: none !important;
+}
+
+/* Üst bilgi kartlarının altındaki küçük açıklamalar */
+.stat-card small {
+    display: none !important;
+}
+
+/* Görev durumundaki "Anlık Durum" küçük etiketi */
+.mission-status-text span {
+    display: none !important;
+}
+
+/* AI / servo / tarama içindeki ekstra notlar */
+.note,
+.servo-note,
+.warning-line {
+    display: none !important;
+}
+
+/* Motor test uyarısı kalsın istersen bu satırı sil.
+   Şimdilik kullanıcı istediği için kapatıldı. */
+.mission-warning {
+    display: none !important;
+}
+
+/* Kart içlerinde gereksiz boşluk oluşmasın */
+.stat-card {
+    min-height: 86px !important;
+}
+
+.panel-head {
+    margin-bottom: 10px !important;
+}
+
+.page-title {
+    margin-bottom: 10px !important;
+}
+
+
+/* Görev Durumu başlığı altındaki açıklamayı gizle */
+.mission-header p,
+.mission-card .mission-header p,
+.mission-panel .mission-header p {
+    display: none !important;
+}
+
+/* Açıklama gidince başlık/rozet hizası daha düzgün olsun */
+.mission-card .mission-header {
+    align-items: center !important;
+    margin-bottom: 14px !important;
+}
+
+
+/* ===== DETAS SOFT LAVENDER PALETTE START ===== */
+
+/*
+Yeni DETAS renk paleti:
+Ana zemin     : #1F2433
+Panel zemin   : #2A3042
+İç panel      : #202638
+Yazı          : #E5EAF5
+Vurgu mavi    : #A0D2EB
+Lavanta       : #D0BDF4
+Mor vurgu     : #8458B3
+Koyu gri-mavi : #494D5F
+*/
+
+:root {
+    --bg: #1F2433 !important;
+    --sidebar: #202638 !important;
+    --panel: #2A3042 !important;
+    --panel2: #202638 !important;
+    --border: rgba(160, 210, 235, 0.28) !important;
+
+    --text: #E5EAF5 !important;
+    --muted: #B9C3D6 !important;
+
+    --cyan: #A0D2EB !important;
+    --blue: #A0D2EB !important;
+    --green: #A0D2EB !important;
+    --purple: #D0BDF4 !important;
+    --violet: #8458B3 !important;
+
+    --red: #C75D75 !important;
+    --orange: #D0BDF4 !important;
+}
+
+/* Genel arka plan */
+body {
+    background: #1F2433 !important;
+    color: #E5EAF5 !important;
+}
+
+/* Ana kabuk */
+.app-shell,
+.main {
+    background: #1F2433 !important;
+}
+
+/* Sol sidebar */
+.sidebar {
+    background: #202638 !important;
+    border-right: 1px solid rgba(160, 210, 235, 0.24) !important;
+}
+
+.brand-icon {
+    background: #A0D2EB !important;
+    color: #1F2433 !important;
+}
+
+.brand h2,
+.topbar h1,
+.page-title h2,
+.panel h3,
+.panel-head h3,
+.mission-header h3 {
+    color: #F4F7FB !important;
+}
+
+.brand span,
+.topbar p,
+.page-title p,
+.panel-head p,
+.stat-card small,
+.operator-box small {
+    color: #B9C3D6 !important;
+}
+
+/* Sidebar menü */
+.side-link {
+    color: #E5EAF5 !important;
+    background: transparent !important;
+}
+
+.side-link.active,
+.side-link:hover {
+    background: #A0D2EB !important;
+    color: #1F2433 !important;
+}
+
+/* Operatör kartı */
+.operator-box {
+    background: #2A3042 !important;
+    border: 1px solid rgba(160, 210, 235, 0.26) !important;
+}
+
+/* Üst bar */
+.topbar {
+    border-bottom: 1px solid rgba(160, 210, 235, 0.24) !important;
+}
+
+.top-item {
+    border-left: 1px solid rgba(160, 210, 235, 0.24) !important;
+}
+
+.top-item small {
+    color: #B9C3D6 !important;
+}
+
+.top-item strong {
+    color: #D0BDF4 !important;
+}
+
+/* Kart ve paneller */
+.stat-card,
+.panel,
+.mission-card,
+.camera-ai-panel,
+.servo-box,
+.detections-list,
+.logs-list,
+.chart-wrap,
+.quick-panel,
+.operator-box {
+    background: #2A3042 !important;
+    border: 1px solid rgba(160, 210, 235, 0.26) !important;
+    box-shadow: none !important;
+}
+
+.stat-card h3,
+#eqStatusText,
+#movementValue,
+#thresholdValue,
+#detectedCount,
+#thermalMaxCard {
+    color: #D0BDF4 !important;
+}
+
+.stat-card span,
+.quick-list span,
+.info-list span,
+.camera-ai-info span,
+.cube-grid span,
+.mini-info-row span {
+    color: #DDE6F2 !important;
+}
+
+/* İç kutular */
+.quick-list p,
+.info-list p,
+.camera-ai-info > div,
+.cube-grid div,
+.mini-info-row div,
+.thermal-grid,
+.servo-box,
+.detections-list,
+.logs-list {
+    background: #202638 !important;
+    border-color: rgba(160, 210, 235, 0.24) !important;
+}
+
+/* Değerler */
+.quick-list b,
+.info-list b,
+.camera-ai-info b,
+.cube-grid strong,
+.mini-info-row strong,
+#telemetryStatus,
+#cubeConnectedText,
+#cubeArmStatus,
+#cubeArmStatusMirror {
+    color: #D0BDF4 !important;
+}
+
+/* Görev durumu kartı */
+.mission-card {
+    background: #2A3042 !important;
+    border-color: rgba(208, 189, 244, 0.30) !important;
+}
+
+.mission-badge,
+.badge,
+.cube-badge {
+    background: #494D5F !important;
+    color: #E5EAF5 !important;
+    border: 1px solid rgba(208, 189, 244, 0.35) !important;
+}
+
+.mission-badge.waiting,
+.mission-badge.active,
+.badge.live {
+    background: #8458B3 !important;
+    color: #FFFFFF !important;
+}
+
+.mission-badge.alert {
+    background: #D0BDF4 !important;
+    color: #1F2433 !important;
+}
+
+.mission-badge.stop {
+    background: #C75D75 !important;
+    color: #FFFFFF !important;
+}
+
+/* Anlık görev kutusu */
+.mission-current-status,
+.mission-current-status.state-waiting,
+.mission-current-status.state-alert,
+.mission-current-status.state-active,
+.mission-current-status.state-stop {
+    background: #202638 !important;
+    border: 1px solid rgba(208, 189, 244, 0.36) !important;
+}
+
+.mission-status-icon {
+    background: #494D5F !important;
+    color: #D0BDF4 !important;
+    border-color: rgba(208, 189, 244, 0.35) !important;
+}
+
+.mission-status-text strong {
+    color: #F4F7FB !important;
+}
+
+/* Görev adımları */
+.mission-step {
+    background: #202638 !important;
+    border-color: rgba(160, 210, 235, 0.22) !important;
+    color: #DDE6F2 !important;
+}
+
+.mission-step i,
+.mission-step .dot {
+    background: #748094 !important;
+}
+
+.mission-step.active {
+    background: #494D5F !important;
+    border-color: rgba(208, 189, 244, 0.42) !important;
+    color: #FFFFFF !important;
+}
+
+.mission-step.active i,
+.mission-step.active .dot {
+    background: #D0BDF4 !important;
+    box-shadow: none !important;
+}
+
+/* Butonlar - düz renk, gradient yok */
+button,
+.camera-btn,
+.mission-btn,
+.servo-buttons button,
+.scan-grid button {
+    background: #494D5F !important;
+    color: #FFFFFF !important;
+    border: 1px solid rgba(160, 210, 235, 0.24) !important;
+    box-shadow: none !important;
+}
+
+button:hover,
+.camera-btn:hover,
+.mission-btn:hover {
+    filter: brightness(1.08) !important;
+    transform: none !important;
+}
+
+.camera-btn.active,
+.btn-green,
+.mission-btn.green {
+    background: #A0D2EB !important;
+    color: #1F2433 !important;
+}
+
+.btn-red,
+.mission-btn.red,
+.servo-stop-btn {
+    background: #C75D75 !important;
+    color: #FFFFFF !important;
+}
+
+.btn-blue,
+.mission-btn.blue {
+    background: #8458B3 !important;
+    color: #FFFFFF !important;
+}
+
+.btn-dark,
+.mission-btn.dark {
+    background: #494D5F !important;
+    color: #FFFFFF !important;
+}
+
+/* Uyarı kutuları */
+.warn,
+.note,
+.mission-warning {
+    background: #202638 !important;
+    border-color: rgba(208, 189, 244, 0.28) !important;
+    color: #D0BDF4 !important;
+}
+
+/* Kamera alanı */
+.camera-viewport {
+    background: #171C28 !important;
+    border-color: rgba(160, 210, 235, 0.26) !important;
+}
+
+/* AI panel */
+.camera-ai-panel {
+    background: #2A3042 !important;
+    border-color: rgba(208, 189, 244, 0.28) !important;
+}
+
+#cameraSection .small-ai-circle,
+#cameraSection .ai-circle {
+    background: #202638 !important;
+    border-color: #D0BDF4 !important;
+    color: #FFFFFF !important;
+}
+
+#cameraSection .small-ai-circle span,
+#cameraSection .ai-circle span {
+    color: #D0BDF4 !important;
+}
+
+#cameraSection .camera-ai-info > div {
+    background: #202638 !important;
+    border-color: rgba(160, 210, 235, 0.22) !important;
+}
+
+#cameraSection .camera-ai-info > div:last-child {
+    background: #202638 !important;
+    border-color: rgba(208, 189, 244, 0.30) !important;
+}
+
+/* Slider renkleri */
+input[type="range"] {
+    accent-color: #D0BDF4 !important;
+}
+
+/* Termal hücreler CSS üzerinden zorlanmasın; JS renklendiriyor */
+.thermal-cell {
+    color: #FFFFFF !important;
+}
+
+/* Harita paneli */
+#map {
+    border-color: rgba(160, 210, 235, 0.26) !important;
+}
+
+/* Loglar */
+.logs-list > div,
+.detections-list > div {
+    border-bottom: 1px solid rgba(160, 210, 235, 0.14) !important;
+    color: #E5EAF5 !important;
+}
+
+/* Üst durum noktası */
+.status-dot,
+.green-dot {
+    background: #D0BDF4 !important;
+}
+
+/* Fazla parlak yeşilleri bastır */
+[style*="color: rgb(34, 197, 94)"],
+[style*="color:#22c55e"],
+[style*="color: #22c55e"] {
+    color: #D0BDF4 !important;
+}
+
+/* ===== DETAS SOFT LAVENDER PALETTE END ===== */
+
+
+/* ===== DETAS CORONA DARK PALETTE START ===== */
+
+/*
+Yeni palet:
+Ana koyu      : #191C24
+Daha koyu     : #11141B
+Panel         : #1F2430
+İç panel      : #151923
+Primary       : #AF1763
+Mavi          : #0D6EFD
+Yeşil         : #198754
+Cyan          : #0DCAF0
+Kırmızı       : #AB2E3C
+Sarı          : #FFC107
+*/
+
+:root {
+    --bg: #11141B !important;
+    --sidebar: #191C24 !important;
+    --panel: #1F2430 !important;
+    --panel2: #151923 !important;
+    --border: rgba(255, 255, 255, 0.09) !important;
+
+    --text: #F4F6FA !important;
+    --muted: #8B94A8 !important;
+
+    --primary: #AF1763 !important;
+    --blue: #0D6EFD !important;
+    --green: #198754 !important;
+    --cyan: #0DCAF0 !important;
+    --red: #AB2E3C !important;
+    --orange: #FFC107 !important;
+    --yellow: #FFC107 !important;
+}
+
+/* Ana zemin */
+html,
+body,
+.app-shell,
+.main {
+    background: #11141B !important;
+    color: #F4F6FA !important;
+}
+
+/* Gradientleri kapat */
+body,
+.sidebar,
+.panel,
+.stat-card,
+.mission-card,
+.camera-ai-panel,
+.mission-current-status,
+.mission-btn,
+button,
+.side-link.active,
+.side-link:hover,
+.brand-icon {
+    background-image: none !important;
+}
+
+/* Sidebar */
+.sidebar {
+    background: #191C24 !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.brand-icon {
+    background: #AF1763 !important;
+    color: #FFFFFF !important;
+}
+
+.brand h2,
+.topbar h1,
+.page-title h2,
+.panel h3,
+.panel-head h3,
+.mission-header h3 {
+    color: #FFFFFF !important;
+}
+
+.brand span,
+.topbar p,
+.page-title p,
+.panel-head p,
+.stat-card small,
+.operator-box small {
+    color: #8B94A8 !important;
+}
+
+/* Sidebar menü */
+.side-link {
+    color: #C8CEDC !important;
+    background: transparent !important;
+}
+
+.side-link.active,
+.side-link:hover {
+    background: #AF1763 !important;
+    color: #FFFFFF !important;
+}
+
+/* Üst bar */
+.topbar {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.top-item {
+    border-left: 1px solid rgba(255, 255, 255, 0.10) !important;
+}
+
+.top-item small {
+    color: #8B94A8 !important;
+}
+
+.top-item strong {
+    color: #0DCAF0 !important;
+}
+
+/* Kartlar ve paneller */
+.stat-card,
+.panel,
+.mission-card,
+.operator-box,
+.camera-ai-panel,
+.servo-box,
+.detections-list,
+.logs-list,
+.chart-wrap,
+.quick-panel,
+.cube-grid div,
+.mini-info-row div,
+.thermal-grid {
+    background: #1F2430 !important;
+    border: 1px solid rgba(255, 255, 255, 0.09) !important;
+    box-shadow: none !important;
+}
+
+/* İç kutular */
+.quick-list p,
+.info-list p,
+.camera-ai-info > div,
+.servo-box,
+.detections-list,
+.logs-list,
+.mission-step {
+    background: #151923 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Üst kart değerleri */
+.stat-card h3,
+#eqStatusText,
+#movementValue,
+#thresholdValue,
+#detectedCount,
+#thermalMaxCard {
+    color: #0DCAF0 !important;
+}
+
+.stat-card span,
+.quick-list span,
+.info-list span,
+.camera-ai-info span,
+.cube-grid span,
+.mini-info-row span {
+    color: #D8DDE8 !important;
+}
+
+/* Genel değerler */
+.quick-list b,
+.info-list b,
+.camera-ai-info b,
+.cube-grid strong,
+.mini-info-row strong,
+#telemetryStatus,
+#cubeConnectedText,
+#cubeArmStatus,
+#cubeArmStatusMirror {
+    color: #0DCAF0 !important;
+}
+
+/* Normal / bağlantı / aktif durumları */
+#eqStatusText,
+#systemStatus,
+#connectionStatus {
+    color: #198754 !important;
+}
+
+/* Görev durumu */
+.mission-card {
+    background: #1F2430 !important;
+    border-color: rgba(175, 23, 99, 0.35) !important;
+}
+
+.mission-badge,
+.badge,
+.cube-badge {
+    background: #151923 !important;
+    color: #F4F6FA !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+.mission-badge.waiting,
+.badge.live {
+    background: #198754 !important;
+    color: #FFFFFF !important;
+    border-color: #198754 !important;
+}
+
+.mission-badge.alert {
+    background: #FFC107 !important;
+    color: #191C24 !important;
+    border-color: #FFC107 !important;
+}
+
+.mission-badge.active {
+    background: #0D6EFD !important;
+    color: #FFFFFF !important;
+    border-color: #0D6EFD !important;
+}
+
+.mission-badge.stop {
+    background: #AB2E3C !important;
+    color: #FFFFFF !important;
+    border-color: #AB2E3C !important;
+}
+
+/* Anlık görev kutusu */
+.mission-current-status,
+.mission-current-status.state-waiting,
+.mission-current-status.state-alert,
+.mission-current-status.state-active,
+.mission-current-status.state-stop {
+    background: #151923 !important;
+    border: 1px solid rgba(175, 23, 99, 0.28) !important;
+}
+
+.mission-status-icon {
+    background: #191C24 !important;
+    color: #198754 !important;
+    border-color: rgba(25, 135, 84, 0.45) !important;
+}
+
+.mission-status-text strong {
+    color: #FFFFFF !important;
+}
+
+/* Görev adımları */
+.mission-step {
+    color: #D8DDE8 !important;
+}
+
+.mission-step i,
+.mission-step .dot {
+    background: #596173 !important;
+}
+
+.mission-step.active {
+    background: rgba(25, 135, 84, 0.16) !important;
+    border-color: rgba(25, 135, 84, 0.55) !important;
+    color: #FFFFFF !important;
+}
+
+.mission-step.active i,
+.mission-step.active .dot {
+    background: #198754 !important;
+    box-shadow: none !important;
+}
+
+/* Butonlar */
+button,
+.camera-btn,
+.mission-btn,
+.servo-buttons button,
+.scan-grid button {
+    background: #252B38 !important;
+    color: #FFFFFF !important;
+    border: 1px solid rgba(255, 255, 255, 0.10) !important;
+    box-shadow: none !important;
+}
+
+button:hover,
+.camera-btn:hover,
+.mission-btn:hover {
+    filter: brightness(1.12) !important;
+    transform: none !important;
+}
+
+.camera-btn.active {
+    background: #AF1763 !important;
+    color: #FFFFFF !important;
+    border-color: #AF1763 !important;
+}
+
+.btn-green,
+.mission-btn.green {
+    background: #198754 !important;
+    color: #FFFFFF !important;
+    border-color: #198754 !important;
+}
+
+.btn-red,
+.mission-btn.red,
+.servo-stop-btn {
+    background: #AB2E3C !important;
+    color: #FFFFFF !important;
+    border-color: #AB2E3C !important;
+}
+
+.btn-blue,
+.mission-btn.blue {
+    background: #0D6EFD !important;
+    color: #FFFFFF !important;
+    border-color: #0D6EFD !important;
+}
+
+.btn-dark,
+.mission-btn.dark {
+    background: #494D5F !important;
+    color: #FFFFFF !important;
+    border-color: #494D5F !important;
+}
+
+/* Motor test uyarısı */
+.warn,
+.note,
+.mission-warning {
+    background: #151923 !important;
+    border-color: rgba(255, 193, 7, 0.35) !important;
+    color: #FFC107 !important;
+}
+
+/* Kamera */
+.camera-viewport {
+    background: #0B0E14 !important;
+    border-color: rgba(255, 255, 255, 0.10) !important;
+}
+
+/* AI panel */
+.camera-ai-panel {
+    background: #1F2430 !important;
+    border-color: rgba(175, 23, 99, 0.28) !important;
+}
+
+#cameraSection .small-ai-circle,
+#cameraSection .ai-circle {
+    background: #151923 !important;
+    border-color: #AF1763 !important;
+    color: #FFFFFF !important;
+}
+
+#cameraSection .small-ai-circle span,
+#cameraSection .ai-circle span {
+    color: #0DCAF0 !important;
+}
+
+#cameraSection .camera-ai-info > div {
+    background: #151923 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+#cameraSection .camera-ai-info > div:last-child {
+    background: #151923 !important;
+    border-color: rgba(13, 202, 240, 0.32) !important;
+}
+
+/* Slider */
+input[type="range"] {
+    accent-color: #AF1763 !important;
+}
+
+/* Harita */
+#map {
+    border-color: rgba(255, 255, 255, 0.10) !important;
+}
+
+/* Log ve tespit satırları */
+.logs-list > div,
+.detections-list > div {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07) !important;
+    color: #F4F6FA !important;
+}
+
+/* Status noktaları */
+.status-dot,
+.green-dot {
+    background: #198754 !important;
+}
+
+/* Sidebar operatör noktası */
+.operator-box .status-dot {
+    background: #198754 !important;
+}
+
+/* Turkuaz/yeşil eski renkleri azalt */
+[style*="color: #22c55e"],
+[style*="color:#22c55e"],
+[style*="color: rgb(34, 197, 94)"] {
+    color: #0DCAF0 !important;
+}
+
+/* ===== DETAS CORONA DARK PALETTE END ===== */
+
+
+/* ===== DETAS OPERATION SUMMARY FIX START ===== */
+
+.operation-summary-card {
+    background: #1F2430 !important;
+    border: 1px solid rgba(255, 255, 255, 0.09) !important;
+    border-radius: 14px !important;
+    padding: 16px !important;
+    box-shadow: none !important;
+}
+
+.operation-summary-card h3 {
+    margin: 0 0 14px 0 !important;
+    padding: 0 !important;
+    font-size: 20px !important;
+    line-height: 1.2 !important;
+    color: #ffffff !important;
+}
+
+.operation-summary-list {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    width: 100% !important;
+}
+
+.operation-summary-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 16px !important;
+    width: 100% !important;
+    min-height: 48px !important;
+    padding: 0 16px !important;
+    border-radius: 10px !important;
+    background: #151923 !important;
+    border: 1px solid rgba(255, 255, 255, 0.07) !important;
+}
+
+.operation-summary-label {
+    display: flex !important;
+    align-items: center !important;
+    min-width: 0 !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #D8DDE8 !important;
+    line-height: 1.2 !important;
+}
+
+.operation-summary-value {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    margin-left: auto !important;
+    min-width: 110px !important;
+    text-align: right !important;
+    font-size: 16px !important;
+    font-weight: 900 !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+}
+
+/* Durum renkleri */
+.operation-summary-value.ok {
+    color: #198754 !important;
+}
+
+.operation-summary-value.info {
+    color: #0DCAF0 !important;
+}
+
+.operation-summary-value.warn {
+    color: #FFC107 !important;
+}
+
+.operation-summary-value.bad {
+    color: #AB2E3C !important;
+}
+
+/* Eski quick-list p stilleri yeni özeti bozmasın */
+.operation-summary-card .quick-list,
+.operation-summary-card .quick-list p {
+    display: none !important;
+}
+
+/* Küçük ekran uyumu */
+@media (max-width: 700px) {
+    .operation-summary-row {
+        min-height: 54px !important;
+        padding: 10px 12px !important;
+    }
+
+    .operation-summary-label,
+    .operation-summary-value {
+        font-size: 14px !important;
+    }
+
+    .operation-summary-value {
+        min-width: 80px !important;
+    }
+}
+
+/* ===== DETAS OPERATION SUMMARY FIX END ===== */
+
