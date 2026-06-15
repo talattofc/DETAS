@@ -2647,3 +2647,17 @@
 [20:09:33] Deprem sinyali normale döndü: tekrar ARM için hazır
 [20:09:35] Deprem tetikleme sistemi yeniden hazır
 [20:09:46] Görev durumu: BEKLEMEDE
+[20:23:54] Görev durumu takip sistemi başlatıldı
+[20:23:54] Istasyon telemetri aciliyor: /dev/serial0
+[20:23:54] Deprem tekrar ARM takipçisi başlatıldı
+[20:23:54] Cube MAVLink aciliyor: /dev/ttyAMA4 @ 57600
+[20:23:54] Görev durumu: BEKLEMEDE
+[20:23:54] Otomatik deprem görev kontrolü aktif - repeat override
+[20:23:54] DETAS panel basladi
+[20:23:54] Istasyon telemetri baglandi
+[20:23:54] AMG8833 bulundu: 0x69
+[20:23:54] AI HAT YOLO modu aktif
+[20:23:54] YOLO kutu sayimi aktif
+[20:23:54] Cube MAVLink modu aktif
+[20:23:54] Cube MAVLink baglandi
+[20:23:56] AI HAT YOLO stream basladi: CAM0
