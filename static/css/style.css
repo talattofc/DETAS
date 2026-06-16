@@ -2341,3 +2341,19 @@ input[type="range"] {
 
 /* === DETAS SARSINTI GRAFIGI TASMA DUZELTME BITIS === */
 
+
+/* === CANLI KAMERA ALTINDAKI ESKI TARAMA MODLARI BLOĞUNU KALDIR === */
+#cameraSection .camera-main .scan-panel,
+#cameraSection .camera-main .panel.scan-panel,
+#cameraSection .camera-main > .scan-panel,
+#cameraSection .camera-main > .panel:has(h3),
+#cameraSection .camera-main > div:has(button):has(h3) {
+    display: none !important;
+}
+
+/* Sağdaki servo/tarama paneli etkilenmesin */
+#cameraSection .camera-side .scan-panel,
+#cameraSection .camera-side .panel,
+#cameraSection .camera-side > div {
+    display: block;
+}

@@ -133,3 +133,42 @@ def detas_clean_scan_full_slow():
 
 # ===== DETAS CLEAN SERVO ROUTES END =====
 
+
+# ============================================================
+# DETAS TEK SERVO TARAMA ROUTE DÜZELTMESİ
+# ============================================================
+# Bu route'lar direkt services/servo_service.py içindeki tek servo kodunu çağırır.
+# AUX1 = SERVO9, tarama 1400 ↔ 2400 arasında yapılır.
+
+try:
+    from services import servo_service
+except Exception:
+    servo_service = None
+
+
+@api_blueprint.route("/servo/scan_single", methods=["GET", "POST"])
+def servo_scan_single_route():
+    if servo_service is None:
+        return jsonify({"ok": False, "error": "servo_service yüklenemedi"}), 500
+
+    result = servo_service.servo_scan()
+    return jsonify(result)
+
+
+@api_blueprint.route("/servo/stop_single", methods=["GET", "POST"])
+def servo_stop_single_route():
+    if servo_service is None:
+        return jsonify({"ok": False, "error": "servo_service yüklenemedi"}), 500
+
+    result = servo_service.servo_stop()
+    return jsonify(result)
+
+
+@api_blueprint.route("/servo/single/<int:pwm>", methods=["GET", "POST"])
+def servo_single_pwm_route(pwm):
+    if servo_service is None:
+        return jsonify({"ok": False, "error": "servo_service yüklenemedi"}), 500
+
+    result = servo_service.set_position(pwm)
+    return jsonify(result)
+

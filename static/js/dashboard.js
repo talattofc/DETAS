@@ -1,4 +1,13 @@
 
+// DETAS güvenli kamera viewport fonksiyonu
+if (typeof window.detasEnsureCameraViewport !== "function") {
+    window.detasEnsureCameraViewport = function () {
+        return true;
+    };
+}
+var detasEnsureCameraViewport = window.detasEnsureCameraViewport;
+
+
 /* ===== DETAS MAP FORCE ZOOM START ===== */
 (function () {
     if (window.__DETAS_MAP_FORCE_ZOOM__) return;

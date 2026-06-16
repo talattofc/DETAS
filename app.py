@@ -1,3 +1,4 @@
+from services import servo_service
 from services.mission_status_service import start_mission_status_service
 from services.earthquake_rearm_service import start_earthquake_rearm_watcher
 """DETAS Flask uygulama baslangic noktasi."""
@@ -21,18 +22,18 @@ def register_route_services(app):
         "camera_stream": camera_service.generate_frames,
         "set_camera": camera_service.set_camera,
 
-        "servo_pan": mavlink_service.servo_pan,
-        "servo_tilt": mavlink_service.servo_tilt,
-        "servo_center": mavlink_service.servo_center,
-        "servo_scan": mavlink_service.servo_scan,
-        "servo_scan_pan_slow": mavlink_service.servo_scan_pan_slow,
-        "servo_scan_tilt_slow": mavlink_service.servo_scan_tilt_slow,
-        "servo_scan_full_slow": mavlink_service.servo_scan_full_slow,
-        "servo_up": mavlink_service.servo_up,
-        "servo_down": mavlink_service.servo_down,
-        "servo_left": mavlink_service.servo_left,
-        "servo_right": mavlink_service.servo_right,
-        "servo_stop": mavlink_service.servo_stop,
+        "servo_pan": servo_service.servo_pan,
+        "servo_tilt": servo_service.servo_tilt,
+        "servo_center": servo_service.servo_center,
+        "servo_scan": servo_service.servo_scan,
+        "servo_scan_pan_slow": servo_service.servo_scan_pan_slow,
+        "servo_scan_tilt_slow": servo_service.servo_scan_tilt_slow,
+        "servo_scan_full_slow": servo_service.servo_scan_full_slow,
+        "servo_up": servo_service.servo_up,
+        "servo_down": servo_service.servo_down,
+        "servo_left": servo_service.servo_left,
+        "servo_right": servo_service.servo_right,
+        "servo_stop": servo_service.servo_stop,
 
         "mission_arm": mavlink_service.mission_arm,
         "mission_stop": mavlink_service.mission_stop,

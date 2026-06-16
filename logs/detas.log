@@ -3122,3 +3122,1137 @@
 [09:32:24] MAVLink veri akışı istendi
 [09:32:32] MAVLink veri akışı istendi
 [09:32:40] MAVLink veri akışı istendi
+[12:18:25] Istasyon telemetri aciliyor: /dev/serial0
+[12:18:25] Otomatik deprem ARM thread'i başlatıldı
+[12:18:25] Görev durumu takip sistemi başlatıldı
+[12:18:25] Deprem tekrar ARM takipçisi başlatıldı
+[12:18:25] MAVLink okuma thread'i başlatıldı
+[12:18:25] DETAS panel basladi
+[12:18:25] AMG8833 bulundu: 0x69
+[12:18:25] AI HAT YOLO modu aktif
+[12:18:25] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+[12:18:25] Görev durumu: BEKLEMEDE
+[12:18:25] Istasyon telemetri baglandi
+[12:18:25] YOLO kutu sayimi aktif
+[12:18:25] Cube MAVLink modu aktif
+[12:18:25] MAVLink bağlantısı hazır
+[12:18:25] MAVLink veri akışı istendi
+[12:18:26] MAVLink veri akışı istendi
+[12:18:26] Flight controller heartbeat kaynağı kilitlendi: sys=1, comp=1
+[12:18:27] AI HAT YOLO stream basladi: CAM0
+[12:18:34] MAVLink veri akışı istendi
+[12:18:42] MAVLink veri akışı istendi
+[12:18:50] MAVLink veri akışı istendi
+[12:18:58] MAVLink veri akışı istendi
+[12:19:06] MAVLink veri akışı istendi
+[12:19:14] MAVLink veri akışı istendi
+[12:19:22] MAVLink veri akışı istendi
+[12:19:30] MAVLink veri akışı istendi
+[12:19:38] MAVLink veri akışı istendi
+[12:19:46] MAVLink veri akışı istendi
+[12:19:54] MAVLink veri akışı istendi
+[12:20:02] MAVLink veri akışı istendi
+[12:20:10] MAVLink veri akışı istendi
+[12:20:18] MAVLink veri akışı istendi
+[12:20:26] MAVLink veri akışı istendi
+[12:20:34] MAVLink veri akışı istendi
+[12:20:42] MAVLink veri akışı istendi
+[12:20:50] MAVLink veri akışı istendi
+[12:20:58] MAVLink veri akışı istendi
+[12:21:06] MAVLink veri akışı istendi
+[12:21:14] MAVLink veri akışı istendi
+[12:21:22] MAVLink veri akışı istendi
+[12:21:30] MAVLink veri akışı istendi
+[12:21:38] MAVLink veri akışı istendi
+[12:21:46] MAVLink veri akışı istendi
+[12:21:54] MAVLink veri akışı istendi
+[12:22:02] MAVLink veri akışı istendi
+[12:22:10] MAVLink veri akışı istendi
+[12:22:18] MAVLink veri akışı istendi
+[12:22:26] MAVLink veri akışı istendi
+[12:22:34] MAVLink veri akışı istendi
+[12:22:42] MAVLink veri akışı istendi
+[12:23:01] Görev durumu takip sistemi başlatıldı
+[12:23:01] Istasyon telemetri aciliyor: /dev/serial0
+[12:23:01] Deprem tekrar ARM takipçisi başlatıldı
+[12:23:01] MAVLink okuma thread'i başlatıldı
+[12:23:01] Görev durumu: BEKLEMEDE
+[12:23:01] Otomatik deprem ARM thread'i başlatıldı
+[12:23:01] AMG8833 bulundu: 0x69
+[12:23:01] Istasyon telemetri baglandi
+[12:23:01] DETAS panel basladi
+[12:23:01] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+[12:23:01] AI HAT YOLO modu aktif
+[12:23:01] YOLO kutu sayimi aktif
+[12:23:01] Cube MAVLink modu aktif
+[12:23:02] MAVLink bağlantısı hazır
+[12:23:02] MAVLink veri akışı istendi
+[12:23:02] MAVLink veri akışı istendi
+[12:23:02] Flight controller heartbeat kaynağı kilitlendi: sys=1, comp=1
+[12:23:03] AI HAT YOLO stream basladi: CAM0
+[12:23:09] AI HAT YOLO stream basladi: CAM0
+[12:23:10] MAVLink veri akışı istendi
+[12:23:18] MAVLink veri akışı istendi
+[12:23:26] MAVLink veri akışı istendi
+[12:23:34] MAVLink veri akışı istendi
+[12:23:42] MAVLink veri akışı istendi
+[12:23:50] MAVLink veri akışı istendi
+[12:23:58] MAVLink veri akışı istendi
+[12:24:06] MAVLink veri akışı istendi
+[12:24:14] MAVLink veri akışı istendi
+[12:25:16] Görev durumu takip sistemi başlatıldı
+[12:25:16] MAVLink okuma thread'i başlatıldı
+[12:25:16] Istasyon telemetri aciliyor: /dev/serial0
+[12:25:16] Deprem tekrar ARM takipçisi başlatıldı
+[12:25:16] Otomatik deprem ARM thread'i başlatıldı
+[12:25:16] Görev durumu: BEKLEMEDE
+[12:25:16] DETAS panel basladi
+[12:25:16] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+[12:25:16] AI HAT YOLO modu aktif
+[12:25:16] AMG8833 bulundu: 0x69
+[12:25:16] Istasyon telemetri baglandi
+[12:25:16] YOLO kutu sayimi aktif
+[12:25:16] Cube MAVLink modu aktif
+[12:25:16] MAVLink bağlantısı hazır
+[12:25:16] MAVLink veri akışı istendi
+[12:25:16] MAVLink veri akışı istendi
+[12:25:16] Flight controller heartbeat kaynağı kilitlendi: sys=1, comp=1
+[12:25:18] AI HAT YOLO stream basladi: CAM0
+[12:25:24] MAVLink veri akışı istendi
+[12:25:32] MAVLink veri akışı istendi
+[12:25:40] MAVLink veri akışı istendi
+[12:25:48] MAVLink veri akışı istendi
+[12:25:56] MAVLink veri akışı istendi
+[12:26:04] MAVLink veri akışı istendi
+[12:26:12] MAVLink veri akışı istendi
+[12:26:13] AI HAT YOLO stream basladi: CAM0
+[12:26:20] MAVLink veri akışı istendi
+[12:26:28] MAVLink veri akışı istendi
+[12:26:36] AI HAT YOLO stream basladi: CAM0
+[12:26:36] MAVLink veri akışı istendi
+[12:26:44] MAVLink veri akışı istendi
+[12:26:52] MAVLink veri akışı istendi
+[12:27:00] MAVLink veri akışı istendi
+[12:27:08] MAVLink veri akışı istendi
+[12:27:16] MAVLink veri akışı istendi
+[12:27:24] MAVLink veri akışı istendi
+[12:27:32] MAVLink veri akışı istendi
+[12:27:40] MAVLink veri akışı istendi
+[12:27:48] MAVLink veri akışı istendi
+[12:27:54] Görev durumu takip sistemi başlatıldı
+[12:27:54] Deprem tekrar ARM takipçisi başlatıldı
+[12:27:54] Istasyon telemetri aciliyor: /dev/serial0
+[12:27:54] Otomatik deprem ARM thread'i başlatıldı
+[12:27:54] MAVLink okuma thread'i başlatıldı
+[12:27:54] Görev durumu: BEKLEMEDE
+[12:27:54] MAVLink okuma hatası: pymavlink yüklü değil
+[12:27:54] DETAS panel basladi
+[12:27:54] AMG8833 bulundu: 0x69
+[12:27:54] AI HAT YOLO modu aktif
+[12:27:54] Istasyon telemetri baglandi
+[12:27:54] YOLO kutu sayimi aktif
+[12:27:54] Cube MAVLink modu aktif
+[12:27:56] MAVLink veri akışı istendi
+[12:27:57] AI HAT YOLO stream basladi: CAM0
+[12:27:58] AI HAT YOLO stream basladi: CAM0
+[12:28:01] AI HAT YOLO stream basladi: CAM0
+[12:28:04] MAVLink veri akışı istendi
+[12:28:15] Deprem tekrar ARM takipçisi başlatıldı
+[12:28:15] Görev durumu takip sistemi başlatıldı
+[12:28:15] Istasyon telemetri aciliyor: /dev/serial0
+[12:28:15] Görev durumu: BEKLEMEDE
+[12:28:15] Otomatik deprem ARM thread'i başlatıldı
+[12:28:15] MAVLink okuma thread'i başlatıldı
+[12:28:15] Istasyon telemetri baglandi
+[12:28:15] DETAS panel basladi
+[12:28:15] AMG8833 bulundu: 0x69
+[12:28:15] AI HAT YOLO modu aktif
+[12:28:15] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+[12:28:15] YOLO kutu sayimi aktif
+[12:28:15] Cube MAVLink modu aktif
+[12:28:15] MAVLink bağlantısı hazır
+[12:28:15] MAVLink veri akışı istendi
+[12:28:16] MAVLink veri akışı istendi
+[12:28:16] AI HAT YOLO stream basladi: CAM0
+[12:28:16] Flight controller heartbeat kaynağı kilitlendi: sys=1, comp=1
+[12:28:24] MAVLink veri akışı istendi
+[12:28:32] MAVLink veri akışı istendi
+[12:28:40] MAVLink veri akışı istendi
+[12:28:48] MAVLink veri akışı istendi
+[12:28:56] MAVLink veri akışı istendi
+[12:29:04] MAVLink veri akışı istendi
+[12:29:12] MAVLink veri akışı istendi
+[12:29:20] MAVLink veri akışı istendi
+[12:29:28] MAVLink veri akışı istendi
+[12:29:36] MAVLink veri akışı istendi
+[12:29:44] MAVLink veri akışı istendi
+[12:29:52] MAVLink veri akışı istendi
+[12:30:00] MAVLink veri akışı istendi
+[12:30:08] MAVLink veri akışı istendi
+[12:30:16] MAVLink veri akışı istendi
+[12:30:24] MAVLink veri akışı istendi
+[12:30:32] MAVLink veri akışı istendi
+[12:30:40] MAVLink veri akışı istendi
+[12:30:48] MAVLink veri akışı istendi
+[12:30:59] Görev durumu takip sistemi başlatıldı
+[12:30:59] Deprem tekrar ARM takipçisi başlatıldı
+[12:30:59] Istasyon telemetri aciliyor: /dev/serial0
+[12:30:59] MAVLink okuma thread'i başlatıldı
+[12:30:59] Otomatik deprem ARM thread'i başlatıldı
+[12:30:59] DETAS panel basladi
+[12:30:59] Görev durumu: BEKLEMEDE
+[12:30:59] AMG8833 bulundu: 0x69
+[12:30:59] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+[12:30:59] AI HAT YOLO modu aktif
+[12:30:59] Istasyon telemetri baglandi
+[12:30:59] YOLO kutu sayimi aktif
+[12:30:59] Cube MAVLink modu aktif
+[12:31:00] MAVLink bağlantısı hazır
+[12:31:00] MAVLink veri akışı istendi
+[12:31:00] MAVLink veri akışı istendi
+[12:31:00] Flight controller heartbeat kaynağı kilitlendi: sys=1, comp=1
+[12:31:00] AI HAT YOLO stream basladi: CAM0
+[12:31:08] MAVLink veri akışı istendi
+[12:31:16] MAVLink veri akışı istendi
+[12:31:24] MAVLink veri akışı istendi
+[12:31:32] MAVLink veri akışı istendi
+[12:31:40] MAVLink veri akışı istendi
+[12:31:48] MAVLink veri akışı istendi
+[12:31:56] MAVLink veri akışı istendi
+[12:31:58] Cube: RCInput: decoding SBUS(1)
+[12:32:04] MAVLink veri akışı istendi
+[12:32:12] MAVLink veri akışı istendi
+[12:32:16] AI HAT YOLO stream basladi: CAM0
+[12:32:18] ARM komutu gönderildi
+[12:32:18] Cube: Warning: Arming Checks Disabled
+[12:32:18] Otomatik tekrar ARM gönderildi: send_arm_command
+[12:32:18] ARM komutu gönderildi
+[12:32:18] Deprem tetikleme: ARM komutu gönderildi
+[12:32:18] Görev durumu: GÖREVDE
+[12:32:18] Deprem tetikleme ARM sonucu: {'ok': True, 'arm': True, 'ack_result': 0, 'message': 'ARM komutu gönderildi'}
+[12:32:20] MAVLink veri akışı istendi
+[12:32:23] Deprem tetikleme sistemi tekrar hazır
+[12:32:24] Deprem tetikleme sistemi yeniden hazır
+[12:32:28] MAVLink veri akışı istendi
+[12:32:36] MAVLink veri akışı istendi
+[12:32:44] MAVLink veri akışı istendi
+[12:32:45] Görev durumu: BEKLEMEDE
+[12:32:52] MAVLink veri akışı istendi
+[12:33:00] MAVLink veri akışı istendi
+[12:33:08] MAVLink veri akışı istendi
+[12:33:16] MAVLink veri akışı istendi
+[12:33:24] MAVLink veri akışı istendi
+[12:33:32] MAVLink veri akışı istendi
+[12:33:40] MAVLink veri akışı istendi
+[12:33:48] MAVLink veri akışı istendi
+[12:33:56] MAVLink veri akışı istendi
+[12:34:04] MAVLink veri akışı istendi
+[12:34:12] MAVLink veri akışı istendi
+[12:34:20] MAVLink veri akışı istendi
+[12:34:28] MAVLink veri akışı istendi
+[12:34:36] MAVLink veri akışı istendi
+[12:34:44] MAVLink veri akışı istendi
+[12:34:52] MAVLink veri akışı istendi
+[12:35:00] MAVLink veri akışı istendi
+[12:35:08] MAVLink veri akışı istendi
+[12:35:12] Görev durumu: ARM KOMUTU GÖNDERİLDİ
+[12:35:12] ARM komutu gönderildi
+[12:35:12] Cube: Warning: Arming Checks Disabled
+[12:35:12] Otomatik tekrar ARM gönderildi: send_arm_command
+[12:35:12] Deprem tetikleme: ARM komutu gönderildi
+[12:35:12] ARM komutu gönderildi
+[12:35:12] Deprem tetikleme ARM sonucu: {'ok': True, 'arm': True, 'ack_result': 0, 'message': 'ARM komutu gönderildi'}
+[12:35:13] Görev durumu: GÖREVDE
+[12:35:15] Deprem tetikleme sistemi tekrar hazır
+[12:35:15] Deprem tetikleme sistemi yeniden hazır
+[12:35:16] MAVLink veri akışı istendi
+[12:35:24] MAVLink veri akışı istendi
+[12:35:28] Görev durumu: BEKLEMEDE
+[12:35:32] MAVLink veri akışı istendi
+[12:35:40] MAVLink veri akışı istendi
+[12:35:48] MAVLink veri akışı istendi
+[12:35:56] MAVLink veri akışı istendi
+[12:36:04] MAVLink veri akışı istendi
+[12:36:13] MAVLink veri akışı istendi
+[12:36:21] MAVLink veri akışı istendi
+[12:36:29] MAVLink veri akışı istendi
+[12:36:37] MAVLink veri akışı istendi
+[12:36:45] MAVLink veri akışı istendi
+[12:36:53] MAVLink veri akışı istendi
+[12:37:01] MAVLink veri akışı istendi
+[12:37:09] MAVLink veri akışı istendi
+[12:37:17] MAVLink veri akışı istendi
+[12:37:25] MAVLink veri akışı istendi
+[12:37:33] MAVLink veri akışı istendi
+[12:37:41] MAVLink veri akışı istendi
+[12:37:49] MAVLink veri akışı istendi
+[12:37:57] MAVLink veri akışı istendi
+[12:38:05] MAVLink veri akışı istendi
+[12:38:13] MAVLink veri akışı istendi
+[12:38:15] AI HAT YOLO stream basladi: CAM0
+[12:38:21] MAVLink veri akışı istendi
+[12:38:25] Deprem tekrar ARM takipçisi başlatıldı
+[12:38:25] Görev durumu takip sistemi başlatıldı
+[12:38:25] Istasyon telemetri aciliyor: /dev/serial0
+[12:38:25] MAVLink okuma thread'i başlatıldı
+[12:38:25] Görev durumu: BEKLEMEDE
+[12:38:25] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+[12:38:25] Otomatik deprem ARM thread'i başlatıldı
+[12:38:25] DETAS panel basladi
+[12:38:25] Istasyon telemetri baglandi
+[12:38:25] AMG8833 bulundu: 0x69
+[12:38:25] AI HAT YOLO modu aktif
+[12:38:25] YOLO kutu sayimi aktif
+[12:38:25] Cube MAVLink modu aktif
+[12:38:25] MAVLink bağlantısı hazır
+[12:38:25] MAVLink veri akışı istendi
+[12:38:25] MAVLink veri akışı istendi
+[12:38:25] Flight controller heartbeat kaynağı kilitlendi: sys=1, comp=1
+[12:38:29] AI HAT YOLO stream basladi: CAM0
+[12:38:33] MAVLink veri akışı istendi
+[12:38:41] MAVLink veri akışı istendi
+[12:38:49] MAVLink veri akışı istendi
+[12:38:57] MAVLink veri akışı istendi
+[12:39:05] MAVLink veri akışı istendi
+[12:39:13] MAVLink veri akışı istendi
+[12:39:21] MAVLink veri akışı istendi
+[12:39:29] MAVLink veri akışı istendi
+[12:39:37] MAVLink veri akışı istendi
+[12:39:45] MAVLink veri akışı istendi
+[12:39:53] MAVLink veri akışı istendi
+[12:40:01] MAVLink veri akışı istendi
+[12:40:09] MAVLink veri akışı istendi
+[12:40:17] MAVLink veri akışı istendi
+[12:40:25] MAVLink veri akışı istendi
+[12:40:33] MAVLink veri akışı istendi
+[12:40:41] MAVLink veri akışı istendi
+[12:40:49] MAVLink veri akışı istendi
+[12:40:57] MAVLink veri akışı istendi
+[12:41:05] MAVLink veri akışı istendi
+[12:41:13] MAVLink veri akışı istendi
+[12:41:21] MAVLink veri akışı istendi
+[12:41:29] MAVLink veri akışı istendi
+[12:41:37] MAVLink veri akışı istendi
+[12:41:45] MAVLink veri akışı istendi
+[12:41:54] MAVLink veri akışı istendi
+[12:42:02] MAVLink veri akışı istendi
+[12:42:10] MAVLink veri akışı istendi
+[12:42:18] MAVLink veri akışı istendi
+[12:42:26] MAVLink veri akışı istendi
+[12:42:34] MAVLink veri akışı istendi
+[12:42:42] MAVLink veri akışı istendi
+[12:42:57] Görev durumu takip sistemi başlatıldı
+[12:42:57] Deprem tekrar ARM takipçisi başlatıldı
+[12:42:57] Istasyon telemetri aciliyor: /dev/serial0
+[12:42:57] Görev durumu: BEKLEMEDE
+[12:42:57] MAVLink okuma thread'i başlatıldı
+[12:42:57] Otomatik deprem ARM thread'i başlatıldı
+[12:42:57] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+[12:42:57] DETAS panel basladi
+[12:42:57] AMG8833 bulundu: 0x69
+[12:42:57] Istasyon telemetri baglandi
+[12:42:57] AI HAT YOLO modu aktif
+[12:42:57] YOLO kutu sayimi aktif
+[12:42:57] Cube MAVLink modu aktif
+[12:42:57] MAVLink bağlantısı hazır
+[12:42:57] MAVLink veri akışı istendi
+[12:42:57] MAVLink veri akışı istendi
+[12:42:57] Flight controller heartbeat kaynağı kilitlendi: sys=1, comp=1
+[12:43:00] AI HAT YOLO stream basladi: CAM0
+[12:43:05] MAVLink veri akışı istendi
+[12:43:13] MAVLink veri akışı istendi
+[12:43:21] MAVLink veri akışı istendi
+[12:43:29] MAVLink veri akışı istendi
+[12:43:37] MAVLink veri akışı istendi
+[12:43:45] MAVLink veri akışı istendi
+[12:43:53] MAVLink veri akışı istendi
+[12:44:01] MAVLink veri akışı istendi
+[12:44:09] MAVLink veri akışı istendi
+[12:44:17] MAVLink veri akışı istendi
+[12:44:25] MAVLink veri akışı istendi
+[12:57:21] Görev durumu takip sistemi başlatıldı
+[12:57:21] Deprem tekrar ARM takipçisi başlatıldı
+[12:57:21] Istasyon telemetri aciliyor: /dev/serial0
+[12:57:21] MAVLink okuma thread'i başlatıldı
+[12:57:21] Görev durumu: BEKLEMEDE
+[12:57:21] DETAS panel basladi
+[12:57:21] Otomatik deprem ARM thread'i başlatıldı
+[12:57:21] AI HAT YOLO modu aktif
+[12:57:21] AMG8833 bulundu: 0x69
+[12:57:21] Istasyon telemetri baglandi
+[12:57:21] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+[12:57:21] YOLO kutu sayimi aktif
+[12:57:21] Cube MAVLink modu aktif
+[12:57:22] MAVLink bağlantısı hazır
+[12:57:22] MAVLink veri akışı istendi
+[12:57:22] MAVLink veri akışı istendi
+[12:57:23] Flight controller heartbeat kaynağı kilitlendi: sys=1, comp=1
+[12:57:30] MAVLink veri akışı istendi
+[12:57:33] AI HAT YOLO stream basladi: CAM0
+[12:57:38] MAVLink veri akışı istendi
+[12:57:46] MAVLink veri akışı istendi
+[12:57:54] MAVLink veri akışı istendi
+[12:58:02] MAVLink veri akışı istendi
+[12:58:08] AI HAT YOLO stream basladi: CAM0
+[12:58:10] MAVLink veri akışı istendi
+[12:58:18] MAVLink veri akışı istendi
+[12:58:26] MAVLink veri akışı istendi
+[12:58:34] MAVLink veri akışı istendi
+[12:58:42] MAVLink veri akışı istendi
+[12:58:50] MAVLink veri akışı istendi
+[12:58:58] MAVLink veri akışı istendi
+[12:59:06] MAVLink veri akışı istendi
+[12:59:14] MAVLink veri akışı istendi
+[12:59:22] MAVLink veri akışı istendi
+[12:59:30] MAVLink veri akışı istendi
+[12:59:38] MAVLink veri akışı istendi
+[12:59:46] MAVLink veri akışı istendi
+[12:59:54] MAVLink veri akışı istendi
+[13:00:02] MAVLink veri akışı istendi
+[13:00:10] MAVLink veri akışı istendi
+[13:00:18] MAVLink veri akışı istendi
+[13:00:26] MAVLink veri akışı istendi
+[13:00:34] MAVLink veri akışı istendi
+[13:00:42] MAVLink veri akışı istendi
+[13:00:50] MAVLink veri akışı istendi
+[13:00:58] MAVLink veri akışı istendi
+[13:02:57] Görev durumu takip sistemi başlatıldı
+[13:02:57] Istasyon telemetri aciliyor: /dev/serial0
+[13:02:57] Deprem tekrar ARM takipçisi başlatıldı
+[13:02:57] Otomatik deprem ARM thread'i başlatıldı
+[13:02:57] MAVLink okuma thread'i başlatıldı
+[13:02:57] Görev durumu: BEKLEMEDE
+[13:02:57] AMG8833 bulundu: 0x69
+[13:02:57] DETAS panel basladi
+[13:02:57] Istasyon telemetri baglandi
+[13:02:57] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+[13:02:57] AI HAT YOLO modu aktif
+[13:02:57] YOLO kutu sayimi aktif
+[13:02:57] Cube MAVLink modu aktif
+[13:02:57] MAVLink bağlantısı hazır
+[13:02:58] MAVLink veri akışı istendi
+[13:02:58] MAVLink veri akışı istendi
+[13:02:58] Flight controller heartbeat kaynağı kilitlendi: sys=1, comp=1
+[13:02:59] AI HAT YOLO stream basladi: CAM0
+[13:03:06] MAVLink veri akışı istendi
+[13:03:14] MAVLink veri akışı istendi
+[13:03:20] AI HAT YOLO stream basladi: CAM0
+[13:03:22] MAVLink veri akışı istendi
+[13:03:30] MAVLink veri akışı istendi
+[13:03:38] MAVLink veri akışı istendi
+[13:03:40] TEK SERVO AUX1 / SERVO9 -> 1400
+[13:03:41] TEK SERVO AUX1 / SERVO9 -> 2400
+[13:03:42] Tek servo tarama stop komutu
+[13:03:42] TEK SERVO TARAMA BAŞLADI: SERVO9 / 1400 ↔ 2400
+[13:03:42] TEK SERVO AUX1 / SERVO9 -> 1400
+[13:03:43] TEK SERVO AUX1 / SERVO9 -> 1500
+[13:03:43] TEK SERVO AUX1 / SERVO9 -> 1600
+[13:03:43] TEK SERVO AUX1 / SERVO9 -> 1700
+[13:03:43] TEK SERVO AUX1 / SERVO9 -> 1800
+[13:03:43] TEK SERVO AUX1 / SERVO9 -> 1900
+[13:03:43] TEK SERVO AUX1 / SERVO9 -> 2000
+[13:03:43] TEK SERVO AUX1 / SERVO9 -> 2100
+[13:03:43] TEK SERVO AUX1 / SERVO9 -> 2200
+[13:03:44] TEK SERVO AUX1 / SERVO9 -> 2300
+[13:03:44] TEK SERVO AUX1 / SERVO9 -> 2400
+[13:03:44] TEK SERVO AUX1 / SERVO9 -> 2400
+[13:03:44] TEK SERVO AUX1 / SERVO9 -> 2300
+[13:03:44] TEK SERVO AUX1 / SERVO9 -> 2200
+[13:03:44] TEK SERVO AUX1 / SERVO9 -> 2100
+[13:03:44] TEK SERVO AUX1 / SERVO9 -> 2000
+[13:03:45] TEK SERVO AUX1 / SERVO9 -> 1900
+[13:03:45] TEK SERVO AUX1 / SERVO9 -> 1800
+[13:03:45] TEK SERVO AUX1 / SERVO9 -> 1700
+[13:03:45] TEK SERVO AUX1 / SERVO9 -> 1600
+[13:03:45] TEK SERVO AUX1 / SERVO9 -> 1500
+[13:03:45] TEK SERVO AUX1 / SERVO9 -> 1400
+[13:03:45] TEK SERVO AUX1 / SERVO9 -> 1400
+[13:03:46] TEK SERVO AUX1 / SERVO9 -> 1500
+[13:03:46] TEK SERVO AUX1 / SERVO9 -> 1600
+[13:03:46] TEK SERVO AUX1 / SERVO9 -> 1700
+[13:03:46] TEK SERVO AUX1 / SERVO9 -> 1800
+[13:03:46] MAVLink veri akışı istendi
+[13:03:46] TEK SERVO AUX1 / SERVO9 -> 1900
+[13:03:46] TEK SERVO AUX1 / SERVO9 -> 2000
+[13:03:46] TEK SERVO AUX1 / SERVO9 -> 2100
+[13:03:46] TEK SERVO AUX1 / SERVO9 -> 2200
+[13:03:47] TEK SERVO AUX1 / SERVO9 -> 2300
+[13:03:47] TEK SERVO AUX1 / SERVO9 -> 2400
+[13:03:47] TEK SERVO AUX1 / SERVO9 -> 2400
+[13:03:47] TEK SERVO AUX1 / SERVO9 -> 2300
+[13:03:47] TEK SERVO AUX1 / SERVO9 -> 2200
+[13:03:47] TEK SERVO AUX1 / SERVO9 -> 2100
+[13:03:47] TEK SERVO AUX1 / SERVO9 -> 2000
+[13:03:48] TEK SERVO AUX1 / SERVO9 -> 1900
+[13:03:48] TEK SERVO AUX1 / SERVO9 -> 1800
+[13:03:48] TEK SERVO AUX1 / SERVO9 -> 1700
+[13:03:48] TEK SERVO AUX1 / SERVO9 -> 1600
+[13:03:48] TEK SERVO AUX1 / SERVO9 -> 1500
+[13:03:48] TEK SERVO AUX1 / SERVO9 -> 1400
+[13:03:48] TEK SERVO AUX1 / SERVO9 -> 1400
+[13:03:49] Tek servo tarama stop komutu
+[13:03:49] TEK SERVO TARAMA DURDU
+[13:03:54] MAVLink veri akışı istendi
+[13:04:02] MAVLink veri akışı istendi
+[13:04:10] MAVLink veri akışı istendi
+[13:04:18] MAVLink veri akışı istendi
+[13:04:26] MAVLink veri akışı istendi
+[13:04:34] MAVLink veri akışı istendi
+[13:04:42] MAVLink veri akışı istendi
+[13:04:50] MAVLink veri akışı istendi
+[13:04:58] MAVLink veri akışı istendi
+[13:05:06] MAVLink veri akışı istendi
+[13:05:14] MAVLink veri akışı istendi
+[13:05:22] MAVLink veri akışı istendi
+[13:05:30] MAVLink veri akışı istendi
+[13:05:31] AI HAT YOLO stream basladi: CAM0
+[13:05:38] MAVLink veri akışı istendi
+[13:05:41] AI HAT YOLO stream basladi: CAM0
+[13:05:46] MAVLink veri akışı istendi
+[13:05:49] Görev durumu takip sistemi başlatıldı
+[13:05:49] Deprem tekrar ARM takipçisi başlatıldı
+[13:05:49] Istasyon telemetri aciliyor: /dev/serial0
+[13:05:49] MAVLink okuma thread'i başlatıldı
+[13:05:49] Görev durumu: BEKLEMEDE
+[13:05:49] DETAS panel basladi
+[13:05:49] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+[13:05:49] Otomatik deprem ARM thread'i başlatıldı
+[13:05:49] AI HAT YOLO modu aktif
+[13:05:49] Istasyon telemetri baglandi
+[13:05:49] AMG8833 bulundu: 0x69
+[13:05:49] YOLO kutu sayimi aktif
+[13:05:49] Cube MAVLink modu aktif
+[13:05:49] AI HAT YOLO stream basladi: CAM0
+[13:05:49] MAVLink bağlantısı hazır
+[13:05:50] MAVLink veri akışı istendi
+[13:05:50] MAVLink veri akışı istendi
+[13:05:50] Flight controller heartbeat kaynağı kilitlendi: sys=1, comp=1
+[13:05:58] MAVLink veri akışı istendi
+[13:06:06] MAVLink veri akışı istendi
+[13:06:10] Tek servo tarama stop komutu
+[13:06:10] TEK SERVO TARAMA BAŞLADI: SERVO9 / 1400 ↔ 2400
+[13:06:10] TEK SERVO AUX1 / SERVO9 -> 1400
+[13:06:10] TEK SERVO AUX1 / SERVO9 -> 1500
+[13:06:10] TEK SERVO AUX1 / SERVO9 -> 1600
+[13:06:10] TEK SERVO AUX1 / SERVO9 -> 1700
+[13:06:10] TEK SERVO AUX1 / SERVO9 -> 1800
+[13:06:10] TEK SERVO AUX1 / SERVO9 -> 1900
+[13:06:10] TEK SERVO AUX1 / SERVO9 -> 2000
+[13:06:11] TEK SERVO AUX1 / SERVO9 -> 2100
+[13:06:11] TEK SERVO AUX1 / SERVO9 -> 2200
+[13:06:11] TEK SERVO AUX1 / SERVO9 -> 2300
+[13:06:11] TEK SERVO AUX1 / SERVO9 -> 2400
+[13:06:11] TEK SERVO AUX1 / SERVO9 -> 2400
+[13:06:11] TEK SERVO AUX1 / SERVO9 -> 2300
+[13:06:11] TEK SERVO AUX1 / SERVO9 -> 2200
+[13:06:12] TEK SERVO AUX1 / SERVO9 -> 2100
+[13:06:12] TEK SERVO AUX1 / SERVO9 -> 2000
+[13:06:12] TEK SERVO AUX1 / SERVO9 -> 1900
+[13:06:12] TEK SERVO AUX1 / SERVO9 -> 1800
+[13:06:12] TEK SERVO AUX1 / SERVO9 -> 1700
+[13:06:12] TEK SERVO AUX1 / SERVO9 -> 1600
+[13:06:12] TEK SERVO AUX1 / SERVO9 -> 1500
+[13:06:12] TEK SERVO AUX1 / SERVO9 -> 1400
+[13:06:13] TEK SERVO AUX1 / SERVO9 -> 1400
+[13:06:13] TEK SERVO AUX1 / SERVO9 -> 1500
+[13:06:13] TEK SERVO AUX1 / SERVO9 -> 1600
+[13:06:13] TEK SERVO AUX1 / SERVO9 -> 1700
+[13:06:13] TEK SERVO AUX1 / SERVO9 -> 1800
+[13:06:13] TEK SERVO AUX1 / SERVO9 -> 1900
+[13:06:13] TEK SERVO AUX1 / SERVO9 -> 2000
+[13:06:14] TEK SERVO AUX1 / SERVO9 -> 2100
+[13:06:14] TEK SERVO AUX1 / SERVO9 -> 2200
+[13:06:14] TEK SERVO AUX1 / SERVO9 -> 2300
+[13:06:14] TEK SERVO AUX1 / SERVO9 -> 2400
+[13:06:14] MAVLink veri akışı istendi
+[13:06:14] TEK SERVO AUX1 / SERVO9 -> 2400
+[13:06:14] TEK SERVO AUX1 / SERVO9 -> 2300
+[13:06:14] TEK SERVO AUX1 / SERVO9 -> 2200
+[13:06:15] TEK SERVO AUX1 / SERVO9 -> 2100
+[13:06:15] TEK SERVO AUX1 / SERVO9 -> 2000
+[13:06:15] TEK SERVO AUX1 / SERVO9 -> 1900
+[13:06:15] TEK SERVO AUX1 / SERVO9 -> 1800
+[13:06:15] TEK SERVO AUX1 / SERVO9 -> 1700
+[13:06:15] TEK SERVO AUX1 / SERVO9 -> 1600
+[13:06:15] TEK SERVO AUX1 / SERVO9 -> 1500
+[13:06:15] TEK SERVO AUX1 / SERVO9 -> 1400
+[13:06:16] TEK SERVO AUX1 / SERVO9 -> 1400
+[13:06:16] TEK SERVO AUX1 / SERVO9 -> 1500
+[13:06:16] TEK SERVO AUX1 / SERVO9 -> 1600
+[13:06:16] TEK SERVO AUX1 / SERVO9 -> 1700
+[13:06:16] Tek servo tarama stop komutu
+[13:06:16] TEK SERVO TARAMA DURDU
+[13:06:22] MAVLink veri akışı istendi
+[13:06:30] MAVLink veri akışı istendi
+[13:06:38] MAVLink veri akışı istendi
+[13:06:46] MAVLink veri akışı istendi
+[13:06:54] MAVLink veri akışı istendi
+[13:07:02] MAVLink veri akışı istendi
+[13:07:10] MAVLink veri akışı istendi
+[13:07:18] MAVLink veri akışı istendi
+[13:07:26] MAVLink veri akışı istendi
+[13:07:34] MAVLink veri akışı istendi
+[13:07:42] MAVLink veri akışı istendi
+[13:07:50] MAVLink veri akışı istendi
+[13:07:58] MAVLink veri akışı istendi
+[13:08:06] MAVLink veri akışı istendi
+[13:08:14] MAVLink veri akışı istendi
+[13:08:22] MAVLink veri akışı istendi
+[13:08:30] MAVLink veri akışı istendi
+[13:08:38] MAVLink veri akışı istendi
+[13:08:46] MAVLink veri akışı istendi
+[13:08:54] MAVLink veri akışı istendi
+[13:09:02] MAVLink veri akışı istendi
+[13:09:11] Deprem tekrar ARM takipçisi başlatıldı
+[13:09:11] MAVLink okuma thread'i başlatıldı
+[13:09:11] Görev durumu takip sistemi başlatıldı
+[13:09:11] Istasyon telemetri aciliyor: /dev/serial0
+[13:09:11] Otomatik deprem ARM thread'i başlatıldı
+[13:09:11] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+[13:09:11] Görev durumu: BEKLEMEDE
+[13:09:11] DETAS panel basladi
+[13:09:11] Istasyon telemetri baglandi
+[13:09:11] AMG8833 bulundu: 0x69
+[13:09:11] AI HAT YOLO modu aktif
+[13:09:11] YOLO kutu sayimi aktif
+[13:09:11] Cube MAVLink modu aktif
+[13:09:12] MAVLink bağlantısı hazır
+[13:09:12] MAVLink veri akışı istendi
+[13:09:12] MAVLink veri akışı istendi
+[13:09:12] AI HAT YOLO stream basladi: CAM0
+[13:09:13] Flight controller heartbeat kaynağı kilitlendi: sys=1, comp=1
+[13:09:17] AI HAT YOLO stream basladi: CAM0
+[13:09:19] AI HAT YOLO stream basladi: CAM0
+[13:09:20] MAVLink veri akışı istendi
+[13:09:28] MAVLink veri akışı istendi
+[13:09:36] MAVLink veri akışı istendi
+[13:09:43] AI HAT YOLO stream basladi: CAM0
+[13:09:44] MAVLink veri akışı istendi
+[13:09:52] MAVLink veri akışı istendi
+[13:10:00] MAVLink veri akışı istendi
+[13:10:08] MAVLink veri akışı istendi
+[13:10:16] MAVLink veri akışı istendi
+[13:10:24] MAVLink veri akışı istendi
+[13:10:32] MAVLink veri akışı istendi
+[13:10:40] MAVLink veri akışı istendi
+[13:10:49] Görev durumu takip sistemi başlatıldı
+[13:10:49] Deprem tekrar ARM takipçisi başlatıldı
+[13:10:49] Istasyon telemetri aciliyor: /dev/serial0
+[13:10:49] MAVLink okuma thread'i başlatıldı
+[13:10:49] Otomatik deprem ARM thread'i başlatıldı
+[13:10:49] Görev durumu: BEKLEMEDE
+[13:10:49] DETAS panel basladi
+[13:10:49] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+[13:10:49] AMG8833 bulundu: 0x69
+[13:10:49] Istasyon telemetri baglandi
+[13:10:49] AI HAT YOLO modu aktif
+[13:10:49] YOLO kutu sayimi aktif
+[13:10:49] Cube MAVLink modu aktif
+[13:10:50] MAVLink bağlantısı hazır
+[13:10:50] MAVLink veri akışı istendi
+[13:10:50] MAVLink veri akışı istendi
+[13:10:51] Flight controller heartbeat kaynağı kilitlendi: sys=1, comp=1
+[13:10:51] AI HAT YOLO stream basladi: CAM0
+[13:10:58] MAVLink veri akışı istendi
+[13:11:06] MAVLink veri akışı istendi
+[13:11:14] MAVLink veri akışı istendi
+[13:11:22] MAVLink veri akışı istendi
+[13:11:30] MAVLink veri akışı istendi
+[13:11:38] MAVLink veri akışı istendi
+[13:11:46] MAVLink veri akışı istendi
+[13:11:54] MAVLink veri akışı istendi
+[13:12:02] MAVLink veri akışı istendi
+[13:12:10] MAVLink veri akışı istendi
+[13:12:18] MAVLink veri akışı istendi
+[13:12:26] MAVLink veri akışı istendi
+[13:12:34] MAVLink veri akışı istendi
+[13:12:42] MAVLink veri akışı istendi
+[13:12:50] MAVLink veri akışı istendi
+[13:12:58] MAVLink veri akışı istendi
+[13:13:06] MAVLink veri akışı istendi
+[13:13:14] MAVLink veri akışı istendi
+[13:13:22] MAVLink veri akışı istendi
+[13:13:42] Görev durumu takip sistemi başlatıldı
+[13:13:42] Deprem tekrar ARM takipçisi başlatıldı
+[13:13:42] MAVLink okuma thread'i başlatıldı
+[13:13:42] Istasyon telemetri aciliyor: /dev/serial0
+[13:13:42] Görev durumu: BEKLEMEDE
+[13:13:42] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+[13:13:42] DETAS panel basladi
+[13:13:42] Otomatik deprem ARM thread'i başlatıldı
+[13:13:42] AMG8833 bulundu: 0x69
+[13:13:42] AI HAT YOLO modu aktif
+[13:13:42] Istasyon telemetri baglandi
+[13:13:42] YOLO kutu sayimi aktif
+[13:13:42] Cube MAVLink modu aktif
+[13:13:42] MAVLink bağlantısı hazır
+[13:13:42] MAVLink veri akışı istendi
+[13:13:42] MAVLink veri akışı istendi
+[13:13:43] Flight controller heartbeat kaynağı kilitlendi: sys=1, comp=1
+[13:13:43] AI HAT YOLO stream basladi: CAM0
+[13:13:50] MAVLink veri akışı istendi
+[13:13:58] MAVLink veri akışı istendi
+[13:14:06] MAVLink veri akışı istendi
+[13:14:14] MAVLink veri akışı istendi
+[13:14:22] MAVLink veri akışı istendi
+[13:14:30] MAVLink veri akışı istendi
+[13:14:38] MAVLink veri akışı istendi
+[13:14:46] MAVLink veri akışı istendi
+[13:14:54] MAVLink veri akışı istendi
+[13:15:02] MAVLink veri akışı istendi
+[13:15:10] MAVLink veri akışı istendi
+[13:15:18] MAVLink veri akışı istendi
+[13:15:26] MAVLink veri akışı istendi
+[13:15:34] MAVLink veri akışı istendi
+[13:15:42] MAVLink veri akışı istendi
+[13:15:50] MAVLink veri akışı istendi
+[13:15:58] MAVLink veri akışı istendi
+[13:16:06] MAVLink veri akışı istendi
+[13:16:14] MAVLink veri akışı istendi
+[13:16:22] MAVLink veri akışı istendi
+[13:16:37] Deprem tekrar ARM takipçisi başlatıldı
+[13:16:37] Istasyon telemetri aciliyor: /dev/serial0
+[13:16:37] Görev durumu takip sistemi başlatıldı
+[13:16:37] MAVLink okuma thread'i başlatıldı
+[13:16:37] Otomatik deprem ARM thread'i başlatıldı
+[13:16:37] DETAS panel basladi
+[13:16:37] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+[13:16:37] Görev durumu: BEKLEMEDE
+[13:16:37] AMG8833 bulundu: 0x69
+[13:16:37] Istasyon telemetri baglandi
+[13:16:37] AI HAT YOLO modu aktif
+[13:16:37] YOLO kutu sayimi aktif
+[13:16:37] Cube MAVLink modu aktif
+[13:16:37] MAVLink bağlantısı hazır
+[13:16:38] MAVLink veri akışı istendi
+[13:16:38] MAVLink veri akışı istendi
+[13:16:38] Flight controller heartbeat kaynağı kilitlendi: sys=1, comp=1
+[13:16:39] AI HAT YOLO stream basladi: CAM0
+[13:16:41] TEK SERVO AUX1 / SERVO9 -> 2300
+[13:16:42] TEK SERVO AUX1 / SERVO9 -> 2200
+[13:16:43] Tek servo tarama stop komutu
+[13:16:43] TEK SERVO TARAMA BAŞLADI: SERVO9 / 1400 ↔ 2400
+[13:16:43] TEK SERVO AUX1 / SERVO9 -> 1400
+[13:16:43] TEK SERVO AUX1 / SERVO9 -> 1500
+[13:16:43] TEK SERVO AUX1 / SERVO9 -> 1600
+[13:16:43] TEK SERVO AUX1 / SERVO9 -> 1700
+[13:16:44] TEK SERVO AUX1 / SERVO9 -> 1800
+[13:16:44] TEK SERVO AUX1 / SERVO9 -> 1900
+[13:16:44] TEK SERVO AUX1 / SERVO9 -> 2000
+[13:16:44] TEK SERVO AUX1 / SERVO9 -> 2100
+[13:16:44] TEK SERVO AUX1 / SERVO9 -> 2200
+[13:16:44] TEK SERVO AUX1 / SERVO9 -> 2300
+[13:16:44] TEK SERVO AUX1 / SERVO9 -> 2400
+[13:16:45] TEK SERVO AUX1 / SERVO9 -> 2400
+[13:16:45] TEK SERVO AUX1 / SERVO9 -> 2300
+[13:16:45] TEK SERVO AUX1 / SERVO9 -> 2200
+[13:16:45] TEK SERVO AUX1 / SERVO9 -> 2100
+[13:16:45] TEK SERVO AUX1 / SERVO9 -> 2000
+[13:16:45] TEK SERVO AUX1 / SERVO9 -> 1900
+[13:16:45] TEK SERVO AUX1 / SERVO9 -> 1800
+[13:16:45] TEK SERVO AUX1 / SERVO9 -> 1700
+[13:16:46] TEK SERVO AUX1 / SERVO9 -> 1600
+[13:16:46] TEK SERVO AUX1 / SERVO9 -> 1500
+[13:16:46] TEK SERVO AUX1 / SERVO9 -> 1400
+[13:16:46] MAVLink veri akışı istendi
+[13:16:46] TEK SERVO AUX1 / SERVO9 -> 1400
+[13:16:46] TEK SERVO AUX1 / SERVO9 -> 1500
+[13:16:46] TEK SERVO AUX1 / SERVO9 -> 1600
+[13:16:46] Tek servo tarama stop komutu
+[13:16:47] TEK SERVO TARAMA DURDU
+[13:16:54] MAVLink veri akışı istendi
+[13:17:02] MAVLink veri akışı istendi
+[13:17:10] MAVLink veri akışı istendi
+[13:17:18] MAVLink veri akışı istendi
+[13:17:26] MAVLink veri akışı istendi
+[13:17:34] MAVLink veri akışı istendi
+[13:17:42] MAVLink veri akışı istendi
+[13:17:50] MAVLink veri akışı istendi
+[13:17:58] MAVLink veri akışı istendi
+[13:18:06] MAVLink veri akışı istendi
+[13:18:14] MAVLink veri akışı istendi
+[13:18:22] MAVLink veri akışı istendi
+[13:18:30] MAVLink veri akışı istendi
+[13:20:03] Deprem tekrar ARM takipçisi başlatıldı
+[13:20:03] Istasyon telemetri aciliyor: /dev/serial0
+[13:20:03] Görev durumu takip sistemi başlatıldı
+[13:20:03] Otomatik deprem ARM thread'i başlatıldı
+[13:20:03] MAVLink okuma thread'i başlatıldı
+[13:20:03] Görev durumu: BEKLEMEDE
+[13:20:03] DETAS panel basladi
+[13:20:03] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+[13:20:03] AMG8833 bulundu: 0x69
+[13:20:03] Istasyon telemetri baglandi
+[13:20:03] AI HAT YOLO modu aktif
+[13:20:03] YOLO kutu sayimi aktif
+[13:20:03] Cube MAVLink modu aktif
+[13:20:04] MAVLink bağlantısı hazır
+[13:20:04] MAVLink veri akışı istendi
+[13:20:04] MAVLink veri akışı istendi
+[13:20:05] Flight controller heartbeat kaynağı kilitlendi: sys=1, comp=1
+[13:20:06] AI HAT YOLO stream basladi: CAM0
+[13:20:09] AI HAT YOLO stream basladi: CAM0
+[13:20:12] AI HAT YOLO stream basladi: CAM0
+[13:20:12] MAVLink veri akışı istendi
+[13:20:14] AI HAT YOLO stream basladi: CAM0
+[13:20:20] MAVLink veri akışı istendi
+[13:20:28] MAVLink veri akışı istendi
+[13:20:36] MAVLink veri akışı istendi
+[13:20:44] MAVLink veri akışı istendi
+[13:20:52] MAVLink veri akışı istendi
+[13:21:00] MAVLink veri akışı istendi
+[13:21:08] MAVLink veri akışı istendi
+[13:21:16] MAVLink veri akışı istendi
+[13:21:24] MAVLink veri akışı istendi
+[13:21:32] MAVLink veri akışı istendi
+[13:21:40] MAVLink veri akışı istendi
+[13:21:48] MAVLink veri akışı istendi
+[13:22:12] Görev durumu takip sistemi başlatıldı
+[13:22:12] Deprem tekrar ARM takipçisi başlatıldı
+[13:22:12] MAVLink okuma thread'i başlatıldı
+[13:22:12] Istasyon telemetri aciliyor: /dev/serial0
+[13:22:12] Otomatik deprem ARM thread'i başlatıldı
+[13:22:12] Görev durumu: BEKLEMEDE
+[13:22:12] DETAS panel basladi
+[13:22:12] AMG8833 bulundu: 0x69
+[13:22:12] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+[13:22:12] Istasyon telemetri baglandi
+[13:22:12] AI HAT YOLO modu aktif
+[13:22:12] YOLO kutu sayimi aktif
+[13:22:12] Cube MAVLink modu aktif
+[13:22:12] MAVLink bağlantısı hazır
+[13:22:13] MAVLink veri akışı istendi
+[13:22:13] MAVLink veri akışı istendi
+[13:22:13] Flight controller heartbeat kaynağı kilitlendi: sys=1, comp=1
+[13:22:13] AI HAT YOLO stream basladi: CAM0
+[13:22:21] MAVLink veri akışı istendi
+[13:22:29] MAVLink veri akışı istendi
+[13:22:37] MAVLink veri akışı istendi
+[13:22:45] MAVLink veri akışı istendi
+[13:22:53] MAVLink veri akışı istendi
+[13:23:01] MAVLink veri akışı istendi
+[13:23:09] MAVLink veri akışı istendi
+[13:23:17] MAVLink veri akışı istendi
+[13:23:25] MAVLink veri akışı istendi
+[13:23:33] MAVLink veri akışı istendi
+[13:23:41] MAVLink veri akışı istendi
+[13:23:49] MAVLink veri akışı istendi
+[13:23:57] MAVLink veri akışı istendi
+[13:24:05] MAVLink veri akışı istendi
+[13:24:13] MAVLink veri akışı istendi
+[13:24:21] MAVLink veri akışı istendi
+[13:24:33] Görev durumu takip sistemi başlatıldı
+[13:24:33] Deprem tekrar ARM takipçisi başlatıldı
+[13:24:33] Istasyon telemetri aciliyor: /dev/serial0
+[13:24:33] Görev durumu: BEKLEMEDE
+[13:24:33] MAVLink okuma thread'i başlatıldı
+[13:24:33] Otomatik deprem ARM thread'i başlatıldı
+[13:24:33] DETAS panel basladi
+[13:24:33] Istasyon telemetri baglandi
+[13:24:33] AMG8833 bulundu: 0x69
+[13:24:33] AI HAT YOLO modu aktif
+[13:24:33] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+[13:24:33] YOLO kutu sayimi aktif
+[13:24:33] Cube MAVLink modu aktif
+[13:24:33] MAVLink bağlantısı hazır
+[13:24:34] MAVLink veri akışı istendi
+[13:24:34] MAVLink veri akışı istendi
+[13:24:34] Flight controller heartbeat kaynağı kilitlendi: sys=1, comp=1
+[13:24:36] AI HAT YOLO stream basladi: CAM0
+[13:24:42] MAVLink veri akışı istendi
+[13:24:50] MAVLink veri akışı istendi
+[13:24:58] MAVLink veri akışı istendi
+[13:25:03] AI HAT YOLO stream basladi: CAM0
+[13:25:08] Görev durumu takip sistemi başlatıldı
+[13:25:08] Deprem tekrar ARM takipçisi başlatıldı
+[13:25:08] Istasyon telemetri aciliyor: /dev/serial0
+[13:25:08] Otomatik deprem ARM thread'i başlatıldı
+[13:25:08] MAVLink okuma thread'i başlatıldı
+[13:25:08] Görev durumu: BEKLEMEDE
+[13:25:08] Istasyon telemetri baglandi
+[13:25:08] DETAS panel basladi
+[13:25:08] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+[13:25:08] AMG8833 bulundu: 0x69
+[13:25:08] AI HAT YOLO modu aktif
+[13:25:08] YOLO kutu sayimi aktif
+[13:25:08] Cube MAVLink modu aktif
+[13:25:08] MAVLink bağlantısı hazır
+[13:25:09] MAVLink veri akışı istendi
+[13:25:09] MAVLink veri akışı istendi
+[13:25:09] Flight controller heartbeat kaynağı kilitlendi: sys=1, comp=1
+[13:25:11] AI HAT YOLO stream basladi: CAM0
+[13:25:17] MAVLink veri akışı istendi
+[13:25:25] MAVLink veri akışı istendi
+[13:25:33] MAVLink veri akışı istendi
+[13:25:41] MAVLink veri akışı istendi
+[13:25:49] MAVLink veri akışı istendi
+[13:25:57] MAVLink veri akışı istendi
+[13:26:05] MAVLink veri akışı istendi
+[13:27:22] Görev durumu takip sistemi başlatıldı
+[13:27:22] Deprem tekrar ARM takipçisi başlatıldı
+[13:27:22] Istasyon telemetri aciliyor: /dev/serial0
+[13:27:22] MAVLink okuma thread'i başlatıldı
+[13:27:22] Görev durumu: BEKLEMEDE
+[13:27:22] Otomatik deprem ARM thread'i başlatıldı
+[13:27:22] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+[13:27:22] Istasyon telemetri baglandi
+[13:27:22] AMG8833 bulundu: 0x69
+[13:27:22] DETAS panel basladi
+[13:27:22] AI HAT YOLO modu aktif
+[13:27:22] YOLO kutu sayimi aktif
+[13:27:22] Cube MAVLink modu aktif
+[13:27:22] MAVLink bağlantısı hazır
+[13:27:23] MAVLink veri akışı istendi
+[13:27:23] MAVLink veri akışı istendi
+[13:27:23] Flight controller heartbeat kaynağı kilitlendi: sys=1, comp=1
+[13:27:23] AI HAT YOLO stream basladi: CAM0
+[13:27:31] MAVLink veri akışı istendi
+[13:27:39] MAVLink veri akışı istendi
+[13:27:47] MAVLink veri akışı istendi
+[13:27:55] MAVLink veri akışı istendi
+[13:28:03] MAVLink veri akışı istendi
+[13:28:11] MAVLink veri akışı istendi
+[13:28:19] MAVLink veri akışı istendi
+[13:28:27] MAVLink veri akışı istendi
+[13:28:35] MAVLink veri akışı istendi
+[13:28:43] MAVLink veri akışı istendi
+[13:28:51] MAVLink veri akışı istendi
+[13:28:59] MAVLink veri akışı istendi
+[13:29:07] MAVLink veri akışı istendi
+[13:29:15] MAVLink veri akışı istendi
+[13:29:23] MAVLink veri akışı istendi
+[13:29:31] MAVLink veri akışı istendi
+[13:29:39] MAVLink veri akışı istendi
+[13:29:47] MAVLink veri akışı istendi
+[13:29:55] MAVLink veri akışı istendi
+[13:30:03] MAVLink veri akışı istendi
+[13:30:11] MAVLink veri akışı istendi
+[13:30:19] MAVLink veri akışı istendi
+[13:30:27] MAVLink veri akışı istendi
+[13:30:35] MAVLink veri akışı istendi
+[13:30:43] MAVLink veri akışı istendi
+[13:30:51] MAVLink veri akışı istendi
+[13:30:59] MAVLink veri akışı istendi
+[13:31:07] MAVLink veri akışı istendi
+[13:31:15] MAVLink veri akışı istendi
+[13:31:23] MAVLink veri akışı istendi
+[13:31:31] MAVLink veri akışı istendi
+[13:31:39] MAVLink veri akışı istendi
+[13:31:47] MAVLink veri akışı istendi
+[13:31:55] MAVLink veri akışı istendi
+[13:32:03] MAVLink veri akışı istendi
+[13:32:11] MAVLink veri akışı istendi
+[13:32:19] MAVLink veri akışı istendi
+[13:32:27] MAVLink veri akışı istendi
+[13:32:35] MAVLink veri akışı istendi
+[13:32:43] MAVLink veri akışı istendi
+[13:32:51] MAVLink veri akışı istendi
+[13:32:59] MAVLink veri akışı istendi
+[13:33:07] MAVLink veri akışı istendi
+[13:33:15] MAVLink veri akışı istendi
+[13:33:23] MAVLink veri akışı istendi
+[13:33:31] MAVLink veri akışı istendi
+[13:33:39] MAVLink veri akışı istendi
+[13:33:47] MAVLink veri akışı istendi
+[13:33:55] MAVLink veri akışı istendi
+[13:34:03] MAVLink veri akışı istendi
+[13:34:11] MAVLink veri akışı istendi
+[13:35:01] Deprem tekrar ARM takipçisi başlatıldı
+[13:35:01] Istasyon telemetri aciliyor: /dev/serial0
+[13:35:01] Görev durumu takip sistemi başlatıldı
+[13:35:01] MAVLink okuma thread'i başlatıldı
+[13:35:01] Otomatik deprem ARM thread'i başlatıldı
+[13:35:01] Görev durumu: BEKLEMEDE
+[13:35:01] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+[13:35:01] DETAS panel basladi
+[13:35:01] AMG8833 bulundu: 0x69
+[13:35:01] Istasyon telemetri baglandi
+[13:35:01] AI HAT YOLO modu aktif
+[13:35:01] YOLO kutu sayimi aktif
+[13:35:01] Cube MAVLink modu aktif
+[13:35:01] MAVLink bağlantısı hazır
+[13:35:02] MAVLink veri akışı istendi
+[13:35:02] MAVLink veri akışı istendi
+[13:35:02] Flight controller heartbeat kaynağı kilitlendi: sys=1, comp=1
+[13:35:03] AI HAT YOLO stream basladi: CAM0
+[13:35:10] MAVLink veri akışı istendi
+[13:35:18] MAVLink veri akışı istendi
+[13:35:18] AI HAT YOLO stream basladi: CAM0
+[13:35:26] MAVLink veri akışı istendi
+[13:35:34] MAVLink veri akışı istendi
+[13:35:42] MAVLink veri akışı istendi
+[13:35:50] MAVLink veri akışı istendi
+[13:35:58] MAVLink veri akışı istendi
+[13:36:06] MAVLink veri akışı istendi
+[13:36:14] MAVLink veri akışı istendi
+[13:36:22] MAVLink veri akışı istendi
+[13:36:30] MAVLink veri akışı istendi
+[13:36:38] MAVLink veri akışı istendi
+[13:36:46] MAVLink veri akışı istendi
+[13:36:54] MAVLink veri akışı istendi
+[13:37:02] MAVLink veri akışı istendi
+[13:37:10] MAVLink veri akışı istendi
+[13:37:18] MAVLink veri akışı istendi
+[13:37:35] Görev durumu takip sistemi başlatıldı
+[13:37:35] Deprem tekrar ARM takipçisi başlatıldı
+[13:37:35] MAVLink okuma thread'i başlatıldı
+[13:37:35] Otomatik deprem ARM thread'i başlatıldı
+[13:37:35] Istasyon telemetri aciliyor: /dev/serial0
+[13:37:35] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+[13:37:35] DETAS panel basladi
+[13:37:35] Görev durumu: BEKLEMEDE
+[13:37:35] AMG8833 bulundu: 0x69
+[13:37:35] AI HAT YOLO modu aktif
+[13:37:35] Istasyon telemetri baglandi
+[13:37:35] YOLO kutu sayimi aktif
+[13:37:35] Cube MAVLink modu aktif
+[13:37:35] MAVLink bağlantısı hazır
+[13:37:36] MAVLink veri akışı istendi
+[13:37:36] MAVLink veri akışı istendi
+[13:37:36] Flight controller heartbeat kaynağı kilitlendi: sys=1, comp=1
+[13:37:38] AI HAT YOLO stream basladi: CAM0
+[13:37:44] MAVLink veri akışı istendi
+[13:37:52] MAVLink veri akışı istendi
+[13:38:00] MAVLink veri akışı istendi
+[13:38:08] MAVLink veri akışı istendi
+[13:38:16] MAVLink veri akışı istendi
+[13:38:24] MAVLink veri akışı istendi
+[13:38:32] MAVLink veri akışı istendi
+[13:38:40] MAVLink veri akışı istendi
+[13:38:48] MAVLink veri akışı istendi
+[13:38:56] MAVLink veri akışı istendi
+[13:39:04] MAVLink veri akışı istendi
+[13:39:12] MAVLink veri akışı istendi
+[13:39:20] MAVLink veri akışı istendi
+[13:39:28] MAVLink veri akışı istendi
+[13:39:36] MAVLink veri akışı istendi
+[13:39:44] MAVLink veri akışı istendi
+[13:39:52] MAVLink veri akışı istendi
+[13:40:00] MAVLink veri akışı istendi
+[13:40:08] MAVLink veri akışı istendi
+[13:40:16] MAVLink veri akışı istendi
+[13:40:24] MAVLink veri akışı istendi
+[13:40:32] MAVLink veri akışı istendi
+[13:40:41] Görev durumu takip sistemi başlatıldı
+[13:40:41] Istasyon telemetri aciliyor: /dev/serial0
+[13:40:41] Deprem tekrar ARM takipçisi başlatıldı
+[13:40:41] Otomatik deprem ARM thread'i başlatıldı
+[13:40:41] MAVLink okuma thread'i başlatıldı
+[13:40:41] Görev durumu: BEKLEMEDE
+[13:40:41] DETAS panel basladi
+[13:40:41] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+[13:40:41] AMG8833 bulundu: 0x69
+[13:40:41] Istasyon telemetri baglandi
+[13:40:41] AI HAT YOLO modu aktif
+[13:40:41] YOLO kutu sayimi aktif
+[13:40:41] Cube MAVLink modu aktif
+[13:40:41] MAVLink bağlantısı hazır
+[13:40:42] MAVLink veri akışı istendi
+[13:40:42] MAVLink veri akışı istendi
+[13:40:42] Flight controller heartbeat kaynağı kilitlendi: sys=1, comp=1
+[13:40:43] AI HAT YOLO stream basladi: CAM0
+[13:40:47] TEK SERVO AUX1 / SERVO9 -> 2300
+[13:40:47] TEK SERVO AUX1 / SERVO9 -> 2200
+[13:40:47] TEK SERVO AUX1 / SERVO9 -> 2300
+[13:40:47] TEK SERVO AUX1 / SERVO9 -> 2400
+[13:40:48] TEK SERVO AUX1 / SERVO9 -> 2400
+[13:40:48] Tek servo tarama stop komutu
+[13:40:48] TEK SERVO TARAMA BAŞLADI: SERVO9 / 1400 ↔ 2400
+[13:40:48] TEK SERVO AUX1 / SERVO9 -> 1400
+[13:40:48] TEK SERVO AUX1 / SERVO9 -> 1500
+[13:40:49] TEK SERVO AUX1 / SERVO9 -> 1600
+[13:40:49] TEK SERVO AUX1 / SERVO9 -> 1700
+[13:40:49] TEK SERVO AUX1 / SERVO9 -> 1800
+[13:40:49] TEK SERVO AUX1 / SERVO9 -> 1900
+[13:40:49] TEK SERVO AUX1 / SERVO9 -> 2000
+[13:40:49] TEK SERVO AUX1 / SERVO9 -> 2100
+[13:40:49] TEK SERVO AUX1 / SERVO9 -> 2200
+[13:40:49] TEK SERVO AUX1 / SERVO9 -> 2300
+[13:40:50] TEK SERVO AUX1 / SERVO9 -> 2400
+[13:40:50] TEK SERVO AUX1 / SERVO9 -> 2400
+[13:40:50] TEK SERVO AUX1 / SERVO9 -> 2300
+[13:40:50] MAVLink veri akışı istendi
+[13:40:50] Tek servo tarama stop komutu
+[13:40:50] TEK SERVO TARAMA DURDU
+[13:40:58] MAVLink veri akışı istendi
+[13:41:06] ARM komutu gönderildi
+[13:41:06] MAVLink veri akışı istendi
+[13:41:06] Cube: Warning: Arming Checks Disabled
+[13:41:06] Otomatik tekrar ARM gönderildi: send_arm_command
+[13:41:06] ARM komutu gönderildi
+[13:41:06] Deprem tetikleme: ARM komutu gönderildi
+[13:41:06] Deprem tetikleme ARM sonucu: {'ok': True, 'arm': True, 'ack_result': 0, 'message': 'ARM komutu gönderildi'}
+[13:41:06] Görev durumu: GÖREVDE
+[13:41:10] Deprem tetikleme sistemi yeniden hazır
+[13:41:10] Deprem tetikleme sistemi tekrar hazır
+[13:41:14] MAVLink veri akışı istendi
+[13:41:22] MAVLink veri akışı istendi
+[13:41:25] Görev durumu: BEKLEMEDE
+[13:41:30] MAVLink veri akışı istendi
+[13:41:38] MAVLink veri akışı istendi
+[13:41:46] MAVLink veri akışı istendi
+[13:41:54] MAVLink veri akışı istendi
+[13:42:02] MAVLink veri akışı istendi
+[13:42:10] MAVLink veri akışı istendi
+[13:42:18] MAVLink veri akışı istendi
+[13:42:26] MAVLink veri akışı istendi
+[13:42:34] MAVLink veri akışı istendi
+[13:42:47] Deprem tekrar ARM takipçisi başlatıldı
+[13:42:47] Görev durumu takip sistemi başlatıldı
+[13:42:47] Istasyon telemetri aciliyor: /dev/serial0
+[13:42:47] MAVLink okuma thread'i başlatıldı
+[13:42:47] DETAS panel basladi
+[13:42:47] Otomatik deprem ARM thread'i başlatıldı
+[13:42:47] Görev durumu: BEKLEMEDE
+[13:42:47] AI HAT YOLO modu aktif
+[13:42:47] AMG8833 bulundu: 0x69
+[13:42:47] Istasyon telemetri baglandi
+[13:42:47] YOLO kutu sayimi aktif
+[13:42:47] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+[13:42:47] Cube MAVLink modu aktif
+[13:42:47] MAVLink bağlantısı hazır
+[13:42:47] MAVLink veri akışı istendi
+[13:42:47] MAVLink veri akışı istendi
+[13:42:48] Flight controller heartbeat kaynağı kilitlendi: sys=1, comp=1
+[13:42:51] Tek servo tarama stop komutu
+[13:42:51] TEK SERVO TARAMA BAŞLADI: SERVO9 / 1400 ↔ 2400
+[13:42:51] TEK SERVO AUX1 / SERVO9 -> 1400
+[13:42:52] TEK SERVO AUX1 / SERVO9 -> 1500
+[13:42:52] TEK SERVO AUX1 / SERVO9 -> 1600
+[13:42:52] TEK SERVO AUX1 / SERVO9 -> 1700
+[13:42:53] TEK SERVO AUX1 / SERVO9 -> 1800
+[13:42:53] TEK SERVO AUX1 / SERVO9 -> 1900
+[13:42:53] TEK SERVO AUX1 / SERVO9 -> 2000
+[13:42:54] TEK SERVO AUX1 / SERVO9 -> 2100
+[13:42:54] TEK SERVO AUX1 / SERVO9 -> 2200
+[13:42:54] TEK SERVO AUX1 / SERVO9 -> 2300
+[13:42:55] TEK SERVO AUX1 / SERVO9 -> 2400
+[13:42:55] TEK SERVO AUX1 / SERVO9 -> 2400
+[13:42:55] MAVLink veri akışı istendi
+[13:42:56] TEK SERVO AUX1 / SERVO9 -> 2300
+[13:42:56] TEK SERVO AUX1 / SERVO9 -> 2200
+[13:42:56] TEK SERVO AUX1 / SERVO9 -> 2100
+[13:42:57] TEK SERVO AUX1 / SERVO9 -> 2000
+[13:42:57] TEK SERVO AUX1 / SERVO9 -> 1900
+[13:42:57] AI HAT YOLO stream basladi: CAM0
+[13:42:57] TEK SERVO AUX1 / SERVO9 -> 1800
+[13:42:58] TEK SERVO AUX1 / SERVO9 -> 1700
+[13:42:58] TEK SERVO AUX1 / SERVO9 -> 1600
+[13:42:58] TEK SERVO AUX1 / SERVO9 -> 1500
+[13:42:59] TEK SERVO AUX1 / SERVO9 -> 1400
+[13:42:59] TEK SERVO AUX1 / SERVO9 -> 1400
+[13:43:00] TEK SERVO AUX1 / SERVO9 -> 1500
+[13:43:00] TEK SERVO AUX1 / SERVO9 -> 1600
+[13:43:00] TEK SERVO AUX1 / SERVO9 -> 1700
+[13:43:01] TEK SERVO AUX1 / SERVO9 -> 1800
+[13:43:01] TEK SERVO AUX1 / SERVO9 -> 1900
+[13:43:01] TEK SERVO AUX1 / SERVO9 -> 2000
+[13:43:02] TEK SERVO AUX1 / SERVO9 -> 2100
+[13:43:02] TEK SERVO AUX1 / SERVO9 -> 2200
+[13:43:02] TEK SERVO AUX1 / SERVO9 -> 2300
+[13:43:03] TEK SERVO AUX1 / SERVO9 -> 2400
+[13:43:03] TEK SERVO AUX1 / SERVO9 -> 2400
+[13:43:03] MAVLink veri akışı istendi
+[13:43:04] TEK SERVO AUX1 / SERVO9 -> 2300
+[13:43:04] Tek servo tarama stop komutu
+[13:43:04] TEK SERVO TARAMA DURDU
