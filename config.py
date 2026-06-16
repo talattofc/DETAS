@@ -22,17 +22,9 @@ ROUTE_SET_CAMERA = "/set_camera/<int:camera_id>"
 ROUTE_MISSION_STOP = "/mission/stop"
 ROUTE_MISSION_RESET = "/mission/reset"
 
-ROUTE_SERVO_PAN = "/servo/pan/<int:pwm>"
-ROUTE_SERVO_TILT = "/servo/tilt/<int:pwm>"
+ROUTE_SERVO_POSITION = "/servo/position/<int:pwm>"
 ROUTE_SERVO_CENTER = "/servo/center"
 ROUTE_SERVO_SCAN = "/servo/scan"
-ROUTE_SERVO_SCAN_PAN_SLOW = "/servo/scan_pan_slow"
-ROUTE_SERVO_SCAN_TILT_SLOW = "/servo/scan_tilt_slow"
-ROUTE_SERVO_SCAN_FULL_SLOW = "/servo/scan_full_slow"
-ROUTE_SERVO_UP = "/servo/up"
-ROUTE_SERVO_DOWN = "/servo/down"
-ROUTE_SERVO_LEFT = "/servo/left"
-ROUTE_SERVO_RIGHT = "/servo/right"
 ROUTE_SERVO_STOP = "/servo/stop"
 
 
@@ -47,6 +39,17 @@ DETECTION_MIN_BOX_HEIGHT = 70
 DETECTION_MIN_BOX_AREA = 6000
 DETECTION_MAX_FRAME_AREA_RATIO = 0.85
 DETECTION_MERGE_IOU_THRESHOLD = 0.25
+DETECTION_DEFAULT_CLASS = "afet_tespiti"
+DISASTER_DATASET_CLASSES = [
+    "person",
+    "rubble",
+    "blocked_road",
+    "collapsed_building",
+    "damaged_vehicle",
+    "fire_smoke",
+    "rescue_worker",
+    "safe_passage",
+]
 
 
 # Kamera ayarlari
@@ -115,22 +118,23 @@ THERMISTOR_L = AMG8833_THERMISTOR_L
 THERMISTOR_H = AMG8833_THERMISTOR_H
 
 
-# Pan-Tilt servo numaralari ve PWM limitleri
-SERVO_PAN = 9
-SERVO_TILT = 11
+# SERVO9 / Orange Cube AUX1 tek eksenli kamera servo ayarlari
+SERVO_CAMERA = 9
+SERVO_PAN = SERVO_CAMERA
+SERVO_TILT = SERVO_CAMERA
 
-PAN_MIN = 700
-PAN_CENTER = 1300
-PAN_MAX = 2300
+PAN_MIN = 1250
+PAN_CENTER = 2400
+PAN_MAX = 2600
 
-TILT_MIN = 650
-TILT_CENTER = 1500
-TILT_MAX = 2000
+TILT_MIN = PAN_MIN
+TILT_CENTER = PAN_CENTER
+TILT_MAX = PAN_MAX
 
-SERVO_DEFAULT_MIN = 900
-SERVO_DEFAULT_MAX = 2100
-SERVO_MOVE_STEP = 10
-SERVO_MOVE_DELAY = 0.04
+SERVO_DEFAULT_MIN = PAN_MIN
+SERVO_DEFAULT_MAX = PAN_MAX
+SERVO_MOVE_STEP = 50
+SERVO_MOVE_DELAY = 0.45
 SERVO_PWM_DEADBAND = 5
 
 
@@ -172,4 +176,3 @@ AUTO_DISARM_AFTER_MOTOR_TEST = False
 MOTOR_TEST_AUTO_DISARM = False
 AUTO_MISSION_DISARM_AFTER_TEST = False
 # ===== DETAS EARTHQUAKE ARM ONLY MODE END =====
-

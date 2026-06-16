@@ -13,9 +13,6 @@ try:
         PAN_MAX,
         PAN_MIN,
         THRESHOLD_VALUE_DEFAULT,
-        TILT_CENTER,
-        TILT_MAX,
-        TILT_MIN,
     )
 except ImportError:
     DEFAULT_CAMERA = 0
@@ -26,10 +23,6 @@ except ImportError:
     PAN_MIN = 450
     PAN_CENTER = 1300
     PAN_MAX = 2500
-
-    TILT_MIN = 650
-    TILT_CENTER = 1500
-    TILT_MAX = 2000
 
 
 class AppState:
@@ -64,6 +57,8 @@ class AppState:
         self.camera = DEFAULT_CAMERA
         self.detection_count = 0
         self.detections = []
+        self.detection_engine = "none"
+        self.detection_supervision_available = False
         self.hailo = False
 
         # Orange Cube / MAVLink
@@ -84,9 +79,17 @@ class AppState:
         self.cube_yaw = 0.0
         self.cube_last_heartbeat = 0.0
 
-        # Pan-Tilt servo
+        # SERVO9 / AUX1 tek eksenli kamera servosu
+        self.servo_pwm = PAN_CENTER
+        self.single_servo_pwm = PAN_CENTER
+        self.servo_number = 9
+        self.servo_mode = "single_aux1_vertical"
+        self.servo_scan_active = False
+        self.servo_scan_mode = "stop"
+
+        # Eski panel alanlari icin aynalar
         self.servo_pan = PAN_CENTER
-        self.servo_tilt = TILT_CENTER
+        self.servo_tilt = PAN_CENTER
 
         # Otomatik gorev
         self.auto_mission_enabled = AUTO_MISSION_ENABLED_DEFAULT
@@ -130,6 +133,8 @@ class AppState:
 
                 "detection_count": self.detection_count,
                 "detections": deepcopy(self.detections),
+                "detection_engine": self.detection_engine,
+                "detection_supervision_available": self.detection_supervision_available,
 
                 "thermal": deepcopy(self.thermal),
                 "thermal_min": self.thermal_min,
@@ -165,14 +170,25 @@ class AppState:
                 "cube_eph": self.cube_eph,
                 "cube_last_heartbeat_age": heartbeat_age,
 
+                "servo_pwm": self.servo_pwm,
+                "single_servo_pwm": self.single_servo_pwm,
+                "servo_number": self.servo_number,
+                "servo_mode": self.servo_mode,
+                "servo_scan_active": self.servo_scan_active,
+                "servo_scan_mode": self.servo_scan_mode,
+                "servo_min": PAN_MIN,
+                "servo_center": PAN_CENTER,
+                "servo_max": PAN_MAX,
+                "servo_down": 1400,
+
                 "servo_pan": self.servo_pan,
                 "servo_tilt": self.servo_tilt,
                 "servo_pan_min": PAN_MIN,
                 "servo_pan_center": PAN_CENTER,
                 "servo_pan_max": PAN_MAX,
-                "servo_tilt_min": TILT_MIN,
-                "servo_tilt_center": TILT_CENTER,
-                "servo_tilt_max": TILT_MAX,
+                "servo_tilt_min": PAN_MIN,
+                "servo_tilt_center": PAN_CENTER,
+                "servo_tilt_max": PAN_MAX,
 
                 "auto_mission_enabled": self.auto_mission_enabled,
                 "auto_mission_stopped": self.auto_mission_stopped,
