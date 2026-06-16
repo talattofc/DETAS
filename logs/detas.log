@@ -1,4 +1,5 @@
 [14:46:17] SERVO9 AUX1 PWM -> 2600
+<<<<<<< HEAD
 [16:14:23] Görev durumu takip sistemi başlatıldı
 [16:14:23] Istasyon telemetri aciliyor: /dev/serial0
 [16:14:23] Deprem tekrar ARM takipçisi başlatıldı
@@ -122,3 +123,83 @@
 [16:20:01] MAVLink veri akışı istendi
 [16:20:03] MAVLink heartbeat gecikti, bağlantı yenileniyor
 [16:20:04] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+=======
+[15:30:13] MAVLink veri akışı istendi
+[15:30:39] Deprem tekrar ARM takipçisi başlatıldı
+[15:30:39] Istasyon telemetri aciliyor: /dev/serial0
+[15:30:39] Görev durumu takip sistemi başlatıldı
+[15:30:39] MAVLink okuma thread'i başlatıldı
+[15:30:39] Görev durumu: BEKLEMEDE
+[15:30:39] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+[15:30:39] Istasyon telemetri baglandi
+[15:30:39] Otomatik deprem ARM thread'i başlatıldı
+[15:30:39] DETAS panel basladi
+[15:30:39] AMG8833 bulundu: 0x69
+[15:30:39] AI HAT YOLO modu aktif
+[15:30:39] YOLO kutu sayimi aktif
+[15:30:39] Cube MAVLink modu aktif
+[15:30:40] MAVLink bağlantısı hazır
+[15:30:40] MAVLink veri akışı istendi
+[15:30:41] MAVLink veri akışı istendi
+[15:30:41] Flight controller heartbeat kaynağı kilitlendi: sys=1, comp=1
+[15:30:44] AI HAT YOLO stream basladi: CAM0
+[15:30:48] ARM komutu gönderildi
+[15:30:48] Görev durumu: ARM KOMUTU GÖNDERİLDİ
+[15:30:48] Cube: Warning: Arming Checks Disabled
+[15:30:48] Otomatik tekrar ARM gönderildi: send_arm_command
+[15:30:48] ARM komutu gönderildi
+[15:30:48] Deprem tetikleme: ARM komutu gönderildi
+[15:30:48] Deprem tetikleme ARM sonucu: {'ok': True, 'arm': True, 'ack_result': 0, 'message': 'ARM komutu gönderildi'}
+[15:30:48] Görev durumu: GÖREVDE
+[15:30:49] MAVLink veri akışı istendi
+[15:30:50] Deprem tetikleme sistemi yeniden hazır
+[15:30:51] Deprem tetikleme sistemi tekrar hazır
+[15:30:55] SERVO9 AUX1 PWM -> 1800
+[15:30:55] SERVO9 AUX1 PWM -> 1625
+[15:30:56] SERVO9 AUX1 PWM -> 1425
+[15:30:57] MAVLink veri akışı istendi
+[15:30:57] SERVO9 AUX1 PWM -> 1275
+[15:30:58] SERVO9 AUX1 PWM -> 2350
+[15:30:59] SERVO9 AUX1 PWM -> 2375
+[15:30:59] SERVO9 AUX1 PWM -> 2475
+[15:31:00] SERVO9 dikey tarama basladi: 1400-2400 PWM
+[15:31:00] SERVO9 AUX1 PWM -> 1400
+[15:31:00] SERVO9 AUX1 PWM -> 1450
+[15:31:01] SERVO9 AUX1 PWM -> 1500
+[15:31:01] SERVO9 AUX1 PWM -> 1550
+[15:31:02] SERVO9 AUX1 PWM -> 1600
+[15:31:02] SERVO9 AUX1 PWM -> 1650
+[15:31:02] SERVO9 AUX1 PWM -> 1700
+[15:31:03] SERVO9 AUX1 PWM -> 1750
+[15:31:03] SERVO9 AUX1 PWM -> 1800
+[15:31:04] Görev durumu: BEKLEMEDE
+[15:31:04] SERVO9 AUX1 PWM -> 1850
+[15:31:04] SERVO9 AUX1 PWM -> 1900
+[15:31:05] MAVLink veri akışı istendi
+[15:31:05] SERVO9 AUX1 PWM -> 1950
+[15:31:05] SERVO9 AUX1 PWM -> 2000
+[15:31:06] SERVO9 AUX1 PWM -> 2050
+[15:31:06] SERVO9 AUX1 PWM -> 2100
+[15:31:07] SERVO9 AUX1 PWM -> 2150
+[15:31:07] SERVO9 AUX1 PWM -> 2200
+[15:31:07] SERVO9 AUX1 PWM -> 2250
+[15:31:08] SERVO9 AUX1 PWM -> 2300
+[15:31:08] SERVO9 AUX1 PWM -> 2350
+[15:31:09] SERVO9 AUX1 PWM -> 2400
+[15:31:09] SERVO9 AUX1 PWM -> 2400
+[15:31:10] SERVO9 AUX1 PWM -> 2350
+[15:31:10] SERVO9 AUX1 PWM -> 2300
+[15:31:11] SERVO9 AUX1 PWM -> 2250
+[15:31:11] SERVO9 AUX1 PWM -> 2200
+[15:31:12] SERVO9 AUX1 PWM -> 2150
+[15:31:12] SERVO9 AUX1 PWM -> 2100
+[15:31:13] MAVLink veri akışı istendi
+[15:31:13] SERVO9 AUX1 PWM -> 2050
+[15:31:13] SERVO9 dikey tarama durdu
+[15:31:15] SERVO9 AUX1 PWM -> 1775
+[15:31:16] SERVO9 AUX1 PWM -> 1425
+[15:31:17] SERVO9 AUX1 PWM -> 1575
+[15:31:21] MAVLink veri akışı istendi
+[15:31:29] MAVLink veri akışı istendi
+[15:31:37] MAVLink veri akışı istendi
+>>>>>>> 5f4b34ef86ae203deb21b3b2dd56e89bbe7564d5

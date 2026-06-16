@@ -399,7 +399,10 @@
 
         setText("detectedCount", count);
         setText("detectedCountDonut", count);
+<<<<<<< HEAD
         setText("detectionEngine", data.detection_engine || (data.hailo ? "hailo" : "bekliyor"));
+=======
+>>>>>>> 5f4b34ef86ae203deb21b3b2dd56e89bbe7564d5
 
         if (!list) return;
 
