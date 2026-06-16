@@ -2274,3 +2274,70 @@ input[type="range"] {
 
 /* ===== DETAS OPERATION SUMMARY FIX END ===== */
 
+/* === DETAS SARSINTI GRAFIGI TASMA DUZELTME BASLANGIC === */
+
+/* Sarsıntı grafiği kartının içeriği dışarı taşmasın */
+#overviewSection canvas,
+#overviewSection svg {
+    max-width: 100% !important;
+}
+
+/* Grafik alanı kutu içinde kalsın */
+#overviewSection .chart-container,
+#overviewSection .graph-container,
+#overviewSection .chart-box,
+#overviewSection .sarsinti-chart,
+#overviewSection .sarsinti-graph {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+}
+
+/* Chart.js canvas sabit genişlikten dolayı dışarı taşmasın */
+#overviewSection canvas#movementChart,
+#overviewSection canvas#sarsintiChart,
+#overviewSection canvas[id*="chart"],
+#overviewSection canvas[id*="Chart"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 300px !important;
+    display: block !important;
+    box-sizing: border-box !important;
+}
+
+/* Grafiğin beyaz iç paneli sağdan-soldan taşmasın */
+#overviewSection .card canvas,
+#overviewSection .panel canvas,
+#overviewSection .dashboard-card canvas {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* Sarsıntı grafiği kartı içeride rahat dursun */
+#overviewSection .card,
+#overviewSection .panel,
+#overviewSection .dashboard-card {
+    box-sizing: border-box !important;
+}
+
+/* Alt istatistik kutuları grafiğe yapışmasın */
+#overviewSection .chart-stats,
+#overviewSection .graph-stats,
+#overviewSection .stats-row {
+    margin-top: 10px !important;
+    gap: 10px !important;
+}
+
+/* Küçük ekranlarda grafik biraz kısalsın */
+@media (max-width: 900px) {
+    #overviewSection canvas#movementChart,
+    #overviewSection canvas#sarsintiChart,
+    #overviewSection canvas[id*="chart"],
+    #overviewSection canvas[id*="Chart"] {
+        height: 250px !important;
+    }
+}
+
+/* === DETAS SARSINTI GRAFIGI TASMA DUZELTME BITIS === */
+

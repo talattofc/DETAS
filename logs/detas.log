@@ -2661,3 +2661,464 @@
 [20:23:54] Cube MAVLink modu aktif
 [20:23:54] Cube MAVLink baglandi
 [20:23:56] AI HAT YOLO stream basladi: CAM0
+[20:29:14] Görev durumu takip sistemi başlatıldı
+[20:29:14] Deprem tekrar ARM takipçisi başlatıldı
+[20:29:14] Istasyon telemetri aciliyor: /dev/serial0
+[20:29:14] Cube MAVLink aciliyor: /dev/ttyAMA4 @ 57600
+[20:29:14] Görev durumu: BEKLEMEDE
+[20:29:14] Otomatik deprem görev kontrolü aktif - repeat override
+[20:29:14] DETAS panel basladi
+[20:29:14] AMG8833 bulundu: 0x69
+[20:29:14] Istasyon telemetri baglandi
+[20:29:14] AI HAT YOLO modu aktif
+[20:29:14] YOLO kutu sayimi aktif
+[20:29:14] Cube MAVLink modu aktif
+[20:29:15] Cube MAVLink baglandi
+[20:29:16] AI HAT YOLO stream basladi: CAM0
+[20:32:12] Deprem tekrar ARM takipçisi başlatıldı
+[20:32:12] Görev durumu takip sistemi başlatıldı
+[20:32:12] Istasyon telemetri aciliyor: /dev/serial0
+[20:32:12] Cube MAVLink aciliyor: /dev/ttyAMA4 @ 57600
+[20:32:12] Görev durumu: BEKLEMEDE
+[20:32:12] Otomatik deprem görev kontrolü aktif - repeat override
+[20:32:12] DETAS panel basladi
+[20:32:12] AMG8833 bulundu: 0x69
+[20:32:12] AI HAT YOLO modu aktif
+[20:32:12] Istasyon telemetri baglandi
+[20:32:12] YOLO kutu sayimi aktif
+[20:32:12] Cube MAVLink modu aktif
+[20:32:12] Cube MAVLink baglandi
+[20:32:14] AI HAT YOLO stream basladi: CAM0
+[20:34:08] Görev durumu takip sistemi başlatıldı
+[20:34:08] Istasyon telemetri aciliyor: /dev/serial0
+[20:34:08] Deprem tekrar ARM takipçisi başlatıldı
+[20:34:08] Cube MAVLink aciliyor: /dev/ttyAMA4 @ 57600
+[20:34:08] Görev durumu: BEKLEMEDE
+[20:34:08] Otomatik deprem görev kontrolü aktif - repeat override
+[20:34:08] DETAS panel basladi
+[20:34:08] Istasyon telemetri baglandi
+[20:34:08] AMG8833 bulundu: 0x69
+[20:34:08] AI HAT YOLO modu aktif
+[20:34:08] YOLO kutu sayimi aktif
+[20:34:08] Cube MAVLink modu aktif
+[20:34:08] Cube MAVLink baglandi
+[20:34:10] AI HAT YOLO stream basladi: CAM0
+[20:35:14] Görev durumu: ARM KOMUTU GÖNDERİLDİ
+[20:35:14] Otomatik tekrar ARM gönderildi: send_arm_command
+[20:35:14] Deprem tetikleme: ARM komutu gönderildi
+[20:35:14] Yeni deprem olayı algılandı: otomatik ARM hazırlanıyor
+[20:35:14] Deprem eşiği aşıldı: Cube ARM komutu gönderildi
+[20:35:14] Görev durumu: GÖREVDE
+[20:35:16] Deprem sinyali normale döndü: tekrar ARM için hazır
+[20:35:18] Deprem tetikleme sistemi yeniden hazır
+[20:35:29] Görev durumu: BEKLEMEDE
+[20:41:11] AI HAT YOLO stream basladi: CAM0
+[20:41:14] SERVO9 PWM gönderildi: 1400
+[20:41:16] SERVO9 PWM gönderildi: 1500
+[20:41:16] SERVO9 PWM gönderildi: 1600
+[20:41:16] SERVO9 PWM gönderildi: 1700
+[20:41:17] SERVO9 PWM gönderildi: 1800
+[20:41:17] SERVO11 PWM gönderildi: 1800
+[20:41:18] SERVO11 PWM gönderildi: 1800
+[20:41:18] SERVO11 PWM gönderildi: 800
+[20:41:18] SERVO11 PWM gönderildi: 800
+[20:41:19] SERVO11 PWM gönderildi: 1030
+[20:41:19] SERVO11 PWM gönderildi: 1640
+[20:41:20] SERVO11 PWM gönderildi: 1720
+[20:41:21] SERVO9 PWM gönderildi: 1500
+[20:41:22] SERVO9 PWM gönderildi: 1340
+[20:41:23] SERVO9 PWM gönderildi: 1780
+[20:41:23] SERVO9 PWM gönderildi: 1810
+[20:41:24] SERVO9 PWM gönderildi: 1270
+[20:41:30] SERVO9 PWM gönderildi: 2110
+[20:41:31] SERVO9 PWM gönderildi: 1190
+[20:41:31] SERVO9 PWM gönderildi: 940
+[20:41:32] SERVO9 PWM gönderildi: 1220
+[20:41:32] SERVO9 PWM gönderildi: 1550
+[20:41:32] SERVO9 PWM gönderildi: 1540
+[20:41:33] SERVO9 PWM gönderildi: 1460
+[20:41:33] SERVO9 PWM gönderildi: 1570
+[20:41:33] SERVO9 PWM gönderildi: 1580
+[20:41:33] SERVO9 PWM gönderildi: 1770
+[20:41:34] SERVO9 PWM gönderildi: 1420
+[20:41:35] SERVO9 PWM gönderildi: 1290
+[20:41:36] SERVO9 PWM gönderildi: 1480
+[20:41:36] SERVO9 PWM gönderildi: 1620
+[20:41:37] SERVO9 PWM gönderildi: 1950
+[20:41:37] SERVO9 PWM gönderildi: 1380
+[20:41:38] SERVO11 PWM gönderildi: 990
+[20:41:39] SERVO11 PWM gönderildi: 1800
+[20:43:59] SERVO9 PWM gönderildi: 1280
+[20:44:00] SERVO9 PWM gönderildi: 1500
+[20:44:00] SERVO9 PWM gönderildi: 1600
+[20:44:01] SERVO9 PWM gönderildi: 1700
+[20:44:01] SERVO9 PWM gönderildi: 1800
+[20:44:01] SERVO9 PWM gönderildi: 1900
+[20:44:01] SERVO9 PWM gönderildi: 2000
+[20:44:01] SERVO9 PWM gönderildi: 2100
+[20:44:01] SERVO9 PWM gönderildi: 2200
+[20:44:02] SERVO9 PWM gönderildi: 2200
+[20:44:02] SERVO9 PWM gönderildi: 2200
+[20:44:02] SERVO9 PWM gönderildi: 2200
+[20:44:02] SERVO9 PWM gönderildi: 2100
+[20:44:03] SERVO9 PWM gönderildi: 2000
+[20:44:03] SERVO9 PWM gönderildi: 1900
+[20:44:03] SERVO9 PWM gönderildi: 1800
+[20:44:03] SERVO9 PWM gönderildi: 1700
+[20:44:03] SERVO9 PWM gönderildi: 1600
+[20:44:03] SERVO9 PWM gönderildi: 1500
+[20:44:03] SERVO9 PWM gönderildi: 1400
+[20:44:04] SERVO9 PWM gönderildi: 1300
+[20:44:04] SERVO9 PWM gönderildi: 1200
+[20:44:04] SERVO9 PWM gönderildi: 1100
+[20:44:04] SERVO9 PWM gönderildi: 1000
+[20:44:04] SERVO9 PWM gönderildi: 900
+[20:44:04] SERVO9 PWM gönderildi: 800
+[20:44:05] SERVO9 PWM gönderildi: 800
+[20:44:05] SERVO9 PWM gönderildi: 900
+[20:44:05] SERVO9 PWM gönderildi: 1000
+[20:44:06] SERVO9 PWM gönderildi: 1100
+[20:44:06] SERVO9 PWM gönderildi: 1200
+[20:44:06] SERVO9 PWM gönderildi: 1300
+[20:44:07] SERVO9 PWM gönderildi: 1400
+[20:44:10] SERVO9 PWM gönderildi: 1520
+[20:44:11] SERVO9 PWM gönderildi: 1450
+[20:44:11] SERVO9 PWM gönderildi: 1290
+[20:44:12] SERVO9 PWM gönderildi: 1130
+[20:44:12] SERVO9 PWM gönderildi: 1540
+[20:44:13] SERVO9 PWM gönderildi: 1590
+[20:44:14] SERVO9 PWM gönderildi: 1490
+[20:44:15] SERVO9 PWM gönderildi: 1460
+[20:44:15] SERVO9 PWM gönderildi: 1540
+[20:44:16] SERVO9 PWM gönderildi: 1580
+[20:44:16] SERVO9 PWM gönderildi: 1440
+[20:44:16] SERVO9 PWM gönderildi: 1380
+[20:44:17] SERVO9 PWM gönderildi: 1330
+[20:44:19] SERVO9 PWM gönderildi: 1230
+[20:44:19] SERVO9 PWM gönderildi: 1130
+[20:44:20] SERVO9 PWM gönderildi: 1030
+[20:44:20] SERVO9 PWM gönderildi: 930
+[20:44:20] SERVO9 PWM gönderildi: 830
+[20:44:21] SERVO11 PWM gönderildi: 1800
+[20:44:21] SERVO11 PWM gönderildi: 800
+[20:44:21] SERVO11 PWM gönderildi: 800
+[20:44:22] SERVO11 PWM gönderildi: 800
+[20:44:22] SERVO11 PWM gönderildi: 800
+[20:44:22] SERVO11 PWM gönderildi: 1300
+[20:44:23] SERVO11 PWM gönderildi: 1250
+[20:44:23] SERVO11 PWM gönderildi: 910
+[20:44:24] SERVO11 PWM gönderildi: 1800
+[20:44:24] SERVO11 PWM gönderildi: 1800
+[20:44:24] SERVO11 PWM gönderildi: 800
+[09:13:39] Deprem tekrar ARM takipçisi başlatıldı
+[09:13:39] Görev durumu takip sistemi başlatıldı
+[09:13:39] MAVLink okuma thread'i başlatıldı
+[09:13:39] Istasyon telemetri aciliyor: /dev/serial0
+[09:13:39] Otomatik deprem ARM thread'i başlatıldı
+[09:13:39] DETAS panel basladi
+[09:13:39] AMG8833 bulundu: 0x69
+[09:13:39] Görev durumu: BEKLEMEDE
+[09:13:39] AI HAT YOLO modu aktif
+[09:13:39] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+[09:13:39] Istasyon telemetri baglandi
+[09:13:39] YOLO kutu sayimi aktif
+[09:13:39] Cube MAVLink modu aktif
+[09:13:40] MAVLink bağlantısı hazır
+[09:13:43] AI HAT YOLO stream basladi: CAM0
+[09:13:46] SERVO9 PWM gönderildi: 1400
+[09:13:46] SERVO9 PWM gönderildi: 1500
+[09:13:48] SERVO11 PWM gönderildi: 650
+[09:13:48] SERVO11 PWM gönderildi: 2000
+[09:13:48] SERVO11 PWM gönderildi: 2000
+[09:13:49] SERVO11 PWM gönderildi: 1280
+[09:13:50] SERVO11 PWM gönderildi: 990
+[09:13:50] SERVO11 PWM gönderildi: 1000
+[09:13:50] SERVO11 PWM gönderildi: 1480
+[09:14:15] ARM komutu gönderildi
+[09:14:15] Cube: Warning: Arming Checks Disabled
+[09:14:15] Cube: Radio Failsafe - Disarming
+[09:14:15] Otomatik tekrar ARM gönderildi: send_arm_command
+[09:14:15] ARM komutu gönderildi
+[09:14:15] Deprem tetikleme: ARM komutu gönderildi
+[09:14:15] Deprem tetikleme: ARM komutu gönderildi
+[09:14:15] Cube: Warning: Arming Checks Disabled
+[09:14:15] Görev durumu: ARM KOMUTU GÖNDERİLDİ
+[09:14:16] Görev durumu: GÖREVDE
+[09:14:20] Deprem tetikleme sistemi tekrar hazır
+[09:14:20] Deprem tetikleme sistemi yeniden hazır
+[09:14:21] Cube: RCInput: decoding SBUS(1)
+[09:14:21] Cube: Radio Failsafe Cleared
+[09:14:37] Görev durumu: BEKLEMEDE
+[09:14:38] AI HAT YOLO stream basladi: CAM0
+[09:15:09] Cube: Mission Planner 1.3.83
+[09:15:09] Cube: Mission Planner 1.3.83
+[09:15:09] Cube: Mission Planner 1.3.83
+[09:18:22] Görev durumu takip sistemi başlatıldı
+[09:18:22] Deprem tekrar ARM takipçisi başlatıldı
+[09:18:22] Istasyon telemetri aciliyor: /dev/serial0
+[09:18:22] MAVLink okuma thread'i başlatıldı
+[09:18:22] Görev durumu: BEKLEMEDE
+[09:18:22] Otomatik deprem ARM thread'i başlatıldı
+[09:18:22] DETAS panel basladi
+[09:18:22] AMG8833 bulundu: 0x69
+[09:18:22] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+[09:18:22] AI HAT YOLO modu aktif
+[09:18:22] YOLO kutu sayimi aktif
+[09:18:22] Istasyon telemetri baglandi
+[09:18:22] Cube MAVLink modu aktif
+[09:18:22] MAVLink bağlantısı hazır
+[09:18:23] MAVLink veri akışı istendi
+[09:18:23] MAVLink veri akışı istendi
+[09:18:24] AI HAT YOLO stream basladi: CAM0
+[09:18:29] ARM komutu gönderildi
+[09:18:29] Cube: Warning: Arming Checks Disabled
+[09:18:29] Otomatik tekrar ARM gönderildi: send_arm_command
+[09:18:29] ARM komutu gönderildi
+[09:18:29] Deprem tetikleme: ARM komutu gönderildi
+[09:18:29] Deprem tetikleme: ARM komutu gönderildi
+[09:18:29] Görev durumu: ARM KOMUTU GÖNDERİLDİ
+[09:18:30] Görev durumu: GÖREVDE
+[09:18:31] Görev durumu: ARM KOMUTU GÖNDERİLDİ
+[09:18:31] MAVLink veri akışı istendi
+[09:18:31] Görev durumu: GÖREVDE
+[09:18:32] Görev durumu: YENİDEN HAZIRLANIYOR
+[09:18:32] Görev durumu: GÖREVDE
+[09:18:33] Görev durumu: YENİDEN HAZIRLANIYOR
+[09:18:33] Deprem tetikleme sistemi yeniden hazır
+[09:18:33] Deprem tetikleme sistemi tekrar hazır
+[09:18:33] Görev durumu: GÖREVDE
+[09:18:34] Görev durumu: YENİDEN HAZIRLANIYOR
+[09:18:34] Görev durumu: GÖREVDE
+[09:18:35] Görev durumu: YENİDEN HAZIRLANIYOR
+[09:18:35] Görev durumu: GÖREVDE
+[09:18:36] Görev durumu: BEKLEMEDE
+[09:18:36] Görev durumu: GÖREVDE
+[09:18:37] Görev durumu: BEKLEMEDE
+[09:18:37] Görev durumu: GÖREVDE
+[09:18:38] Görev durumu: BEKLEMEDE
+[09:18:38] Görev durumu: GÖREVDE
+[09:18:39] Görev durumu: BEKLEMEDE
+[09:18:39] MAVLink veri akışı istendi
+[09:18:39] Görev durumu: GÖREVDE
+[09:18:40] Görev durumu: BEKLEMEDE
+[09:18:40] Görev durumu: GÖREVDE
+[09:18:41] Görev durumu: BEKLEMEDE
+[09:18:47] MAVLink veri akışı istendi
+[09:18:55] MAVLink veri akışı istendi
+[09:19:03] MAVLink veri akışı istendi
+[09:19:11] MAVLink veri akışı istendi
+[09:19:19] MAVLink veri akışı istendi
+[09:19:27] MAVLink veri akışı istendi
+[09:19:35] MAVLink veri akışı istendi
+[09:19:43] MAVLink veri akışı istendi
+[09:19:51] MAVLink veri akışı istendi
+[09:19:59] MAVLink veri akışı istendi
+[09:20:07] MAVLink veri akışı istendi
+[09:20:15] MAVLink veri akışı istendi
+[09:20:23] MAVLink veri akışı istendi
+[09:20:31] MAVLink veri akışı istendi
+[09:20:39] MAVLink veri akışı istendi
+[09:20:47] MAVLink veri akışı istendi
+[09:20:55] MAVLink veri akışı istendi
+[09:21:03] MAVLink veri akışı istendi
+[09:21:11] MAVLink veri akışı istendi
+[09:21:19] MAVLink veri akışı istendi
+[09:21:31] Deprem tekrar ARM takipçisi başlatıldı
+[09:21:31] Istasyon telemetri aciliyor: /dev/serial0
+[09:21:31] Görev durumu takip sistemi başlatıldı
+[09:21:31] Otomatik deprem ARM thread'i başlatıldı
+[09:21:31] MAVLink okuma thread'i başlatıldı
+[09:21:31] Görev durumu: BEKLEMEDE
+[09:21:31] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+[09:21:31] DETAS panel basladi
+[09:21:31] AMG8833 bulundu: 0x69
+[09:21:31] Istasyon telemetri baglandi
+[09:21:31] AI HAT YOLO modu aktif
+[09:21:31] YOLO kutu sayimi aktif
+[09:21:31] Cube MAVLink modu aktif
+[09:21:31] MAVLink bağlantısı hazır
+[09:21:31] MAVLink veri akışı istendi
+[09:21:32] MAVLink veri akışı istendi
+[09:21:33] AI HAT YOLO stream basladi: CAM0
+[09:21:37] ARM komutu gönderildi
+[09:21:37] Görev durumu: ARM KOMUTU GÖNDERİLDİ
+[09:21:37] Cube: Warning: Arming Checks Disabled
+[09:21:37] Otomatik tekrar ARM gönderildi: send_arm_command
+[09:21:37] ARM komutu gönderildi
+[09:21:37] Deprem tetikleme: ARM komutu gönderildi
+[09:21:37] Deprem tetikleme: ARM komutu gönderildi
+[09:21:38] Görev durumu: GÖREVDE
+[09:21:39] Görev durumu: YENİDEN HAZIRLANIYOR
+[09:21:39] Görev durumu: GÖREVDE
+[09:21:40] MAVLink veri akışı istendi
+[09:21:40] Görev durumu: YENİDEN HAZIRLANIYOR
+[09:21:40] Deprem tetikleme sistemi yeniden hazır
+[09:21:40] Deprem tetikleme sistemi tekrar hazır
+[09:21:43] Görev durumu: BEKLEMEDE
+[09:21:48] MAVLink veri akışı istendi
+[09:21:56] MAVLink veri akışı istendi
+[09:22:04] MAVLink veri akışı istendi
+[09:22:12] MAVLink veri akışı istendi
+[09:22:20] MAVLink veri akışı istendi
+[09:22:28] MAVLink veri akışı istendi
+[09:22:36] MAVLink veri akışı istendi
+[09:22:44] MAVLink veri akışı istendi
+[09:22:52] MAVLink veri akışı istendi
+[09:23:00] MAVLink veri akışı istendi
+[09:23:08] MAVLink veri akışı istendi
+[09:23:16] MAVLink veri akışı istendi
+[09:23:24] MAVLink veri akışı istendi
+[09:23:32] MAVLink veri akışı istendi
+[09:23:40] MAVLink veri akışı istendi
+[09:23:48] MAVLink veri akışı istendi
+[09:23:56] MAVLink veri akışı istendi
+[09:24:04] MAVLink veri akışı istendi
+[09:24:12] MAVLink veri akışı istendi
+[09:24:20] MAVLink veri akışı istendi
+[09:24:28] MAVLink veri akışı istendi
+[09:24:36] MAVLink veri akışı istendi
+[09:24:44] MAVLink veri akışı istendi
+[09:24:52] MAVLink veri akışı istendi
+[09:25:00] MAVLink veri akışı istendi
+[09:25:08] MAVLink veri akışı istendi
+[09:25:16] MAVLink veri akışı istendi
+[09:25:24] MAVLink veri akışı istendi
+[09:25:32] MAVLink veri akışı istendi
+[09:25:40] MAVLink veri akışı istendi
+[09:25:48] MAVLink veri akışı istendi
+[09:25:56] MAVLink veri akışı istendi
+[09:26:04] MAVLink veri akışı istendi
+[09:26:12] MAVLink veri akışı istendi
+[09:26:26] Deprem tekrar ARM takipçisi başlatıldı
+[09:26:26] Istasyon telemetri aciliyor: /dev/serial0
+[09:26:26] Görev durumu takip sistemi başlatıldı
+[09:26:26] MAVLink okuma thread'i başlatıldı
+[09:26:26] Otomatik deprem ARM thread'i başlatıldı
+[09:26:26] Görev durumu: BEKLEMEDE
+[09:26:26] DETAS panel basladi
+[09:26:26] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+[09:26:26] AMG8833 bulundu: 0x69
+[09:26:26] AI HAT YOLO modu aktif
+[09:26:26] Istasyon telemetri baglandi
+[09:26:26] YOLO kutu sayimi aktif
+[09:26:26] Cube MAVLink modu aktif
+[09:26:27] MAVLink bağlantısı hazır
+[09:26:27] MAVLink veri akışı istendi
+[09:26:27] MAVLink veri akışı istendi
+[09:26:28] Flight controller heartbeat kaynağı kilitlendi: sys=1, comp=1
+[09:26:35] MAVLink veri akışı istendi
+[09:26:43] MAVLink veri akışı istendi
+[09:26:51] MAVLink veri akışı istendi
+[09:26:59] MAVLink veri akışı istendi
+[09:27:01] AI HAT YOLO stream basladi: CAM0
+[09:27:07] Görev durumu: ARM KOMUTU GÖNDERİLDİ
+[09:27:07] MAVLink veri akışı istendi
+[09:27:08] ARM komutu gönderildi
+[09:27:08] Cube: Warning: Arming Checks Disabled
+[09:27:08] Otomatik tekrar ARM gönderildi: send_arm_command
+[09:27:08] ARM komutu gönderildi
+[09:27:08] Deprem tetikleme: ARM komutu gönderildi
+[09:27:08] Deprem tetikleme ARM sonucu: {'ok': True, 'arm': True, 'ack_result': 0, 'message': 'ARM komutu gönderildi'}
+[09:27:08] Görev durumu: GÖREVDE
+[09:27:11] Deprem tetikleme sistemi tekrar hazır
+[09:27:12] Deprem tetikleme sistemi yeniden hazır
+[09:27:15] MAVLink veri akışı istendi
+[09:27:23] MAVLink veri akışı istendi
+[09:27:27] Görev durumu: BEKLEMEDE
+[09:27:31] MAVLink veri akışı istendi
+[09:27:39] MAVLink veri akışı istendi
+[09:27:47] MAVLink veri akışı istendi
+[09:27:55] MAVLink veri akışı istendi
+[09:28:03] MAVLink veri akışı istendi
+[09:28:11] MAVLink veri akışı istendi
+[09:28:19] MAVLink veri akışı istendi
+[09:28:27] MAVLink veri akışı istendi
+[09:28:35] MAVLink veri akışı istendi
+[09:28:43] MAVLink veri akışı istendi
+[09:28:51] MAVLink veri akışı istendi
+[09:28:59] MAVLink veri akışı istendi
+[09:29:07] MAVLink veri akışı istendi
+[09:29:15] MAVLink veri akışı istendi
+[09:29:23] MAVLink veri akışı istendi
+[09:29:31] MAVLink veri akışı istendi
+[09:29:39] MAVLink veri akışı istendi
+[09:29:47] MAVLink veri akışı istendi
+[09:29:55] MAVLink veri akışı istendi
+[09:30:03] MAVLink veri akışı istendi
+[09:30:11] AI HAT YOLO stream basladi: CAM0
+[09:30:11] MAVLink veri akışı istendi
+[09:30:12] AI HAT YOLO stream basladi: CAM0
+[09:30:14] AI HAT YOLO stream basladi: CAM0
+[09:30:15] AI HAT YOLO stream basladi: CAM0
+[09:30:19] MAVLink veri akışı istendi
+[09:30:23] Görev durumu takip sistemi başlatıldı
+[09:30:23] Deprem tekrar ARM takipçisi başlatıldı
+[09:30:23] Istasyon telemetri aciliyor: /dev/serial0
+[09:30:23] Otomatik deprem ARM thread'i başlatıldı
+[09:30:23] MAVLink okuma thread'i başlatıldı
+[09:30:23] DETAS panel basladi
+[09:30:23] AMG8833 bulundu: 0x69
+[09:30:23] Görev durumu: BEKLEMEDE
+[09:30:23] Istasyon telemetri baglandi
+[09:30:23] MAVLink bağlantısı açılıyor: /dev/ttyAMA4 @ 57600
+[09:30:23] AI HAT YOLO modu aktif
+[09:30:23] YOLO kutu sayimi aktif
+[09:30:23] Cube MAVLink modu aktif
+[09:30:24] MAVLink bağlantısı hazır
+[09:30:24] MAVLink veri akışı istendi
+[09:30:24] MAVLink veri akışı istendi
+[09:30:25] Flight controller heartbeat kaynağı kilitlendi: sys=1, comp=1
+[09:30:25] AI HAT YOLO stream basladi: CAM0
+[09:30:30] ARM komutu gönderildi
+[09:30:30] Cube: Warning: Arming Checks Disabled
+[09:30:30] Otomatik tekrar ARM gönderildi: send_arm_command
+[09:30:30] ARM komutu gönderildi
+[09:30:30] Deprem tetikleme: ARM komutu gönderildi
+[09:30:30] Deprem tetikleme ARM sonucu: {'ok': True, 'arm': True, 'ack_result': 0, 'message': 'ARM komutu gönderildi'}
+[09:30:30] Görev durumu: GÖREVDE
+[09:30:32] MAVLink veri akışı istendi
+[09:30:34] Deprem tetikleme sistemi yeniden hazır
+[09:30:34] Deprem tetikleme sistemi tekrar hazır
+[09:30:40] MAVLink veri akışı istendi
+[09:30:48] MAVLink veri akışı istendi
+[09:30:51] Görev durumu: BEKLEMEDE
+[09:30:56] MAVLink veri akışı istendi
+[09:31:04] MAVLink veri akışı istendi
+[09:31:12] MAVLink veri akışı istendi
+[09:31:20] MAVLink veri akışı istendi
+[09:31:26] ARM komutu gönderildi
+[09:31:26] Cube: Warning: Arming Checks Disabled
+[09:31:26] Görev durumu: ARM KOMUTU GÖNDERİLDİ
+[09:31:26] Otomatik tekrar ARM gönderildi: send_arm_command
+[09:31:26] Deprem tetikleme: ARM komutu gönderildi
+[09:31:26] ARM komutu gönderildi
+[09:31:26] Deprem tetikleme ARM sonucu: {'ok': True, 'arm': True, 'ack_result': 0, 'message': 'ARM komutu gönderildi'}
+[09:31:26] Görev durumu: GÖREVDE
+[09:31:28] MAVLink veri akışı istendi
+[09:31:29] Deprem tetikleme sistemi tekrar hazır
+[09:31:29] Deprem tetikleme sistemi yeniden hazır
+[09:31:36] MAVLink veri akışı istendi
+[09:31:44] MAVLink veri akışı istendi
+[09:31:51] DISARM komutu gönderildi
+[09:31:52] DISARM komutu gönderildi
+[09:31:52] DISARM komutu gönderildi
+[09:31:52] MAVLink veri akışı istendi
+[09:31:52] Görev durumu: BEKLEMEDE
+[09:31:55] DISARM komutu gönderildi
+[09:31:55] DISARM komutu gönderildi
+[09:31:57] ARM komutu gönderildi
+[09:31:57] Cube: Warning: Arming Checks Disabled
+[09:31:57] Deprem tetikleme ARM sonucu: {'ok': True, 'arm': True, 'ack_result': 0, 'message': 'ARM komutu gönderildi'}
+[09:31:57] Görev durumu: GÖREVDE
+[09:31:57] ARM komutu gönderildi
+[09:31:57] Otomatik tekrar ARM gönderildi: send_arm_command
+[09:31:57] Deprem tetikleme: ARM komutu gönderildi
+[09:32:00] MAVLink veri akışı istendi
+[09:32:00] Deprem tetikleme sistemi yeniden hazır
+[09:32:00] Deprem tetikleme sistemi tekrar hazır
+[09:32:08] MAVLink veri akışı istendi
+[09:32:13] Görev durumu: BEKLEMEDE
+[09:32:16] MAVLink veri akışı istendi
+[09:32:24] MAVLink veri akışı istendi
+[09:32:32] MAVLink veri akışı istendi
+[09:32:40] MAVLink veri akışı istendi
