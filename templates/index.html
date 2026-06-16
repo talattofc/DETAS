@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
-    <link rel="stylesheet" href="/static/css/style.css?v=sekme1">
+    <link rel="stylesheet" href="/static/css/style.css?v=single-servo1">
 </head>
 
 <body>
@@ -245,7 +245,7 @@
             <div id="cameraSection" class="page">
                 <div class="page-title">
                     <h2>Canlı Kamera + YOLO</h2>
-                    <p>Kamera görüntüsü, YOLO tespitleri, pan-tilt ve tarama modları</p>
+                    <p>Kamera görüntüsü, YOLO tespitleri ve tek eksenli servo tarama</p>
                 </div>
 
                 <div class="camera-page-grid">
@@ -317,54 +317,31 @@
                         </div>
 
                         <div class="panel servo-panel">
-                            <h3>Pan-Tilt Kamera Kontrol</h3>
+                            <h3>Kamera Servo Kontrol</h3>
 
                             <div class="servo-box">
                                 <div class="servo-title">
-                                    <strong>PAN / Sağ-Sol</strong>
-                                    <span id="panValue">1300</span>
+                                    <strong>SERVO9 / AUX1 Yukarı-Aşağı</strong>
+                                    <span id="servoValue">2400</span>
                                 </div>
-                                <input id="panSlider" type="range" min="450" max="2500" value="1300" step="25"
-                                       oninput="previewServoValue('pan')" onchange="sendServoValue('pan')">
-                                <div class="servo-buttons">
-                                    <button onclick="servoLeft()">Sol</button>
-                                    <button onclick="servoCenter()">Merkez</button>
-                                    <button onclick="servoRight()">Sağ</button>
-                                </div>
+                                <input id="servoSlider" type="range" min="1250" max="2600" value="2400" step="25"
+                                       oninput="previewServoValue()" onchange="sendServoValue()">
+                                <small class="note">2400 öne bakış, 1400 aşağı bakış, güvenli aralık 1250-2600 PWM</small>
                             </div>
-
-                            <div class="servo-box">
-                                <div class="servo-title">
-                                    <strong>TILT / Yukarı-Aşağı</strong>
-                                    <span id="tiltValue">1500</span>
-                                </div>
-                                <input id="tiltSlider" type="range" min="650" max="2000" value="1500" step="25"
-                                       oninput="previewServoValue('tilt')" onchange="sendServoValue('tilt')">
-                                <div class="servo-buttons">
-                                    <button onclick="servoUp()">Yukarı</button>
-                                    <button onclick="servoCenter()">Merkez</button>
-                                    <button onclick="servoDown()">Aşağı</button>
-                                </div>
-                            </div>
-
-                            <small class="note">PAN servo güvenli aralık filtresi aktif</small>
                         </div>
 
                         <div class="panel scan-panel">
                             <div class="panel-head">
                                 <div>
                                     <h3>Tarama Modları</h3>
-                                    <p>Otomatik kamera hareketleri</p>
+                                    <p>1400-2400 PWM arası yavaş dikey tarama</p>
                                 </div>
-                                <span class="badge live">Aktif</span>
+                                <span id="servoScanBadge" class="badge offline">Durdu</span>
                             </div>
 
                             <div class="scan-grid">
-                                <button onclick="servoCenter()">Merkeze Al</button>
+                                <button class="btn-green" onclick="servoScan()">Tarama Başlat</button>
                                 <button class="btn-red" onclick="servoStop()">Taramayı Durdur</button>
-                                <button onclick="servoScanPanSlow()">Sağ-Sol Tarama</button>
-                                <button onclick="servoScanTiltSlow()">Yukarı-Aşağı Tarama</button>
-                                <button onclick="servoScanFullSlow()">Tam Tarama</button>
                             </div>
                         </div>
                     </div>
@@ -478,55 +455,6 @@
 </div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="/static/js/dashboard.js"></script>
-
-<script>
-function switchPage(targetId) {
-    document.querySelectorAll(".page").forEach(page => {
-        page.classList.remove("active");
-    });
-
-    const target = document.getElementById(targetId);
-    if (target) {
-        target.classList.add("active");
-    }
-
-    document.querySelectorAll(".side-link").forEach(btn => {
-        btn.classList.remove("active");
-    });
-
-    const activeBtn = document.querySelector('.side-link[data-target="' + targetId + '"]');
-    if (activeBtn) {
-        activeBtn.classList.add("active");
-    }
-
-    setTimeout(() => {
-        window.dispatchEvent(new Event("resize"));
-    }, 250);
-}
-
-document.querySelectorAll(".side-link").forEach(btn => {
-    btn.addEventListener("click", () => {
-        switchPage(btn.dataset.target);
-    });
-});
-
-function missionMotorTest() {
-    fetch("/mission/motor_test", { method: "POST" })
-        .then(r => r.json())
-        .then(data => console.log("Motor test:", data))
-        .catch(err => console.error("Motor test hata:", err));
-}
-</script>
-    <script src="/static/js/dashboard_compat.js?v=compat1"></script>
-
-
-
-
-
-
-
-    <script src="/static/js/detas_remove_camera_scan_panel.js?v=1781606246"></script>
-    <script src="/static/js/servo_right_clean.js?v=1781606436"></script>
+<script src="/static/js/dashboard.js?v=single-servo1"></script>
 </body>
 </html>
