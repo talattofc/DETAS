@@ -10,6 +10,7 @@ from config import (
     DEFAULT_CAMERA,
     DETECTION_FRAME_INTERVAL,
     HAILO_JSON,
+    RPICAM_HAILO_POSTPROCESS_ENABLED,
     RPICAM_COMMAND,
     RPICAM_STREAM_READ_SIZE,
     VALID_CAMERA_IDS,
@@ -21,12 +22,38 @@ from services.state import state
 _process_lock = threading.Lock()
 _active_process = None
 _detection_callback = None
+_latest_frame_lock = threading.Lock()
+_latest_jpeg = None
+_latest_frame_time = 0.0
+_latest_frame_camera = DEFAULT_CAMERA
 
 
 def set_detection_callback(callback):
     """JPEG karelerini isleyecek detection service callback'ini ayarlar."""
     global _detection_callback
     _detection_callback = callback
+
+
+def get_latest_frame():
+    """Dataset kaydi icin son JPEG kareyi dondurur."""
+    with _latest_frame_lock:
+        if _latest_jpeg is None:
+            return None
+
+        return {
+            "jpg": bytes(_latest_jpeg),
+            "timestamp": _latest_frame_time,
+            "camera": _latest_frame_camera,
+        }
+
+
+def _store_latest_frame(jpg_bytes, camera_id):
+    global _latest_jpeg, _latest_frame_time, _latest_frame_camera
+
+    with _latest_frame_lock:
+        _latest_jpeg = bytes(jpg_bytes)
+        _latest_frame_time = time.time()
+        _latest_frame_camera = camera_id
 
 
 def get_active_camera():
@@ -86,7 +113,7 @@ def build_rpicam_command(camera_id):
 
     command.extend(camera_config.get("extra_controls", []))
 
-    hailo_active = os.path.exists(HAILO_JSON)
+    hailo_active = RPICAM_HAILO_POSTPROCESS_ENABLED and os.path.exists(HAILO_JSON)
     state.update(hailo=hailo_active)
 
     if hailo_active:
@@ -121,17 +148,22 @@ def stop_active_process():
         add_log(f"rpicam process kapatma hatasi: {exc}")
 
 
-def _update_detection(jpg_bytes):
-    """Varsa detection service callback'ini cagirir."""
+def _update_detection(jpg_bytes, run_inference=True):
+    """Varsa detection service callback'ini cagirir ve islenmis JPEG dondurur."""
     callback = _detection_callback
 
     if callback is None:
-        return
+        return jpg_bytes
 
     try:
-        callback(jpg_bytes)
+        try:
+            result = callback(jpg_bytes, run_inference=run_inference)
+        except TypeError:
+            result = callback(jpg_bytes)
+        return result if isinstance(result, (bytes, bytearray)) else jpg_bytes
     except Exception as exc:
         add_log(f"YOLO detection guncelleme hatasi: {exc}")
+        return jpg_bytes
 
 
 def generate_frames(camera_id=None):
@@ -193,14 +225,15 @@ def generate_frames(camera_id=None):
                 jpg = buffer[start:end + 2]
                 buffer = buffer[end + 2:]
                 frame_counter += 1
+                _store_latest_frame(jpg, camera_id)
 
-                if frame_counter % DETECTION_FRAME_INTERVAL == 0:
-                    _update_detection(jpg)
+                run_inference = frame_counter % max(1, DETECTION_FRAME_INTERVAL) == 0
+                processed_jpg = _update_detection(jpg, run_inference=run_inference)
 
                 yield (
                     b"--frame\r\n"
                     b"Content-Type: image/jpeg\r\n\r\n"
-                    + jpg
+                    + processed_jpg
                     + b"\r\n"
                 )
 

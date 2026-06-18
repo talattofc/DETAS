@@ -22,24 +22,52 @@ ROUTE_SET_CAMERA = "/set_camera/<int:camera_id>"
 ROUTE_MISSION_STOP = "/mission/stop"
 ROUTE_MISSION_RESET = "/mission/reset"
 
-ROUTE_SERVO_PAN = "/servo/pan/<int:pwm>"
-ROUTE_SERVO_TILT = "/servo/tilt/<int:pwm>"
+ROUTE_SERVO_POSITION = "/servo/position/<int:pwm>"
 ROUTE_SERVO_CENTER = "/servo/center"
 ROUTE_SERVO_SCAN = "/servo/scan"
-ROUTE_SERVO_SCAN_PAN_SLOW = "/servo/scan_pan_slow"
-ROUTE_SERVO_SCAN_TILT_SLOW = "/servo/scan_tilt_slow"
-ROUTE_SERVO_SCAN_FULL_SLOW = "/servo/scan_full_slow"
-ROUTE_SERVO_UP = "/servo/up"
-ROUTE_SERVO_DOWN = "/servo/down"
-ROUTE_SERVO_LEFT = "/servo/left"
-ROUTE_SERVO_RIGHT = "/servo/right"
 ROUTE_SERVO_STOP = "/servo/stop"
 
 
 # AI HAT / YOLO postprocess ayarlari
 HAILO_JSON = "/usr/share/rpi-camera-assets/hailo_yolov8_inference.json"
+RPICAM_HAILO_POSTPROCESS_ENABLED = False
 
-DETECTION_FRAME_INTERVAL = 8
+MODELS_DIR = BASE_DIR / "models"
+YOLO_PT_MODEL_PATH = MODELS_DIR / "best.pt"
+YOLO_ONNX_MODEL_PATH = MODELS_DIR / "best.onnx"
+PERSON_MODEL_PATH = MODELS_DIR / "yolov8n.pt"
+LABELS_PATH = MODELS_DIR / "labels.txt"
+DETECTION_CONFIDENCE = 0.25
+DETECTION_IMGSZ = 640
+YOLO_MODEL_BACKEND = "pt"
+
+DETAS_DISABLED_CLASSES = [
+    "person",
+    "rescue_worker",
+]
+
+DETAS_ALLOWED_CLASSES = [
+    "rubble",
+    "blocked_road",
+    "collapsed_building",
+    "damaged_vehicle",
+    "fire_smoke",
+    "safe_passage",
+    "flood_area",
+]
+
+DETAS_CLASS_THRESHOLDS = {
+    "rubble": 0.70,
+    "blocked_road": 0.75,
+    "collapsed_building": 0.75,
+    "damaged_vehicle": 0.70,
+    "fire_smoke": 0.70,
+    "safe_passage": 0.80,
+    "flood_area": 0.75,
+    "person": 0.35,
+}
+
+DETECTION_FRAME_INTERVAL = 12
 DETECTION_MAX_COUNT = 20
 DETECTION_RESIZE_MAX_WIDTH = 960
 DETECTION_MIN_BOX_WIDTH = 70
@@ -47,6 +75,40 @@ DETECTION_MIN_BOX_HEIGHT = 70
 DETECTION_MIN_BOX_AREA = 6000
 DETECTION_MAX_FRAME_AREA_RATIO = 0.85
 DETECTION_MERGE_IOU_THRESHOLD = 0.25
+DETECTION_DEFAULT_CLASS = "afet_tespiti"
+DETECTION_EVENT_MIN_CONFIDENCE = 0.70
+DETECTION_EVENT_CLASSES = [
+    "rubble",
+    "blocked_road",
+    "collapsed_building",
+    "damaged_vehicle",
+    "fire_smoke",
+    "flood_area",
+]
+DETECTION_EVENT_MAX_ITEMS = 60
+DETECTION_EVENT_DEDUP_SECONDS = 8.0
+DETECTION_EVENT_SNAPSHOT_DIR = BASE_DIR / "static" / "detections"
+
+
+# Dataset feedback / sahada yanlis tespit toplama
+DATASET_FEEDBACK_DIR = BASE_DIR / "dataset_feedback"
+FEEDBACK_IMAGES_DIR = DATASET_FEEDBACK_DIR / "images" / "train"
+FEEDBACK_LABELS_DIR = DATASET_FEEDBACK_DIR / "labels" / "train"
+FEEDBACK_REVIEW_IMAGES_DIR = DATASET_FEEDBACK_DIR / "images" / "review"
+FEEDBACK_REVIEW_LABELS_DIR = DATASET_FEEDBACK_DIR / "labels" / "review"
+FEEDBACK_CROPS_DIR = DATASET_FEEDBACK_DIR / "crops"
+FEEDBACK_METADATA_PATH = DATASET_FEEDBACK_DIR / "metadata.jsonl"
+FEEDBACK_CLASS_NAMES = [
+    "person",
+    "rubble",
+    "blocked_road",
+    "collapsed_building",
+    "damaged_vehicle",
+    "fire_smoke",
+    "rescue_worker",
+    "safe_passage",
+    "flood_area",
+]
 
 
 # Kamera ayarlari
@@ -115,22 +177,23 @@ THERMISTOR_L = AMG8833_THERMISTOR_L
 THERMISTOR_H = AMG8833_THERMISTOR_H
 
 
-# Pan-Tilt servo numaralari ve PWM limitleri
-SERVO_PAN = 9
-SERVO_TILT = 11
+# SERVO9 / Orange Cube AUX1 tek eksenli kamera servo ayarlari
+SERVO_CAMERA = 9
+SERVO_PAN = SERVO_CAMERA
+SERVO_TILT = SERVO_CAMERA
 
-PAN_MIN = 700
-PAN_CENTER = 1300
-PAN_MAX = 2300
+PAN_MIN = 1250
+PAN_CENTER = 2400
+PAN_MAX = 2600
 
-TILT_MIN = 650
-TILT_CENTER = 1500
-TILT_MAX = 2000
+TILT_MIN = PAN_MIN
+TILT_CENTER = PAN_CENTER
+TILT_MAX = PAN_MAX
 
-SERVO_DEFAULT_MIN = 900
-SERVO_DEFAULT_MAX = 2100
-SERVO_MOVE_STEP = 10
-SERVO_MOVE_DELAY = 0.04
+SERVO_DEFAULT_MIN = PAN_MIN
+SERVO_DEFAULT_MAX = PAN_MAX
+SERVO_MOVE_STEP = 50
+SERVO_MOVE_DELAY = 0.45
 SERVO_PWM_DEADBAND = 5
 
 
@@ -172,4 +235,3 @@ AUTO_DISARM_AFTER_MOTOR_TEST = False
 MOTOR_TEST_AUTO_DISARM = False
 AUTO_MISSION_DISARM_AFTER_TEST = False
 # ===== DETAS EARTHQUAKE ARM ONLY MODE END =====
-
