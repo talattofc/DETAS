@@ -13,9 +13,6 @@ try:
         PAN_MAX,
         PAN_MIN,
         THRESHOLD_VALUE_DEFAULT,
-        TILT_CENTER,
-        TILT_MAX,
-        TILT_MIN,
     )
 except ImportError:
     DEFAULT_CAMERA = 0
@@ -26,10 +23,6 @@ except ImportError:
     PAN_MIN = 450
     PAN_CENTER = 1300
     PAN_MAX = 2500
-
-    TILT_MIN = 650
-    TILT_CENTER = 1500
-    TILT_MAX = 2000
 
 
 class AppState:
@@ -64,6 +57,13 @@ class AppState:
         self.camera = DEFAULT_CAMERA
         self.detection_count = 0
         self.detections = []
+        self.detected_objects = []
+        self.last_detection_time = 0.0
+        self.detection_count_by_class = {}
+        self.detection_events = []
+        self.detection_event_count = 0
+        self.detection_engine = "none"
+        self.detection_supervision_available = False
         self.hailo = False
 
         # Orange Cube / MAVLink
@@ -75,6 +75,12 @@ class AppState:
         self.cube_gps_fix = 0
         self.cube_satellites = 0
         self.cube_eph = 0
+        self.cube_lat = None
+        self.cube_lng = None
+        self.cube_latitude = None
+        self.cube_longitude = None
+        self.lat = None
+        self.lng = None
         self.cube_altitude = 0.0
         self.cube_groundspeed = 0.0
         self.cube_heading = 0
@@ -84,9 +90,17 @@ class AppState:
         self.cube_yaw = 0.0
         self.cube_last_heartbeat = 0.0
 
-        # Pan-Tilt servo
+        # SERVO9 / AUX1 tek eksenli kamera servosu
+        self.servo_pwm = PAN_CENTER
+        self.single_servo_pwm = PAN_CENTER
+        self.servo_number = 9
+        self.servo_mode = "single_aux1_vertical"
+        self.servo_scan_active = False
+        self.servo_scan_mode = "stop"
+
+        # Eski panel alanlari icin aynalar
         self.servo_pan = PAN_CENTER
-        self.servo_tilt = TILT_CENTER
+        self.servo_tilt = PAN_CENTER
 
         # Otomatik gorev
         self.auto_mission_enabled = AUTO_MISSION_ENABLED_DEFAULT
@@ -130,6 +144,13 @@ class AppState:
 
                 "detection_count": self.detection_count,
                 "detections": deepcopy(self.detections),
+                "detected_objects": deepcopy(self.detected_objects),
+                "last_detection_time": self.last_detection_time,
+                "detection_count_by_class": deepcopy(self.detection_count_by_class),
+                "detection_events": deepcopy(self.detection_events),
+                "detection_event_count": self.detection_event_count,
+                "detection_engine": self.detection_engine,
+                "detection_supervision_available": self.detection_supervision_available,
 
                 "thermal": deepcopy(self.thermal),
                 "thermal_min": self.thermal_min,
@@ -163,16 +184,33 @@ class AppState:
                 "cube_gps_fix": self.cube_gps_fix,
                 "cube_satellites": self.cube_satellites,
                 "cube_eph": self.cube_eph,
+                "cube_lat": self.cube_lat,
+                "cube_lng": self.cube_lng,
+                "cube_latitude": self.cube_latitude,
+                "cube_longitude": self.cube_longitude,
+                "lat": self.lat,
+                "lng": self.lng,
                 "cube_last_heartbeat_age": heartbeat_age,
+
+                "servo_pwm": self.servo_pwm,
+                "single_servo_pwm": self.single_servo_pwm,
+                "servo_number": self.servo_number,
+                "servo_mode": self.servo_mode,
+                "servo_scan_active": self.servo_scan_active,
+                "servo_scan_mode": self.servo_scan_mode,
+                "servo_min": PAN_MIN,
+                "servo_center": PAN_CENTER,
+                "servo_max": PAN_MAX,
+                "servo_down": 1400,
 
                 "servo_pan": self.servo_pan,
                 "servo_tilt": self.servo_tilt,
                 "servo_pan_min": PAN_MIN,
                 "servo_pan_center": PAN_CENTER,
                 "servo_pan_max": PAN_MAX,
-                "servo_tilt_min": TILT_MIN,
-                "servo_tilt_center": TILT_CENTER,
-                "servo_tilt_max": TILT_MAX,
+                "servo_tilt_min": PAN_MIN,
+                "servo_tilt_center": PAN_CENTER,
+                "servo_tilt_max": PAN_MAX,
 
                 "auto_mission_enabled": self.auto_mission_enabled,
                 "auto_mission_stopped": self.auto_mission_stopped,
