@@ -1,0 +1,8 @@
+person
+rubble
+blocked_road
+collapsed_building
+damaged_vehicle
+fire_smoke
+rescue_worker
+safe_passage
