@@ -737,6 +737,15 @@
         const autoSpeed = number(data.auto_landing_target_speed_mps, 0);
         const mz80Connected = Boolean(data.landing_mz80_connected);
         const mz80Detected = Boolean(data.landing_mz80_detected);
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+        const sharpConnected = Boolean(data.landing_sharp_connected);
+        const sharpCm = data.landing_sharp_distance_cm;
+        const sharpVoltage = Number(data.landing_sharp_voltage);
+=======
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
 
         const card = $("landingCard");
         if (card) {
@@ -752,8 +761,22 @@
         setText("landingProximitySmall", distanceText === "-" ? "Sensör verisi bekleniyor" : `En yakın: ${distanceText}`);
 
         const mz80Text = !mz80Connected ? "Yok" : (mz80Detected ? "80 cm içinde" : "Serbest");
+<<<<<<< HEAD
 
         setText("landingMz80", mz80Text);
+=======
+<<<<<<< HEAD
+        const sharpText = !sharpConnected
+            ? "Yok"
+            : `${formatDistanceCm(sharpCm)}${Number.isFinite(sharpVoltage) && sharpVoltage > 0 ? ` / ${sharpVoltage.toFixed(2)}V` : ""}`;
+
+        setText("landingMz80", mz80Text);
+        setText("landingSharp", sharpText);
+=======
+
+        setText("landingMz80", mz80Text);
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
         setText("landingCubeStatus", displayText);
         setText("landingSummary", distanceText === "-" ? text : `${text} (${distanceText})`);
         setText("autoLandingStatus", autoStatus);

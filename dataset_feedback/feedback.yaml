@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 path: dataset_feedback
 train: images/train
 val: images/train
@@ -12,3 +13,19 @@ names:
 6: rescue_worker
 7: safe_passage
 8: flood_area
+=======
+path: dataset_feedback
+train: images/train
+val: images/train
+nc: 9
+names:
+0: person
+1: rubble
+2: blocked_road
+3: collapsed_building
+4: damaged_vehicle
+5: fire_smoke
+6: rescue_worker
+7: safe_passage
+8: flood_area
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f

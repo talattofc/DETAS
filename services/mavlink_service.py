@@ -13,6 +13,7 @@ except Exception:
     config = None
 
 from services.state import state
+from services.landing_sensor_service import update_sharp_distance
 
 try:
     from services.logger_service import add_log
@@ -49,6 +50,13 @@ MOTOR_TEST_THROTTLE_PERCENT = 22
 MOTOR_TEST_DURATION_SEC = 1.0
 MOTOR_TEST_PAUSE_SEC = 0.5
 MOTOR_TEST_MOTOR_COUNT = 4
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+SHARP_ADC_FIELD = getattr(config, "SHARP_ADC_FIELD", "adc1") if config else "adc1"
+=======
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
 AUTO_MISSION_SEQUENCE_ENABLED = getattr(config, "AUTO_MISSION_SEQUENCE_ENABLED", True) if config else True
 AUTO_MISSION_EARTHQUAKE_CONFIRM_SEC = getattr(config, "AUTO_MISSION_EARTHQUAKE_CONFIRM_SEC", 3.0) if config else 3.0
 AUTO_MISSION_EARTHQUAKE_GAP_TOLERANCE_SEC = getattr(config, "AUTO_MISSION_EARTHQUAKE_GAP_TOLERANCE_SEC", 0.8) if config else 0.8
@@ -57,7 +65,14 @@ AUTO_MISSION_TAKEOFF_SETTLE_SEC = getattr(config, "AUTO_MISSION_TAKEOFF_SETTLE_S
 AUTO_MISSION_SCAN_DURATION_SEC = getattr(config, "AUTO_MISSION_SCAN_DURATION_SEC", 45.0) if config else 45.0
 AUTO_MISSION_SCAN_MIN_ALTITUDE_M = getattr(config, "AUTO_MISSION_SCAN_MIN_ALTITUDE_M", 1.5) if config else 1.5
 AUTO_MISSION_LAND_AFTER_SCAN = getattr(config, "AUTO_MISSION_LAND_AFTER_SCAN", True) if config else True
+<<<<<<< HEAD
 AUTO_MISSION_RTL_ON_STOP = getattr(config, "AUTO_MISSION_RTL_ON_STOP", True) if config else True
+=======
+<<<<<<< HEAD
+=======
+AUTO_MISSION_RTL_ON_STOP = getattr(config, "AUTO_MISSION_RTL_ON_STOP", True) if config else True
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
 
 
 # ============================================================
@@ -314,6 +329,16 @@ def request_mavlink_data_streams(master=None):
             mavutil.mavlink.MAVLINK_MSG_ID_VFR_HUD: 5,
             mavutil.mavlink.MAVLINK_MSG_ID_RC_CHANNELS: 2,
         }
+
+        for const_name, hz in (
+            ("MAVLINK_MSG_ID_DISTANCE_SENSOR", 10),
+            ("MAVLINK_MSG_ID_RANGEFINDER", 10),
+            ("MAVLINK_MSG_ID_RAW_IMU", 2),
+            ("MAVLINK_MSG_ID_SCALED_IMU2", 2),
+        ):
+            msg_id = getattr(mavutil.mavlink, const_name, None)
+            if msg_id is not None:
+                message_rates[msg_id] = hz
 
         for msg_id, hz in message_rates.items():
             interval_us = int(1_000_000 / hz)
@@ -616,6 +641,64 @@ def _handle_vfr_hud(msg):
     )
 
 
+def _handle_distance_sensor(msg):
+    try:
+        current_cm = float(getattr(msg, "current_distance"))
+    except Exception:
+        return
+
+    if current_cm <= 0:
+        return
+
+    update_sharp_distance(distance_cm=current_cm, source="DISTANCE_SENSOR")
+
+
+def _handle_rangefinder(msg):
+    try:
+        distance_m = float(getattr(msg, "distance"))
+    except Exception:
+        return
+
+    if distance_m <= 0:
+        return
+
+    voltage = None
+    try:
+        voltage = float(getattr(msg, "voltage"))
+    except Exception:
+        voltage = None
+
+    update_sharp_distance(
+        distance_cm=distance_m * 100.0,
+        voltage=voltage,
+        source="RANGEFINDER",
+    )
+
+
+def _handle_adc_like(msg):
+    fields = {}
+    try:
+        fields = msg.to_dict()
+    except Exception:
+        for key in ("adc1", "adc2", "adc3", "adc4", "adc5", "adc6", "analog1", "analog2"):
+            if hasattr(msg, key):
+                fields[key] = getattr(msg, key)
+
+    if not fields:
+        return
+
+    raw = None
+    for key in (SHARP_ADC_FIELD, "adc1", "adc2", "analog1", "analog2"):
+        if key in fields:
+            raw = fields[key]
+            break
+
+    if raw is None:
+        return
+
+    update_sharp_distance(raw=raw, source=msg.get_type())
+
+
 def _handle_rc_channels(msg):
     updates = {}
 
@@ -684,6 +767,12 @@ def _handle_message(msg):
         _handle_attitude(msg)
     elif msg_type == "VFR_HUD":
         _handle_vfr_hud(msg)
+    elif msg_type == "DISTANCE_SENSOR":
+        _handle_distance_sensor(msg)
+    elif msg_type == "RANGEFINDER":
+        _handle_rangefinder(msg)
+    elif msg_type in ("RAW_IMU", "SCALED_IMU2", "ADC_CHANNELS", "ANALOG_DATA"):
+        _handle_adc_like(msg)
     elif msg_type == "RC_CHANNELS":
         _handle_rc_channels(msg)
     elif msg_type == "STATUSTEXT":
@@ -784,7 +873,11 @@ def _active_mission_phase():
     phase = str(data.get("auto_sequence_phase", _auto_sequence_phase) or "").lower()
     status = str(data.get("mission_status", "") or "").upper()
 
+<<<<<<< HEAD
     if phase in ("confirmed", "takeoff", "scan", "landing", "mission", "auto", "mission_start"):
+=======
+    if phase in ("confirmed", "takeoff", "scan", "landing"):
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
         return True
     if _as_bool(data.get("auto_landing_active")):
         return True
@@ -1009,6 +1102,7 @@ def send_takeoff_command(altitude_m=None):
             return {"ok": False, "error": str(e), "altitude_m": altitude_m}
 
 
+<<<<<<< HEAD
 def send_mission_start_command():
     if mavutil is None:
         return {"ok": False, "error": "pymavlink yüklü değil"}
@@ -1037,6 +1131,8 @@ def send_mission_start_command():
             return {"ok": False, "error": str(e)}
 
 
+=======
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
 # ============================================================
 # SERVO
 # ============================================================
@@ -1262,6 +1358,7 @@ def _start_autonomous_takeoff(now):
         auto_sequence_started_time=now,
         auto_mission_enabled=True,
         auto_mission_stopped=False,
+<<<<<<< HEAD
         mission_status="AUTO GÖREV HAZIRLANIYOR",
     )
 
@@ -1269,12 +1366,22 @@ def _start_autonomous_takeoff(now):
     if not mode_result.get("ok"):
         _set_auto_sequence_phase("error", "AUTO MOD HATASI", mode_result.get("error"))
         add_log(f"Auto gorev durdu: {mode_result}")
+=======
+        mission_status="OTONOM KALKIŞ HAZIRLANIYOR",
+    )
+
+    mode_result = set_mode("GUIDED")
+    if not mode_result.get("ok"):
+        _set_auto_sequence_phase("error", "GUIDED MOD HATASI", mode_result.get("error"))
+        add_log(f"Otonom kalkis durdu: {mode_result}")
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
         return False
 
     if not _cube_armed():
         arm_result = send_arm_command(True)
         if not arm_result.get("ok"):
             _set_auto_sequence_phase("error", "ARM HATASI", arm_result.get("error") or str(arm_result))
+<<<<<<< HEAD
             add_log(f"Auto gorev ARM hatasi: {arm_result}")
             return False
 
@@ -1285,6 +1392,18 @@ def _start_autonomous_takeoff(now):
 
     _auto_takeoff_sent_time = now
     _set_auto_sequence_phase("mission", "AUTO GÖREV BAŞLATILDI")
+=======
+            add_log(f"Otonom kalkis ARM hatasi: {arm_result}")
+            return False
+
+    takeoff_result = send_takeoff_command(AUTO_MISSION_TAKEOFF_ALTITUDE_M)
+    if not takeoff_result.get("ok"):
+        _set_auto_sequence_phase("error", "KALKIŞ HATASI", takeoff_result.get("error"))
+        return False
+
+    _auto_takeoff_sent_time = now
+    _set_auto_sequence_phase("takeoff", "OTONOM KALKIŞ")
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
     return True
 
 
@@ -1425,6 +1544,17 @@ def mission_arm():
 def mission_stop():
     _stop_servo_scan_for_mission()
     _stop_auto_landing_for_mission()
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+    _state_update(
+        auto_mission_stopped=True,
+        auto_sequence_phase="stopped",
+        mission_status="DURDURULDU",
+    )
+    return send_arm_command(False)
+=======
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
 
     rtl_result = None
     mission_active = _active_mission_phase()
@@ -1444,6 +1574,10 @@ def mission_stop():
         "rtl_sent": bool(rtl_result and rtl_result.get("ok")),
         "rtl_result": rtl_result,
     }
+<<<<<<< HEAD
+=======
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
 
 
 def mission_disarm():
@@ -1469,6 +1603,11 @@ def mission_reset():
 
     _stop_servo_scan_for_mission()
     _stop_auto_landing_for_mission()
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
 
     rtl_result = None
     mission_active = _active_mission_phase()
@@ -1477,6 +1616,10 @@ def mission_reset():
         rtl_result = send_rtl_command()
 
     status = "Görev iptal edildi, RTL başlatıldı" if should_rtl and rtl_result and rtl_result.get("ok") else "BEKLEMEDE"
+<<<<<<< HEAD
+=======
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
 
     _state_update(
         mission_status=status,
