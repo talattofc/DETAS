@@ -2,11 +2,11 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>DETAS Kontrol Paneli</title>
+    <title>ADTİ Kontrol Paneli</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
-    <link rel="stylesheet" href="/static/css/style.css?v=sekme1">
+    <link rel="stylesheet" href="/static/css/style.css?v=feedback1">
 </head>
 
 <body>
@@ -15,10 +15,9 @@
     <!-- SOL SIDEBAR -->
     <aside class="sidebar">
         <div class="brand">
-            <div class="brand-icon">D</div>
+            <div class="brand-icon">A</div>
             <div>
-                <h2>DETAS</h2>
-                <span>Afet Analiz Sistemi</span>
+                <h2>ADTİ</h2>
             </div>
         </div>
 
@@ -34,7 +33,7 @@
         <div class="operator-box">
             <span class="status-dot"></span>
             <strong>Operatör</strong>
-            <small>DETAS-001</small>
+            <small>ADTİ-001</small>
             <small>v1.2.3</small>
         </div>
     </aside>
@@ -45,8 +44,7 @@
         <!-- TOPBAR -->
         <header class="topbar">
             <div>
-                <h1>DETAS Kontrol Paneli</h1>
-                <p>Deprem erken tespit, İHA görev yönetimi, canlı görüntü analizi ve termal keşif sistemi</p>
+                <h1>ADTİ Kontrol Paneli</h1>
             </div>
 
             <div class="top-right">
@@ -99,13 +97,18 @@
             <div class="stat-card">
                 <span>Tespit Edilen Nesne</span>
                 <h3 id="detectedCount">0</h3>
-                <small>AI HAT YOLO</small>
             </div>
 
             <div class="stat-card">
                 <span>Termal Maksimum</span>
                 <h3 id="thermalMaxCard">0.0°C</h3>
                 <small id="hotspotText">Sıcak nokta yok</small>
+            </div>
+
+            <div id="landingCard" class="stat-card">
+                <span>İniş Yakınlığı</span>
+                <h3 id="landingProximityText">BİLİNMİYOR</h3>
+                <small id="landingProximitySmall">MZ80 / Sharp bekleniyor</small>
             </div>
         </section>
 
@@ -116,7 +119,6 @@
             <div id="overview" class="page active">
                 <div class="page-title">
                     <h2>Genel Bakış</h2>
-                    <p>Sistemin en kritik görev, deprem ve bağlantı durumları</p>
                 </div>
 
                 <div class="overview-grid">
@@ -156,14 +158,24 @@
             <span>ARM KOMUTU</span>
         </div>
 
+        <div class="mission-step" id="step-takeoff">
+            <i></i>
+            <span>OTONOM KALKIŞ</span>
+        </div>
+
         <div class="mission-step" id="step-active">
             <i></i>
             <span>GÖREVDE</span>
         </div>
 
-        <div class="mission-step" id="step-motor-ready">
+        <div class="mission-step" id="step-scan">
             <i></i>
-            <span>MOTOR HAZIR</span>
+            <span>ŞERİT TARAMA</span>
+        </div>
+
+        <div class="mission-step" id="step-landing">
+            <i></i>
+            <span>OTONOM İNİŞ</span>
         </div>
 
         <div class="mission-step" id="step-stopped">
@@ -177,10 +189,23 @@
         <button id="missionStopBtn" class="mission-btn red" onclick="missionStop()">Motorları Durdur / DISARM</button>
         <button id="missionResetBtn" class="mission-btn blue" onclick="missionReset()">Görevi Sıfırla</button>
         <button id="missionMotorTestBtn" class="mission-btn dark" onclick="missionMotorTest()">Motor Test</button>
+        <button id="autoLandingStartBtn" class="mission-btn green" onclick="landingStart()">Otomatik İniş Başlat</button>
+        <button id="autoLandingStopBtn" class="mission-btn red" onclick="landingStop()">Otomatik İnişi Durdur</button>
+    </div>
+
+    <div class="auto-landing-status">
+        <div>
+            <span>Otomatik İniş</span>
+            <strong id="autoLandingStatus">Kapalı</strong>
+        </div>
+        <div>
+            <span>Hedef Alçalma</span>
+            <strong id="autoLandingSpeed">0.00 m/s</strong>
+        </div>
     </div>
 
     <div class="mission-warning">
-        ⚠ Pervane yokken motor test kullanın
+        ⚠ İlk otomatik iniş testini pervanesiz veya bağlı testle yapın
     </div>
 </div>
 
@@ -188,7 +213,6 @@
                         <div class="panel-head">
                             <div>
                                 <h3>Sarsıntı Grafiği</h3>
-                                <p>İstasyon telemetri verisi</p>
                             </div>
                             <span class="badge live">CANLI</span>
                         </div>
@@ -236,6 +260,11 @@
             <span class="operation-summary-label">Termal durum</span>
             <span class="operation-summary-value warn" id="thermalHotspot">YOK</span>
         </div>
+
+        <div class="operation-summary-row">
+            <span class="operation-summary-label">Zemin yakınlığı</span>
+            <span class="operation-summary-value info" id="landingSummary">Bilinmiyor</span>
+        </div>
     </div>
 </div>
                 </div>
@@ -245,7 +274,6 @@
             <div id="cameraSection" class="page">
                 <div class="page-title">
                     <h2>Canlı Kamera + YOLO</h2>
-                    <p>Kamera görüntüsü, YOLO tespitleri, pan-tilt ve tarama modları</p>
                 </div>
 
                 <div class="camera-page-grid">
@@ -253,7 +281,6 @@
                         <div class="panel-head">
                             <div>
                                 <h3>Canlı Kamera</h3>
-                                <p>AI HAT hızlandırmalı görüntü akışı</p>
                             </div>
 
                             <div class="camera-buttons">
@@ -263,6 +290,7 @@
                                 <button id="zoomOutBtn" class="camera-btn" onclick="cameraZoomOut()">Zoom -</button>
                                 <button id="zoomResetBtn" class="camera-btn" onclick="cameraZoomReset()">Zoom 1.00x</button>
                                 <button id="zoomInBtn" class="camera-btn" onclick="cameraZoomIn()">Zoom +</button>
+                                <button id="feedbackOpenBtn" class="camera-btn" onclick="openFeedbackModal()">Dataset İçin Kaydet</button>
                             </div>
                         </div>
 
@@ -275,7 +303,6 @@
                         <div class="panel-head">
                             <div>
                                 <h3>AI Analiz Paneli</h3>
-                                <p>AI HAT, YOLO postprocess ve canlı tespit özeti</p>
                             </div>
                             <span class="badge live">AI AKTİF</span>
                         </div>
@@ -288,7 +315,7 @@
 
                             <div class="camera-ai-info">
                                 <div>
-                                    <span>AI HAT aktif mi?</span>
+                                    <span>AI aktif mi?</span>
                                     <b>Evet</b>
                                 </div>
                                 <div>
@@ -296,8 +323,8 @@
                                     <b>Evet</b>
                                 </div>
                                 <div>
-                                    <span>YOLO postprocess aktif mi?</span>
-                                    <b>Evet</b>
+                                    <span>Görüntü işleme motoru</span>
+                                    <b id="detectionEngine">-</b>
                                 </div>
                                 <div>
                                     <span>Tespit edilen nesne sayısı</span>
@@ -316,55 +343,47 @@
                             </div>
                         </div>
 
+                        <div class="panel feedback-stats-panel">
+                            <h3>Dataset Feedback</h3>
+                            <div class="feedback-stat-grid">
+                                <div>
+                                    <span>Görüntü</span>
+                                    <b id="feedbackImageCount">0</b>
+                                </div>
+                                <div>
+                                    <span>Background</span>
+                                    <b id="feedbackNegativeCount">0</b>
+                                </div>
+                            </div>
+                            <div id="feedbackClassStats" class="feedback-class-stats">
+                                <div>Henüz feedback yok</div>
+                            </div>
+                        </div>
+
                         <div class="panel servo-panel">
-                            <h3>Pan-Tilt Kamera Kontrol</h3>
+                            <h3>Kamera Servo Kontrol</h3>
 
                             <div class="servo-box">
                                 <div class="servo-title">
-                                    <strong>PAN / Sağ-Sol</strong>
-                                    <span id="panValue">1300</span>
+                                    <strong>SERVO9 / AUX1 Yukarı-Aşağı</strong>
+                                    <span id="servoValue">2400</span>
                                 </div>
-                                <input id="panSlider" type="range" min="450" max="2500" value="1300" step="25"
-                                       oninput="previewServoValue('pan')" onchange="sendServoValue('pan')">
-                                <div class="servo-buttons">
-                                    <button onclick="servoLeft()">Sol</button>
-                                    <button onclick="servoCenter()">Merkez</button>
-                                    <button onclick="servoRight()">Sağ</button>
-                                </div>
+                                <input id="servoSlider" type="range" min="1250" max="2600" value="2400" step="25"
+                                       oninput="previewServoValue()" onchange="sendServoValue()">
                             </div>
-
-                            <div class="servo-box">
-                                <div class="servo-title">
-                                    <strong>TILT / Yukarı-Aşağı</strong>
-                                    <span id="tiltValue">1500</span>
-                                </div>
-                                <input id="tiltSlider" type="range" min="650" max="2000" value="1500" step="25"
-                                       oninput="previewServoValue('tilt')" onchange="sendServoValue('tilt')">
-                                <div class="servo-buttons">
-                                    <button onclick="servoUp()">Yukarı</button>
-                                    <button onclick="servoCenter()">Merkez</button>
-                                    <button onclick="servoDown()">Aşağı</button>
-                                </div>
-                            </div>
-
-                            <small class="note">PAN servo güvenli aralık filtresi aktif</small>
                         </div>
 
                         <div class="panel scan-panel">
                             <div class="panel-head">
-                                <div>
-                                    <h3>Tarama Modları</h3>
-                                    <p>Otomatik kamera hareketleri</p>
-                                </div>
-                                <span class="badge live">Aktif</span>
+                            <div>
+                                <h3>Tarama Modları</h3>
+                            </div>
+                                <span id="servoScanBadge" class="badge offline">Durdu</span>
                             </div>
 
                             <div class="scan-grid">
-                                <button onclick="servoCenter()">Merkeze Al</button>
+                                <button class="btn-green" onclick="servoScan()">Tarama Başlat</button>
                                 <button class="btn-red" onclick="servoStop()">Taramayı Durdur</button>
-                                <button onclick="servoScanPanSlow()">Sağ-Sol Tarama</button>
-                                <button onclick="servoScanTiltSlow()">Yukarı-Aşağı Tarama</button>
-                                <button onclick="servoScanFullSlow()">Tam Tarama</button>
                             </div>
                         </div>
                     </div>
@@ -378,9 +397,8 @@
 
             <!-- TERMAL -->
             <div id="thermalSection" class="page">
-                <div class="page-title">
+                    <div class="page-title">
                     <h2>Termal Analiz</h2>
-                    <p>AMG8833 8x8 sıcaklık matrisi ve sıcak nokta takibi</p>
                 </div>
 
                 <div class="thermal-page-grid">
@@ -388,7 +406,6 @@
                         <div class="panel-head">
                             <div>
                                 <h3>Termal Harita</h3>
-                                <p>8x8 sıcaklık matrisi</p>
                             </div>
                             <span id="thermalBadge" class="badge live">NORMAL</span>
                         </div>
@@ -412,17 +429,36 @@
             <div id="mapSection" class="page">
                 <div class="page-title">
                     <h2>Operasyon Haritası</h2>
-                    <p>İstasyon, İHA rotası ve risk bölgeleri</p>
                 </div>
 
-                <div class="panel">
-                    <div id="map"></div>
+                <div class="map-layout">
+                    <div class="panel map-panel">
+                        <div id="map"></div>
 
-                    <div class="legend">
-                        <span><i class="dot blue"></i>İstasyon</span>
-                        <span><i class="dot red"></i>Riskli bölge</span>
-                        <span><i class="dot green"></i>Güvenli alan</span>
-                        <span><i class="line yellow"></i>İHA rotası</span>
+                        <div class="legend">
+                            <span><i class="dot blue"></i>İstasyon</span>
+                            <span><i class="dot red"></i>Riskli bölge</span>
+                            <span><i class="dot green"></i>Güvenli alan</span>
+                            <span><i class="line yellow"></i>İHA rotası</span>
+                            <span><i class="dot magenta"></i>AI tespiti</span>
+                        </div>
+                    </div>
+
+                    <div class="panel ai-events-panel">
+                        <div class="panel-head">
+                            <div>
+                                <h3>Kritik AI Tespitleri</h3>
+                            </div>
+                            <span id="aiEventsCount" class="badge offline">0</span>
+                        </div>
+
+                        <div id="detectionEventsList" class="detection-events-list">
+                            <div class="empty-state">Henüz kritik tespit yok</div>
+                        </div>
+
+                        <div id="detectionEventDetail" class="detection-event-detail">
+                            <div class="empty-state">Bir tespit seçildiğinde fotoğraf ve konum burada görünür.</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -431,14 +467,12 @@
             <div id="cubeSection" class="page">
                 <div class="page-title">
                     <h2>Orange Cube / Uçuş Kontrol</h2>
-                    <p>MAVLink canlı uçuş verileri</p>
                 </div>
 
                 <div class="panel">
                     <div class="panel-head">
                         <div>
                             <h3>Cube Durumu</h3>
-                            <p>Uçuş kontrolcü bağlantı ve sensör bilgileri</p>
                         </div>
                         <span id="cubeConnectionBadge" class="cube-badge offline">BAĞLANTI YOK</span>
                     </div>
@@ -455,6 +489,11 @@
                         <div><span>Roll</span><strong id="cubeRoll">-°</strong></div>
                         <div><span>Pitch</span><strong id="cubePitch">-°</strong></div>
                         <div><span>Yaw</span><strong id="cubeYaw">-°</strong></div>
+                        <div><span>MZ80</span><strong id="landingMz80">-</strong></div>
+                        <div><span>Sharp</span><strong id="landingSharp">-</strong></div>
+                        <div><span>İniş Uyarısı</span><strong id="landingCubeStatus">-</strong></div>
+                        <div><span>Otomatik İniş</span><strong id="landingAutoStatus">-</strong></div>
+                        <div><span>Alçalma Hızı</span><strong id="landingAutoSpeed">-</strong></div>
                     </div>
                 </div>
             </div>
@@ -463,7 +502,6 @@
             <div id="logsSection" class="page">
                 <div class="page-title">
                     <h2>Sistem Logları</h2>
-                    <p>Canlı olay kayıtları</p>
                 </div>
 
                 <div class="panel">
@@ -477,56 +515,35 @@
     </main>
 </div>
 
+<div id="feedbackModal" class="feedback-modal" aria-hidden="true">
+    <div class="feedback-modal-backdrop" onclick="closeFeedbackModal()"></div>
+    <div class="feedback-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="feedbackModalTitle">
+        <div class="feedback-modal-head">
+            <div>
+                <h3 id="feedbackModalTitle">Dataset İçin Kaydet</h3>
+            </div>
+            <button class="feedback-close-btn" onclick="closeFeedbackModal()">×</button>
+        </div>
+
+        <div class="feedback-modal-body">
+            <div class="feedback-preview">
+                <img id="feedbackPreviewImage" alt="Son kamera karesi">
+            </div>
+
+            <div class="feedback-form">
+                <div id="feedbackDetectionRows" class="feedback-detection-rows"></div>
+                <div class="feedback-actions">
+                    <button class="btn-dark" onclick="markAllFeedbackNone()">Tümünü Background Yap</button>
+                    <button class="btn-green" onclick="submitFeedbackCapture()">Kaydet</button>
+                    <button class="btn-red" onclick="closeFeedbackModal()">Vazgeç</button>
+                </div>
+                <div id="feedbackStatus" class="feedback-status">Hazır</div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="/static/js/dashboard.js"></script>
-
-<script>
-function switchPage(targetId) {
-    document.querySelectorAll(".page").forEach(page => {
-        page.classList.remove("active");
-    });
-
-    const target = document.getElementById(targetId);
-    if (target) {
-        target.classList.add("active");
-    }
-
-    document.querySelectorAll(".side-link").forEach(btn => {
-        btn.classList.remove("active");
-    });
-
-    const activeBtn = document.querySelector('.side-link[data-target="' + targetId + '"]');
-    if (activeBtn) {
-        activeBtn.classList.add("active");
-    }
-
-    setTimeout(() => {
-        window.dispatchEvent(new Event("resize"));
-    }, 250);
-}
-
-document.querySelectorAll(".side-link").forEach(btn => {
-    btn.addEventListener("click", () => {
-        switchPage(btn.dataset.target);
-    });
-});
-
-function missionMotorTest() {
-    fetch("/mission/motor_test", { method: "POST" })
-        .then(r => r.json())
-        .then(data => console.log("Motor test:", data))
-        .catch(err => console.error("Motor test hata:", err));
-}
-</script>
-    <script src="/static/js/dashboard_compat.js?v=compat1"></script>
-
-
-
-
-
-
-
-    <script src="/static/js/detas_remove_camera_scan_panel.js?v=1781606246"></script>
-    <script src="/static/js/servo_right_clean.js?v=1781606436"></script>
+<script src="/static/js/dashboard.js?v=feedback1"></script>
 </body>
 </html>

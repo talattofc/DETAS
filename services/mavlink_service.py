@@ -13,6 +13,7 @@ except Exception:
     config = None
 
 from services.state import state
+from services.landing_sensor_service import update_sharp_distance
 
 try:
     from services.logger_service import add_log
@@ -49,6 +50,15 @@ MOTOR_TEST_THROTTLE_PERCENT = 22
 MOTOR_TEST_DURATION_SEC = 1.0
 MOTOR_TEST_PAUSE_SEC = 0.5
 MOTOR_TEST_MOTOR_COUNT = 4
+SHARP_ADC_FIELD = getattr(config, "SHARP_ADC_FIELD", "adc1") if config else "adc1"
+AUTO_MISSION_SEQUENCE_ENABLED = getattr(config, "AUTO_MISSION_SEQUENCE_ENABLED", True) if config else True
+AUTO_MISSION_EARTHQUAKE_CONFIRM_SEC = getattr(config, "AUTO_MISSION_EARTHQUAKE_CONFIRM_SEC", 3.0) if config else 3.0
+AUTO_MISSION_EARTHQUAKE_GAP_TOLERANCE_SEC = getattr(config, "AUTO_MISSION_EARTHQUAKE_GAP_TOLERANCE_SEC", 0.8) if config else 0.8
+AUTO_MISSION_TAKEOFF_ALTITUDE_M = getattr(config, "AUTO_MISSION_TAKEOFF_ALTITUDE_M", 3.0) if config else 3.0
+AUTO_MISSION_TAKEOFF_SETTLE_SEC = getattr(config, "AUTO_MISSION_TAKEOFF_SETTLE_SEC", 8.0) if config else 8.0
+AUTO_MISSION_SCAN_DURATION_SEC = getattr(config, "AUTO_MISSION_SCAN_DURATION_SEC", 45.0) if config else 45.0
+AUTO_MISSION_SCAN_MIN_ALTITUDE_M = getattr(config, "AUTO_MISSION_SCAN_MIN_ALTITUDE_M", 1.5) if config else 1.5
+AUTO_MISSION_LAND_AFTER_SCAN = getattr(config, "AUTO_MISSION_LAND_AFTER_SCAN", True) if config else True
 
 
 # ============================================================
@@ -74,6 +84,13 @@ _last_status_text = ""
 _auto_event_latched = False
 _last_auto_arm_time = 0.0
 _last_quake_clear_time = 0.0
+_quake_candidate_start_time = 0.0
+_quake_last_seen_time = 0.0
+_auto_sequence_phase = "idle"
+_auto_sequence_started_time = 0.0
+_auto_takeoff_sent_time = 0.0
+_auto_scan_started_time = 0.0
+_auto_landing_started_time = 0.0
 
 
 # ============================================================
@@ -298,6 +315,16 @@ def request_mavlink_data_streams(master=None):
             mavutil.mavlink.MAVLINK_MSG_ID_VFR_HUD: 5,
             mavutil.mavlink.MAVLINK_MSG_ID_RC_CHANNELS: 2,
         }
+
+        for const_name, hz in (
+            ("MAVLINK_MSG_ID_DISTANCE_SENSOR", 10),
+            ("MAVLINK_MSG_ID_RANGEFINDER", 10),
+            ("MAVLINK_MSG_ID_RAW_IMU", 2),
+            ("MAVLINK_MSG_ID_SCALED_IMU2", 2),
+        ):
+            msg_id = getattr(mavutil.mavlink, const_name, None)
+            if msg_id is not None:
+                message_rates[msg_id] = hz
 
         for msg_id, hz in message_rates.items():
             interval_us = int(1_000_000 / hz)
@@ -600,6 +627,64 @@ def _handle_vfr_hud(msg):
     )
 
 
+def _handle_distance_sensor(msg):
+    try:
+        current_cm = float(getattr(msg, "current_distance"))
+    except Exception:
+        return
+
+    if current_cm <= 0:
+        return
+
+    update_sharp_distance(distance_cm=current_cm, source="DISTANCE_SENSOR")
+
+
+def _handle_rangefinder(msg):
+    try:
+        distance_m = float(getattr(msg, "distance"))
+    except Exception:
+        return
+
+    if distance_m <= 0:
+        return
+
+    voltage = None
+    try:
+        voltage = float(getattr(msg, "voltage"))
+    except Exception:
+        voltage = None
+
+    update_sharp_distance(
+        distance_cm=distance_m * 100.0,
+        voltage=voltage,
+        source="RANGEFINDER",
+    )
+
+
+def _handle_adc_like(msg):
+    fields = {}
+    try:
+        fields = msg.to_dict()
+    except Exception:
+        for key in ("adc1", "adc2", "adc3", "adc4", "adc5", "adc6", "analog1", "analog2"):
+            if hasattr(msg, key):
+                fields[key] = getattr(msg, key)
+
+    if not fields:
+        return
+
+    raw = None
+    for key in (SHARP_ADC_FIELD, "adc1", "adc2", "analog1", "analog2"):
+        if key in fields:
+            raw = fields[key]
+            break
+
+    if raw is None:
+        return
+
+    update_sharp_distance(raw=raw, source=msg.get_type())
+
+
 def _handle_rc_channels(msg):
     updates = {}
 
@@ -668,6 +753,12 @@ def _handle_message(msg):
         _handle_attitude(msg)
     elif msg_type == "VFR_HUD":
         _handle_vfr_hud(msg)
+    elif msg_type == "DISTANCE_SENSOR":
+        _handle_distance_sensor(msg)
+    elif msg_type == "RANGEFINDER":
+        _handle_rangefinder(msg)
+    elif msg_type in ("RAW_IMU", "SCALED_IMU2", "ADC_CHANNELS", "ANALOG_DATA"):
+        _handle_adc_like(msg)
     elif msg_type == "RC_CHANNELS":
         _handle_rc_channels(msg)
     elif msg_type == "STATUSTEXT":
@@ -854,6 +945,97 @@ def set_loiter_mode():
     return set_mode("LOITER")
 
 
+def send_guided_descent_velocity(vz_down_mps):
+    """GUIDED modda asagi yonlu hiz istegi gonderir; pozitif z NED'de asagidir."""
+    if mavutil is None:
+        return {"ok": False, "error": "pymavlink yüklü değil"}
+
+    try:
+        vz_down_mps = max(0.0, min(float(vz_down_mps), 1.5))
+    except Exception:
+        vz_down_mps = 0.0
+
+    with _command_lock:
+        try:
+            master = get_master()
+            target_system, target_component = _target_ids(master)
+            mavlink = mavutil.mavlink
+
+            type_mask = (
+                getattr(mavlink, "POSITION_TARGET_TYPEMASK_X_IGNORE", 1)
+                | getattr(mavlink, "POSITION_TARGET_TYPEMASK_Y_IGNORE", 2)
+                | getattr(mavlink, "POSITION_TARGET_TYPEMASK_Z_IGNORE", 4)
+                | getattr(mavlink, "POSITION_TARGET_TYPEMASK_AX_IGNORE", 64)
+                | getattr(mavlink, "POSITION_TARGET_TYPEMASK_AY_IGNORE", 128)
+                | getattr(mavlink, "POSITION_TARGET_TYPEMASK_AZ_IGNORE", 256)
+                | getattr(mavlink, "POSITION_TARGET_TYPEMASK_YAW_IGNORE", 1024)
+                | getattr(mavlink, "POSITION_TARGET_TYPEMASK_YAW_RATE_IGNORE", 2048)
+            )
+            frame = getattr(mavlink, "MAV_FRAME_BODY_NED", mavlink.MAV_FRAME_LOCAL_NED)
+
+            master.mav.set_position_target_local_ned_send(
+                int(time.time() * 1000) & 0xFFFFFFFF,
+                target_system,
+                target_component,
+                frame,
+                type_mask,
+                0,
+                0,
+                0,
+                0,
+                0,
+                vz_down_mps,
+                0,
+                0,
+                0,
+                0,
+                0,
+            )
+            return {"ok": True, "vz_down_mps": vz_down_mps}
+        except Exception as e:
+            add_log(f"GUIDED inis hiz komutu hatasi: {e}")
+            return {"ok": False, "error": str(e), "vz_down_mps": vz_down_mps}
+
+
+def stop_guided_velocity():
+    return send_guided_descent_velocity(0.0)
+
+
+def send_takeoff_command(altitude_m=None):
+    if mavutil is None:
+        return {"ok": False, "error": "pymavlink yüklü değil"}
+
+    try:
+        altitude_m = float(altitude_m if altitude_m is not None else AUTO_MISSION_TAKEOFF_ALTITUDE_M)
+    except Exception:
+        altitude_m = AUTO_MISSION_TAKEOFF_ALTITUDE_M
+
+    altitude_m = max(1.0, min(altitude_m, 20.0))
+
+    with _command_lock:
+        try:
+            master = get_master()
+            target_system, target_component = _target_ids(master)
+            master.mav.command_long_send(
+                target_system,
+                target_component,
+                mavutil.mavlink.MAV_CMD_NAV_TAKEOFF,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                altitude_m,
+            )
+            add_log(f"Otonom kalkis komutu gonderildi: {altitude_m:.1f} m")
+            return {"ok": True, "altitude_m": altitude_m}
+        except Exception as e:
+            add_log(f"Otonom kalkis komutu hatasi: {e}")
+            return {"ok": False, "error": str(e), "altitude_m": altitude_m}
+
+
 # ============================================================
 # SERVO
 # ============================================================
@@ -909,67 +1091,6 @@ def send_servo_pwm(servo_number, pwm):
         except Exception as e:
             add_log(f"Servo PWM hatası: {e}")
             return {"ok": False, "servo_number": servo_number, "pwm": pwm, "error": str(e)}
-
-
-def detas_set_pan(pwm):
-    return send_servo_pwm(PAN_SERVO_NUMBER, pwm)
-
-
-def detas_set_tilt(pwm):
-    return send_servo_pwm(TILT_SERVO_NUMBER, pwm)
-
-
-def detas_servo_center():
-    pan = detas_set_pan(PAN_CENTER_PWM)
-    time.sleep(0.1)
-    tilt = detas_set_tilt(TILT_CENTER_PWM)
-
-    return {
-        "ok": bool(pan.get("ok") and tilt.get("ok")),
-        "mode": "center",
-        "pan": PAN_CENTER_PWM,
-        "tilt": TILT_CENTER_PWM
-    }
-
-
-def detas_servo_stop():
-    return {"ok": True, "mode": "stop"}
-
-
-def detas_scan_pan_slow():
-    return {"ok": True, "mode": "pan_scan_pasif"}
-
-
-def detas_scan_tilt_slow():
-    return {"ok": True, "mode": "tilt_scan_pasif"}
-
-
-def detas_scan_full_slow():
-    return {"ok": True, "mode": "full_scan_pasif"}
-
-
-def _current_pwm(keys, default):
-    data = _state_snapshot()
-
-    for key in keys:
-        try:
-            value = data.get(key)
-            if value is not None and value != "":
-                return int(value)
-        except Exception:
-            pass
-
-    return int(default)
-
-
-def _move_pan_relative(delta):
-    current = _current_pwm(["servo_pan", "pan_pwm"], PAN_CENTER_PWM)
-    return detas_set_pan(current + int(delta))
-
-
-def _move_tilt_relative(delta):
-    current = _current_pwm(["servo_tilt", "tilt_pwm"], TILT_CENTER_PWM)
-    return detas_set_tilt(current + int(delta))
 
 
 # ============================================================
@@ -1064,10 +1185,154 @@ def _cube_armed():
     return status == "ARMED"
 
 
+def _set_auto_sequence_phase(phase, status=None, error=None):
+    global _auto_sequence_phase
+
+    _auto_sequence_phase = phase
+    _state_update(
+        auto_sequence_phase=phase,
+        auto_sequence_error=error,
+        mission_status=status or phase,
+    )
+
+
+def _quake_confirmed(quake, now):
+    global _quake_candidate_start_time, _quake_last_seen_time
+
+    if quake:
+        _quake_last_seen_time = now
+        if _quake_candidate_start_time <= 0:
+            _quake_candidate_start_time = now
+            _state_update(mission_status="DEPREM DOĞRULANIYOR")
+        return (now - _quake_candidate_start_time) >= float(AUTO_MISSION_EARTHQUAKE_CONFIRM_SEC)
+
+    if _quake_last_seen_time and (now - _quake_last_seen_time) <= float(AUTO_MISSION_EARTHQUAKE_GAP_TOLERANCE_SEC):
+        return (now - _quake_candidate_start_time) >= float(AUTO_MISSION_EARTHQUAKE_CONFIRM_SEC)
+
+    _quake_candidate_start_time = 0.0
+    _quake_last_seen_time = 0.0
+    return False
+
+
+def _start_servo_scan_for_mission():
+    try:
+        from services import servo_service
+
+        return servo_service.servo_scan()
+    except Exception as exc:
+        add_log(f"Otonom tarama baslatma hatasi: {exc}")
+        return {"ok": False, "error": str(exc)}
+
+
+def _stop_servo_scan_for_mission():
+    try:
+        from services import servo_service
+
+        return servo_service.servo_stop()
+    except Exception as exc:
+        add_log(f"Otonom tarama durdurma hatasi: {exc}")
+        return {"ok": False, "error": str(exc)}
+
+
+def _start_auto_landing_for_mission():
+    try:
+        from services.auto_landing_service import start_auto_landing
+
+        return start_auto_landing()
+    except Exception as exc:
+        add_log(f"Otonom inis baslatma hatasi: {exc}")
+        return {"ok": False, "error": str(exc)}
+
+
+def _stop_auto_landing_for_mission():
+    try:
+        from services.auto_landing_service import stop_auto_landing
+
+        return stop_auto_landing()
+    except Exception:
+        return {"ok": False}
+
+
+def _start_autonomous_takeoff(now):
+    global _auto_takeoff_sent_time, _auto_sequence_started_time
+
+    _auto_sequence_started_time = now
+    _state_update(
+        auto_sequence_started_time=now,
+        auto_mission_enabled=True,
+        auto_mission_stopped=False,
+        mission_status="OTONOM KALKIŞ HAZIRLANIYOR",
+    )
+
+    mode_result = set_mode("GUIDED")
+    if not mode_result.get("ok"):
+        _set_auto_sequence_phase("error", "GUIDED MOD HATASI", mode_result.get("error"))
+        add_log(f"Otonom kalkis durdu: {mode_result}")
+        return False
+
+    if not _cube_armed():
+        arm_result = send_arm_command(True)
+        if not arm_result.get("ok"):
+            _set_auto_sequence_phase("error", "ARM HATASI", arm_result.get("error") or str(arm_result))
+            add_log(f"Otonom kalkis ARM hatasi: {arm_result}")
+            return False
+
+    takeoff_result = send_takeoff_command(AUTO_MISSION_TAKEOFF_ALTITUDE_M)
+    if not takeoff_result.get("ok"):
+        _set_auto_sequence_phase("error", "KALKIŞ HATASI", takeoff_result.get("error"))
+        return False
+
+    _auto_takeoff_sent_time = now
+    _set_auto_sequence_phase("takeoff", "OTONOM KALKIŞ")
+    return True
+
+
+def _run_auto_sequence(now):
+    global _auto_scan_started_time, _auto_landing_started_time
+
+    data = _state_snapshot()
+    altitude = _get_float(data, "cube_altitude", 0.0)
+
+    if _auto_sequence_phase == "takeoff":
+        settled = (now - _auto_takeoff_sent_time) >= float(AUTO_MISSION_TAKEOFF_SETTLE_SEC)
+        high_enough = altitude >= float(AUTO_MISSION_SCAN_MIN_ALTITUDE_M)
+
+        if settled or high_enough:
+            result = _start_servo_scan_for_mission()
+            _auto_scan_started_time = now
+            _set_auto_sequence_phase("scan", "ŞERİT TARAMA")
+            add_log(f"Otonom serit tarama basladi: {result}")
+        return
+
+    if _auto_sequence_phase == "scan":
+        elapsed = now - _auto_scan_started_time
+        _state_update(mission_status=f"ŞERİT TARAMA {elapsed:.0f}s")
+
+        if elapsed >= float(AUTO_MISSION_SCAN_DURATION_SEC):
+            _stop_servo_scan_for_mission()
+
+            if AUTO_MISSION_LAND_AFTER_SCAN:
+                result = _start_auto_landing_for_mission()
+                _auto_landing_started_time = now
+                _set_auto_sequence_phase("landing", "OTONOM İNİŞ")
+                add_log(f"Otonom inis basladi: {result}")
+            else:
+                _set_auto_sequence_phase("complete", "TARAMA TAMAMLANDI")
+        return
+
+    if _auto_sequence_phase == "landing":
+        landing_active = bool(data.get("auto_landing_active"))
+        landing_status = str(data.get("auto_landing_status") or "Otonom iniş")
+        _state_update(mission_status=f"OTONOM İNİŞ - {landing_status}")
+
+        if not landing_active and (now - _auto_landing_started_time) > 2.0:
+            _set_auto_sequence_phase("complete", "GÖREV TAMAMLANDI")
+
+
 def auto_mission_loop():
     global _auto_event_latched, _last_auto_arm_time, _last_quake_clear_time
 
-    add_log("Otomatik deprem ARM thread'i başlatıldı")
+    add_log("Otomatik deprem görev thread'i başlatıldı")
 
     while not _stop_threads.is_set():
         try:
@@ -1075,13 +1340,26 @@ def auto_mission_loop():
             armed = _cube_armed()
             now = time.time()
 
-            if quake:
+            if AUTO_MISSION_SEQUENCE_ENABLED and _auto_sequence_phase in ("takeoff", "scan", "landing"):
+                _run_auto_sequence(now)
+                time.sleep(0.4)
+                continue
+
+            confirmed = _quake_confirmed(quake, now)
+
+            if confirmed:
                 _last_quake_clear_time = 0.0
 
                 first_trigger = not _auto_event_latched
                 retry_allowed = (not armed) and (now - _last_auto_arm_time > 8)
 
-                if AUTO_ARM_ON_EARTHQUAKE and (first_trigger or retry_allowed):
+                if AUTO_MISSION_SEQUENCE_ENABLED and first_trigger:
+                    _auto_event_latched = True
+                    _last_auto_arm_time = now
+                    _set_auto_sequence_phase("confirmed", "DEPREM DOĞRULANDI")
+                    add_log("Deprem doğrulandı, otonom görev başlıyor")
+                    _start_autonomous_takeoff(now)
+                elif AUTO_ARM_ON_EARTHQUAKE and (first_trigger or retry_allowed):
                     result = send_arm_command(True)
                     _last_auto_arm_time = now
                     _auto_event_latched = True
@@ -1101,9 +1379,10 @@ def auto_mission_loop():
                         _last_quake_clear_time = now
 
                     if now - _last_quake_clear_time >= 2.0:
-                        _auto_event_latched = False
-                        _state_update(auto_arm_sent=False)
-                        add_log("Deprem tetikleme sistemi tekrar hazır")
+                        if _auto_sequence_phase in ("idle", "confirmed", "complete", "error"):
+                            _auto_event_latched = False
+                            _state_update(auto_arm_sent=False)
+                            add_log("Deprem tetikleme sistemi tekrar hazır")
 
             time.sleep(0.4)
 
@@ -1138,111 +1417,18 @@ def stop_service():
     close_mavlink()
 
 
-def servo_pan(pwm):
-    return detas_set_pan(pwm)
-
-
-def servo_tilt(pwm):
-    return detas_set_tilt(pwm)
-
-
-def set_pan(pwm):
-    return detas_set_pan(pwm)
-
-
-def set_tilt(pwm):
-    return detas_set_tilt(pwm)
-
-
-def servo_left():
-    return _move_pan_relative(-SERVO_STEP_PWM)
-
-
-def servo_right():
-    return _move_pan_relative(SERVO_STEP_PWM)
-
-
-def servo_up():
-    return _move_tilt_relative(-SERVO_STEP_PWM)
-
-
-def servo_down():
-    return _move_tilt_relative(SERVO_STEP_PWM)
-
-
-def pan_left():
-    return servo_left()
-
-
-def pan_right():
-    return servo_right()
-
-
-def tilt_up():
-    return servo_up()
-
-
-def tilt_down():
-    return servo_down()
-
-
-def servo_center():
-    return detas_servo_center()
-
-
-def center_servo():
-    return detas_servo_center()
-
-
-def center_servos():
-    return detas_servo_center()
-
-
-def servo_stop():
-    return detas_servo_stop()
-
-
-def stop_servo():
-    return detas_servo_stop()
-
-
-def stop_servo_scan():
-    return detas_servo_stop()
-
-
-def servo_scan():
-    return detas_scan_full_slow()
-
-
-def scan_servo():
-    return detas_scan_full_slow()
-
-
-def start_servo_scan():
-    return detas_scan_full_slow()
-
-
-def servo_scan_full():
-    return detas_scan_full_slow()
-
-
-def servo_scan_pan_slow():
-    return detas_scan_pan_slow()
-
-
-def servo_scan_tilt_slow():
-    return detas_scan_tilt_slow()
-
-
-def servo_scan_full_slow():
-    return detas_scan_full_slow()
-
-
 def mission_arm():
     return send_arm_command(True)
 
 
 def mission_stop():
+    _stop_servo_scan_for_mission()
+    _stop_auto_landing_for_mission()
+    _state_update(
+        auto_mission_stopped=True,
+        auto_sequence_phase="stopped",
+        mission_status="DURDURULDU",
+    )
     return send_arm_command(False)
 
 
@@ -1252,16 +1438,32 @@ def mission_disarm():
 
 def mission_reset():
     global _auto_event_latched, _last_auto_arm_time, _last_quake_clear_time
+    global _quake_candidate_start_time, _quake_last_seen_time
+    global _auto_sequence_phase, _auto_sequence_started_time, _auto_takeoff_sent_time
+    global _auto_scan_started_time, _auto_landing_started_time
 
     _auto_event_latched = False
     _last_auto_arm_time = 0.0
     _last_quake_clear_time = 0.0
+    _quake_candidate_start_time = 0.0
+    _quake_last_seen_time = 0.0
+    _auto_sequence_phase = "idle"
+    _auto_sequence_started_time = 0.0
+    _auto_takeoff_sent_time = 0.0
+    _auto_scan_started_time = 0.0
+    _auto_landing_started_time = 0.0
+
+    _stop_servo_scan_for_mission()
+    _stop_auto_landing_for_mission()
 
     _state_update(
         mission_status="BEKLEMEDE",
         auto_arm_sent=False,
         auto_mission_stopped=False,
-        auto_mission_enabled=True
+        auto_mission_enabled=True,
+        auto_sequence_phase="idle",
+        auto_sequence_started_time=0.0,
+        auto_sequence_error=None,
     )
 
     add_log("Görev durumu sıfırlandı")
