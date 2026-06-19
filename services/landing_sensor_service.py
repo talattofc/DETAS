@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 """Inis yaklasma sensorleri: MZ80 GPIO ve Sharp analog mesafe."""
+=======
+"""Inis yaklasma sensoru: MZ80 GPIO."""
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
 
 import math
 import threading
@@ -11,15 +15,26 @@ from config import (
     LANDING_MZ80_GPIO_PIN,
     LANDING_MZ80_READ_INTERVAL,
     LANDING_WARNING_DISTANCE_CM,
+<<<<<<< HEAD
     SHARP_ADC_MAX_RAW,
     SHARP_ADC_MAX_VOLTAGE,
     SHARP_GP2Y0A41_MAX_VALID_CM,
     SHARP_GP2Y0A41_MIN_VALID_CM,
+=======
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
 )
 from services.logger_service import add_log
 from services.state import state
 
 try:
+<<<<<<< HEAD
+=======
+    from services.autonomous_mission_service import update_landing_sensor_status
+except Exception:
+    update_landing_sensor_status = None
+
+try:
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
     from gpiozero import DigitalInputDevice
 
     GPIOZERO_AVAILABLE = True
@@ -47,6 +62,7 @@ def _round_or_none(value, digits=1):
         return None
 
 
+<<<<<<< HEAD
 def sharp_voltage_to_cm(voltage):
     """GP2Y0A41SK0F icin yaklasik 4-30 cm donusumu."""
     try:
@@ -86,6 +102,12 @@ def _compute_proximity(mz80_detected=None, sharp_cm=None):
         distances.append(float(LANDING_MZ80_DETECT_DISTANCE_CM))
     if sharp_cm is not None:
         distances.append(float(sharp_cm))
+=======
+def _compute_proximity(mz80_detected=None):
+    distances = []
+    if mz80_detected:
+        distances.append(float(LANDING_MZ80_DETECT_DISTANCE_CM))
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
 
     nearest = min(distances) if distances else None
 
@@ -103,8 +125,12 @@ def _update_landing_state(**updates):
 
     snapshot = state.snapshot()
     mz80_detected = updates.get("landing_mz80_detected", snapshot.get("landing_mz80_detected"))
+<<<<<<< HEAD
     sharp_cm = updates.get("landing_sharp_distance_cm", snapshot.get("landing_sharp_distance_cm"))
     nearest, level, text, alert = _compute_proximity(mz80_detected, sharp_cm)
+=======
+    nearest, level, text, alert = _compute_proximity(mz80_detected)
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
 
     payload = {
         **updates,
@@ -116,11 +142,29 @@ def _update_landing_state(**updates):
     }
     state.update(**payload)
 
+<<<<<<< HEAD
+=======
+    if update_landing_sensor_status is not None:
+        try:
+            update_landing_sensor_status(
+                mz80_connected=payload.get("landing_mz80_connected"),
+                mz80_detected=payload.get("landing_mz80_detected"),
+                mz80_distance_cm=payload.get("landing_mz80_distance_cm"),
+                proximity_level=level,
+                proximity_text=text,
+                proximity_alert=alert,
+                timestamp=payload["landing_proximity_last_time"],
+            )
+        except Exception:
+            pass
+
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
     if level != _last_proximity_level and level in ("warn", "danger"):
         add_log(f"Inis sensor uyarisi: {text} ({payload['landing_nearest_distance_cm']} cm)")
     _last_proximity_level = level
 
 
+<<<<<<< HEAD
 def update_sharp_distance(distance_cm=None, voltage=None, raw=None, source="mavlink"):
     if distance_cm is None and voltage is None and raw is not None:
         voltage = sharp_raw_to_voltage(raw)
@@ -140,6 +184,8 @@ def update_sharp_distance(distance_cm=None, voltage=None, raw=None, source="mavl
     return updates
 
 
+=======
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
 def _read_mz80_loop():
     global _last_mz80_log_state
 

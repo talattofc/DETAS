@@ -31,6 +31,91 @@ ROUTE_SERVO_STOP = "/servo/stop"
 # AI HAT / YOLO postprocess ayarlari
 HAILO_JSON = "/usr/share/rpi-camera-assets/hailo_yolov8_inference.json"
 RPICAM_HAILO_POSTPROCESS_ENABLED = False
+<<<<<<< HEAD
+=======
+
+MODELS_DIR = BASE_DIR / "models"
+YOLO_PT_MODEL_PATH = MODELS_DIR / "best.pt"
+YOLO_ONNX_MODEL_PATH = MODELS_DIR / "best.onnx"
+HAILO_HEF_MODEL_PATH = MODELS_DIR / "detas_v3_7class_yolov8n_json_nms_hailo8l.hef"
+HAILO_MODEL_MANIFEST_PATH = MODELS_DIR / "detas_v3_hailo8l_manifest.json"
+READY_HAILO_HEF_MODEL_PATH = Path("/usr/share/hailo-models/yolov8s_h8l.hef")
+READY_HAILO_INPUT_SIZE = 640
+READY_HAILO_INCLUDE_PERSON = False
+PERSON_MODEL_PATH = MODELS_DIR / "yolov8n.pt"
+PERSON_HAILO_HEF_MODEL_PATH = Path("/usr/share/hailo-models/yolov5s_personface_h8l.hef")
+LABELS_PATH = MODELS_DIR / "labels.txt"
+DETECTION_CONFIDENCE = 0.35
+DETECTION_IMGSZ = 640
+# DETAS HEF sorun cikarirsa gecici B-plan icin "ready_hailo" yapilabilir.
+YOLO_MODEL_BACKEND = "hailo"
+PERSON_MODEL_BACKEND = "hailo"
+HAILO_INPUT_SIZE = 640
+PERSON_HAILO_INPUT_SIZE = 640
+HAILO_CONFIDENCE = 0.25
+HAILO_NMS_IOU = 0.45
+HAILO_MAX_CANDIDATES = 1200
+
+READY_HAILO_CLASS_THRESHOLDS = {
+    "person": 0.35,
+    "car": 0.50,
+    "truck": 0.50,
+    "bus": 0.50,
+    "motorcycle": 0.45,
+    "bicycle": 0.45,
+    "chair": 0.55,
+    "backpack": 0.45,
+    "handbag": 0.45,
+}
+
+READY_HAILO_ALLOWED_CLASSES = [
+    "person",
+    "car",
+    "truck",
+    "bus",
+    "motorcycle",
+    "bicycle",
+    "chair",
+    "backpack",
+    "handbag",
+]
+
+DETAS_DISABLED_CLASSES = [
+    "person",
+    "rescue_worker",
+]
+
+DETAS_ALLOWED_CLASSES = [
+    "rubble",
+    "blocked_road",
+    "collapsed_building",
+    "damaged_vehicle",
+    "fire_smoke",
+    "open_road",
+    "flood_area",
+]
+
+DETAS_CLASS_THRESHOLDS = {
+    "rubble": 0.70,
+    "blocked_road": 0.75,
+    "collapsed_building": 0.75,
+    "damaged_vehicle": 0.70,
+    "fire_smoke": 0.70,
+    "open_road": 0.80,
+    "flood_area": 0.75,
+    "person": 0.35,
+}
+
+HAILO_CLASS_THRESHOLDS = {
+    "rubble": 0.45,
+    "blocked_road": 0.50,
+    "collapsed_building": 0.35,
+    "damaged_vehicle": 0.45,
+    "fire_smoke": 0.45,
+    "open_road": 0.55,
+    "flood_area": 0.45,
+}
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
 
 MODELS_DIR = BASE_DIR / "models"
 YOLO_PT_MODEL_PATH = MODELS_DIR / "best.pt"
@@ -343,7 +428,7 @@ CAM0_CONFIG = {
     "width": 1280,
     "height": 720,
     "framerate": 30,
-    "extra_controls": ["--hflip", "--vflip"],
+    "extra_controls": ["--hflip", "--vflip", "--ev", "0.4"],
 }
 
 CAM1_CONFIG = {
@@ -397,18 +482,25 @@ THERMISTOR_L = AMG8833_THERMISTOR_L
 THERMISTOR_H = AMG8833_THERMISTOR_H
 
 
+<<<<<<< HEAD
 # Inis yaklasma sensorleri
+=======
+# Inis yaklasma sensoru
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
 LANDING_MZ80_GPIO_PIN = 18
 LANDING_MZ80_ACTIVE_LOW = True
 LANDING_MZ80_DETECT_DISTANCE_CM = 80.0
 LANDING_MZ80_READ_INTERVAL = 0.05
 
+<<<<<<< HEAD
 SHARP_GP2Y0A41_MAX_DISTANCE_CM = 30.0
 SHARP_GP2Y0A41_MIN_VALID_CM = 4.0
 SHARP_GP2Y0A41_MAX_VALID_CM = 35.0
 SHARP_ADC_MAX_VOLTAGE = 3.3
 SHARP_ADC_MAX_RAW = 4095.0
 SHARP_ADC_FIELD = "adc1"
+=======
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
 LANDING_WARNING_DISTANCE_CM = 80.0
 LANDING_DANGER_DISTANCE_CM = 30.0
 
@@ -458,11 +550,25 @@ SERVO_PWM_DEADBAND = 5
 DEFAULT_EARTHQUAKE_THRESHOLD = 1.5
 THRESHOLD_VALUE_DEFAULT = DEFAULT_EARTHQUAKE_THRESHOLD
 
-AUTO_MISSION_ENABLED_DEFAULT = True
-AUTO_ARM_ON_EARTHQUAKE = True
-AUTO_ARM_COOLDOWN = 6.0
+# Otonom gorev ana ayarlari
+AUTO_MISSION_ENABLED = True
+AUTO_MISSION_START_ON_EARTHQUAKE = True
+AUTO_MISSION_EARTHQUAKE_CONFIRM_SECONDS = 2.0
+AUTO_TAKEOFF_ALTITUDE_M = 10
+AUTO_MISSION_REQUIRE_GPS = True
+AUTO_MISSION_MIN_SATELLITES = 8
+AUTO_MISSION_MIN_BATTERY_VOLTAGE = 14.0
+AUTO_MISSION_RTL_ON_STOP = True
+AUTO_MISSION_RTL_AFTER_FINISH = True
+AUTO_MISSION_RETRIGGER_COOLDOWN_SECONDS = 60
+
+# Eski servis isimleriyle uyumluluk
+AUTO_MISSION_ENABLED_DEFAULT = AUTO_MISSION_ENABLED
+AUTO_ARM_ON_EARTHQUAKE = AUTO_MISSION_START_ON_EARTHQUAKE
+AUTO_ARM_COOLDOWN = AUTO_MISSION_RETRIGGER_COOLDOWN_SECONDS
 AUTO_MISSION_CHECK_INTERVAL = 0.4
 AUTO_MISSION_SEQUENCE_ENABLED = True
+<<<<<<< HEAD
 AUTO_MISSION_EARTHQUAKE_CONFIRM_SEC = 3.0
 AUTO_MISSION_EARTHQUAKE_GAP_TOLERANCE_SEC = 0.8
 AUTO_MISSION_TAKEOFF_ALTITUDE_M = 3.0
@@ -470,6 +576,15 @@ AUTO_MISSION_TAKEOFF_SETTLE_SEC = 8.0
 AUTO_MISSION_SCAN_DURATION_SEC = 45.0
 AUTO_MISSION_SCAN_MIN_ALTITUDE_M = 1.5
 AUTO_MISSION_LAND_AFTER_SCAN = True
+=======
+AUTO_MISSION_EARTHQUAKE_CONFIRM_SEC = AUTO_MISSION_EARTHQUAKE_CONFIRM_SECONDS
+AUTO_MISSION_EARTHQUAKE_GAP_TOLERANCE_SEC = 0.8
+AUTO_MISSION_TAKEOFF_ALTITUDE_M = AUTO_TAKEOFF_ALTITUDE_M
+AUTO_MISSION_TAKEOFF_SETTLE_SEC = 8.0
+AUTO_MISSION_SCAN_DURATION_SEC = 45.0
+AUTO_MISSION_SCAN_MIN_ALTITUDE_M = 1.5
+AUTO_MISSION_LAND_AFTER_SCAN = not AUTO_MISSION_RTL_AFTER_FINISH
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
 
 
 # Log ayarlari
@@ -499,4 +614,7 @@ AUTO_MOTOR_TEST_ON_EARTHQUAKE = False
 AUTO_DISARM_AFTER_MOTOR_TEST = False
 MOTOR_TEST_AUTO_DISARM = False
 AUTO_MISSION_DISARM_AFTER_TEST = False
+AUTO_MISSION_ENABLED_DEFAULT = AUTO_MISSION_ENABLED
+AUTO_ARM_ON_EARTHQUAKE = AUTO_MISSION_START_ON_EARTHQUAKE
+AUTO_ARM_COOLDOWN = AUTO_MISSION_RETRIGGER_COOLDOWN_SECONDS
 # ===== DETAS EARTHQUAKE ARM ONLY MODE END =====

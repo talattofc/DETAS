@@ -50,7 +50,10 @@ MOTOR_TEST_THROTTLE_PERCENT = 22
 MOTOR_TEST_DURATION_SEC = 1.0
 MOTOR_TEST_PAUSE_SEC = 0.5
 MOTOR_TEST_MOTOR_COUNT = 4
+<<<<<<< HEAD
 SHARP_ADC_FIELD = getattr(config, "SHARP_ADC_FIELD", "adc1") if config else "adc1"
+=======
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
 AUTO_MISSION_SEQUENCE_ENABLED = getattr(config, "AUTO_MISSION_SEQUENCE_ENABLED", True) if config else True
 AUTO_MISSION_EARTHQUAKE_CONFIRM_SEC = getattr(config, "AUTO_MISSION_EARTHQUAKE_CONFIRM_SEC", 3.0) if config else 3.0
 AUTO_MISSION_EARTHQUAKE_GAP_TOLERANCE_SEC = getattr(config, "AUTO_MISSION_EARTHQUAKE_GAP_TOLERANCE_SEC", 0.8) if config else 0.8
@@ -59,6 +62,10 @@ AUTO_MISSION_TAKEOFF_SETTLE_SEC = getattr(config, "AUTO_MISSION_TAKEOFF_SETTLE_S
 AUTO_MISSION_SCAN_DURATION_SEC = getattr(config, "AUTO_MISSION_SCAN_DURATION_SEC", 45.0) if config else 45.0
 AUTO_MISSION_SCAN_MIN_ALTITUDE_M = getattr(config, "AUTO_MISSION_SCAN_MIN_ALTITUDE_M", 1.5) if config else 1.5
 AUTO_MISSION_LAND_AFTER_SCAN = getattr(config, "AUTO_MISSION_LAND_AFTER_SCAN", True) if config else True
+<<<<<<< HEAD
+=======
+AUTO_MISSION_RTL_ON_STOP = getattr(config, "AUTO_MISSION_RTL_ON_STOP", True) if config else True
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
 
 
 # ============================================================
@@ -849,9 +856,46 @@ def _wait_ack(command, timeout=3.0):
 # ARM / DISARM / MODE
 # ============================================================
 
+def _cube_connected():
+    data = _state_snapshot()
+    return _as_bool(data.get("cube_connected") or data.get("mavlink_connected"))
+
+
+def _active_mission_phase():
+    data = _state_snapshot()
+    phase = str(data.get("auto_sequence_phase", _auto_sequence_phase) or "").lower()
+    status = str(data.get("mission_status", "") or "").upper()
+
+    if phase in ("confirmed", "takeoff", "scan", "landing"):
+        return True
+    if _as_bool(data.get("auto_landing_active")):
+        return True
+    return any(token in status for token in ("OTONOM", "TARAMA", "KALKIŞ", "INIS", "İNİŞ"))
+
+
+def _in_air_for_disarm_guard():
+    data = _state_snapshot()
+    altitude = _get_float(data, "cube_altitude", 0.0)
+    throttle = _get_float(data, "cube_throttle", 0.0)
+
+    if _active_mission_phase():
+        return True
+    if altitude > 0.5:
+        return True
+    if _cube_armed() and throttle > 5:
+        return True
+    return False
+
+
 def send_arm_command(arm=True):
     if mavutil is None:
         return {"ok": False, "error": "pymavlink yüklü değil"}
+
+    if not arm and _in_air_for_disarm_guard():
+        message = "Havadayken DISARM engellendi"
+        _state_update(mission_status=message)
+        add_log(message)
+        return {"ok": False, "arm": False, "error": message, "blocked": True}
 
     with _command_lock:
         try:
@@ -901,6 +945,17 @@ def send_arm_command(arm=True):
 
 def send_disarm_command():
     return send_arm_command(False)
+
+
+def send_rtl_command():
+    result = set_mode("RTL")
+    if result.get("ok"):
+        _state_update(
+            mission_status="Görev iptal edildi, RTL başlatıldı",
+            auto_sequence_phase="rtl",
+        )
+        add_log("Görev iptal edildi, RTL başlatıldı")
+    return result
 
 
 def set_mode(mode_name):
@@ -1424,12 +1479,34 @@ def mission_arm():
 def mission_stop():
     _stop_servo_scan_for_mission()
     _stop_auto_landing_for_mission()
+<<<<<<< HEAD
     _state_update(
         auto_mission_stopped=True,
         auto_sequence_phase="stopped",
         mission_status="DURDURULDU",
     )
     return send_arm_command(False)
+=======
+
+    rtl_result = None
+    mission_active = _active_mission_phase()
+    should_rtl = AUTO_MISSION_RTL_ON_STOP and _cube_connected() and (mission_active or _cube_armed())
+    if should_rtl:
+        rtl_result = send_rtl_command()
+
+    status = "Görev iptal edildi, RTL başlatıldı" if should_rtl and rtl_result and rtl_result.get("ok") else "DURDURULDU"
+    _state_update(
+        auto_mission_stopped=True,
+        auto_sequence_phase="stopped",
+        mission_status=status,
+    )
+    return {
+        "ok": True if rtl_result is None else bool(rtl_result.get("ok")),
+        "message": status,
+        "rtl_sent": bool(rtl_result and rtl_result.get("ok")),
+        "rtl_result": rtl_result,
+    }
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
 
 
 def mission_disarm():
@@ -1455,9 +1532,20 @@ def mission_reset():
 
     _stop_servo_scan_for_mission()
     _stop_auto_landing_for_mission()
+<<<<<<< HEAD
+=======
+
+    rtl_result = None
+    mission_active = _active_mission_phase()
+    should_rtl = AUTO_MISSION_RTL_ON_STOP and _cube_connected() and (mission_active or _cube_armed())
+    if should_rtl:
+        rtl_result = send_rtl_command()
+
+    status = "Görev iptal edildi, RTL başlatıldı" if should_rtl and rtl_result and rtl_result.get("ok") else "BEKLEMEDE"
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
 
     _state_update(
-        mission_status="BEKLEMEDE",
+        mission_status=status,
         auto_arm_sent=False,
         auto_mission_stopped=False,
         auto_mission_enabled=True,
@@ -1466,9 +1554,14 @@ def mission_reset():
         auto_sequence_error=None,
     )
 
-    add_log("Görev durumu sıfırlandı")
+    add_log(status if should_rtl else "Görev durumu sıfırlandı")
 
-    return {"ok": True, "message": "Görev durumu sıfırlandı"}
+    return {
+        "ok": True if rtl_result is None else bool(rtl_result.get("ok")),
+        "message": status,
+        "rtl_sent": bool(rtl_result and rtl_result.get("ok")),
+        "rtl_result": rtl_result,
+    }
 
 
 def arm():
@@ -1496,7 +1589,7 @@ def disarm_motors():
 
 
 def stop_mission():
-    return send_arm_command(False)
+    return mission_stop()
 
 
 def reset_mission():
