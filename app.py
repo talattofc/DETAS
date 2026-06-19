@@ -1,7 +1,4 @@
-from services import servo_service
-from services.mission_status_service import start_mission_status_service
-from services.earthquake_rearm_service import start_earthquake_rearm_watcher
-"""DETAS Flask uygulama baslangic noktasi."""
+"""ADTİ Flask uygulama baslangic noktasi."""
 
 import atexit
 
@@ -9,9 +6,13 @@ from flask import Flask
 
 import config
 from routes import register_routes
-from services import camera_service, mavlink_service
-from services.detection_service import update_detection_state_from_jpeg
+from services import camera_service, mavlink_service, servo_service
+from services.auto_landing_service import start_auto_landing, stop_auto_landing
+from services.detection_service import process_stream_jpeg
+from services.earthquake_rearm_service import start_earthquake_rearm_watcher
+from services.landing_sensor_service import start_landing_sensor_thread
 from services.logger_service import add_log
+from services.mission_status_service import start_mission_status_service
 from services.telemetry_service import start_telemetry_thread
 from services.thermal_service import start_thermal_thread
 
@@ -22,23 +23,17 @@ def register_route_services(app):
         "camera_stream": camera_service.generate_frames,
         "set_camera": camera_service.set_camera,
 
-        "servo_pan": servo_service.servo_pan,
-        "servo_tilt": servo_service.servo_tilt,
+        "servo_position": servo_service.set_position,
         "servo_center": servo_service.servo_center,
         "servo_scan": servo_service.servo_scan,
-        "servo_scan_pan_slow": servo_service.servo_scan_pan_slow,
-        "servo_scan_tilt_slow": servo_service.servo_scan_tilt_slow,
-        "servo_scan_full_slow": servo_service.servo_scan_full_slow,
-        "servo_up": servo_service.servo_up,
-        "servo_down": servo_service.servo_down,
-        "servo_left": servo_service.servo_left,
-        "servo_right": servo_service.servo_right,
         "servo_stop": servo_service.servo_stop,
 
         "mission_arm": mavlink_service.mission_arm,
         "mission_stop": mavlink_service.mission_stop,
         "mission_reset": mavlink_service.mission_reset,
         "mission_motor_test": mavlink_service.mission_motor_test,
+        "landing_start": start_auto_landing,
+        "landing_stop": stop_auto_landing,
     }
 
 
@@ -58,28 +53,27 @@ def create_app():
 
 
 def start_background_services():
+    """ADTİ donanim ve otomatik gorev servislerini baslatir."""
+    camera_service.set_detection_callback(process_stream_jpeg)
 
     try:
         start_mission_status_service()
     except Exception as e:
         print("Görev durumu takip sistemi başlatılamadı:", e)
 
-
     try:
         start_earthquake_rearm_watcher()
     except Exception as e:
         print("Deprem tekrar ARM takipçisi başlatılamadı:", e)
 
-    """DETAS donanim ve otomatik gorev servislerini baslatir."""
-    camera_service.set_detection_callback(update_detection_state_from_jpeg)
-
     start_telemetry_thread()
     mavlink_service.start_mavlink_thread()
     mavlink_service.start_auto_mission_thread()
     start_thermal_thread()
+    start_landing_sensor_thread()
 
-    add_log("DETAS panel basladi")
-    add_log("AI HAT YOLO modu aktif")
+    add_log("ADTİ panel basladi")
+    add_log("AI modu aktif")
     add_log("YOLO kutu sayimi aktif")
     add_log("Cube MAVLink modu aktif")
 

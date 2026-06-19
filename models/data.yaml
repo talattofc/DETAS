@@ -1,0 +1,12 @@
+path: /content/detas_dataset_v3/detas_disaster_v3
+train: images/train
+val: images/val
+test: images/test
+names:
+  0: rubble
+  1: blocked_road
+  2: collapsed_building
+  3: damaged_vehicle
+  4: fire_smoke
+  5: open_road
+  6: flood_area
