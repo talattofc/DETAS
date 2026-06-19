@@ -5,6 +5,7 @@ import threading
 import time
 
 from config import (
+    AUTO_MISSION_EARTHQUAKE_CONFIRM_SECONDS,
     TELEMETRY_BAUD,
     TELEMETRY_DISCONNECT_TIMEOUT,
     TELEMETRY_PORT,
@@ -13,6 +14,11 @@ from config import (
 )
 from services.logger_service import add_log
 from services.state import state
+
+try:
+    from services.autonomous_mission_service import start_auto_survey_mission
+except Exception:
+    start_auto_survey_mission = None
 
 try:
     import serial
@@ -26,6 +32,8 @@ except Exception as exc:
 
 _thread_lock = threading.Lock()
 _telemetry_thread = None
+_earthquake_alarm_started_at = 0.0
+_earthquake_alarm_latched = False
 
 _MOVEMENT_PATTERNS = (
     r"movement\s*[:=]\s*(-?\d+(?:\.\d+)?)",
@@ -52,6 +60,45 @@ def _find_number(text, patterns):
     return None
 
 
+def _handle_autonomous_alarm(raw_deprem):
+    """Deprem:1 sinyali kararlı sürerse otonom tarama görevini başlatır."""
+    global _earthquake_alarm_started_at, _earthquake_alarm_latched
+
+    now = time.time()
+    if int(raw_deprem or 0) != 1:
+        _earthquake_alarm_started_at = 0.0
+        _earthquake_alarm_latched = False
+        return
+
+    if _earthquake_alarm_started_at <= 0:
+        _earthquake_alarm_started_at = now
+        return
+
+    elapsed = now - _earthquake_alarm_started_at
+    if elapsed < float(AUTO_MISSION_EARTHQUAKE_CONFIRM_SECONDS):
+        return
+
+    if _earthquake_alarm_latched:
+        return
+
+    _earthquake_alarm_latched = True
+    add_log(
+        "Istasyon deprem alarmi dogrulandi "
+        f"({elapsed:.1f} sn), otonom gorev tetikleniyor"
+    )
+
+    if start_auto_survey_mission is None:
+        add_log("Otonom gorev servisi yuklenemedi")
+        return
+
+    try:
+        result = start_auto_survey_mission()
+        if not result.get("ok"):
+            add_log(f"Otonom gorev baslatilamadi: {result.get('error')}")
+    except Exception as exc:
+        add_log(f"Otonom gorev tetikleme hatasi: {exc}")
+
+
 def parse_telemetry_text(text):
     """Gelen telemetri metnini parse ederek merkezi state'i gunceller."""
     try:
@@ -67,6 +114,11 @@ def parse_telemetry_text(text):
         mute = _find_number(lower, (
             r"mute\s*[:=]\s*(-?\d+(?:\.\d+)?)",
             r"sessiz\s*[:=]\s*(-?\d+(?:\.\d+)?)",
+        ))
+        raw_deprem = _find_number(lower, (
+            r"deprem\s*[:=]\s*([01])",
+            r"quake\s*[:=]\s*([01])",
+            r"alarm\s*[:=]\s*([01])",
         ))
 
         if movement is None:
@@ -89,7 +141,9 @@ def parse_telemetry_text(text):
             or "quake" in lower
         )
 
-        if alarm_text and (
+        if raw_deprem is not None:
+            deprem = 1 if int(raw_deprem) == 1 else 0
+        elif alarm_text and (
             "1" in lower
             or "true" in lower
             or "var" in lower
@@ -115,6 +169,9 @@ def parse_telemetry_text(text):
 
         updates["deprem"] = deprem
         state.update(**updates)
+
+        if raw_deprem is not None:
+            _handle_autonomous_alarm(raw_deprem)
 
         return updates
     except Exception as exc:

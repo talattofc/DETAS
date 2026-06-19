@@ -22,22 +22,97 @@ ROUTE_SET_CAMERA = "/set_camera/<int:camera_id>"
 ROUTE_MISSION_STOP = "/mission/stop"
 ROUTE_MISSION_RESET = "/mission/reset"
 
-ROUTE_SERVO_PAN = "/servo/pan/<int:pwm>"
-ROUTE_SERVO_TILT = "/servo/tilt/<int:pwm>"
+ROUTE_SERVO_POSITION = "/servo/position/<int:pwm>"
 ROUTE_SERVO_CENTER = "/servo/center"
 ROUTE_SERVO_SCAN = "/servo/scan"
-ROUTE_SERVO_SCAN_PAN_SLOW = "/servo/scan_pan_slow"
-ROUTE_SERVO_SCAN_TILT_SLOW = "/servo/scan_tilt_slow"
-ROUTE_SERVO_SCAN_FULL_SLOW = "/servo/scan_full_slow"
-ROUTE_SERVO_UP = "/servo/up"
-ROUTE_SERVO_DOWN = "/servo/down"
-ROUTE_SERVO_LEFT = "/servo/left"
-ROUTE_SERVO_RIGHT = "/servo/right"
 ROUTE_SERVO_STOP = "/servo/stop"
 
 
 # AI HAT / YOLO postprocess ayarlari
 HAILO_JSON = "/usr/share/rpi-camera-assets/hailo_yolov8_inference.json"
+RPICAM_HAILO_POSTPROCESS_ENABLED = False
+
+MODELS_DIR = BASE_DIR / "models"
+YOLO_PT_MODEL_PATH = MODELS_DIR / "best.pt"
+YOLO_ONNX_MODEL_PATH = MODELS_DIR / "best.onnx"
+HAILO_HEF_MODEL_PATH = MODELS_DIR / "detas_v3_7class_yolov8n_json_nms_hailo8l.hef"
+HAILO_MODEL_MANIFEST_PATH = MODELS_DIR / "detas_v3_hailo8l_manifest.json"
+READY_HAILO_HEF_MODEL_PATH = Path("/usr/share/hailo-models/yolov8s_h8l.hef")
+READY_HAILO_INPUT_SIZE = 640
+READY_HAILO_INCLUDE_PERSON = False
+PERSON_MODEL_PATH = MODELS_DIR / "yolov8n.pt"
+PERSON_HAILO_HEF_MODEL_PATH = Path("/usr/share/hailo-models/yolov5s_personface_h8l.hef")
+LABELS_PATH = MODELS_DIR / "labels.txt"
+DETECTION_CONFIDENCE = 0.35
+DETECTION_IMGSZ = 640
+# DETAS HEF sorun cikarirsa gecici B-plan icin "ready_hailo" yapilabilir.
+YOLO_MODEL_BACKEND = "hailo"
+PERSON_MODEL_BACKEND = "hailo"
+HAILO_INPUT_SIZE = 640
+PERSON_HAILO_INPUT_SIZE = 640
+HAILO_CONFIDENCE = 0.25
+HAILO_NMS_IOU = 0.45
+HAILO_MAX_CANDIDATES = 1200
+
+READY_HAILO_CLASS_THRESHOLDS = {
+    "person": 0.35,
+    "car": 0.50,
+    "truck": 0.50,
+    "bus": 0.50,
+    "motorcycle": 0.45,
+    "bicycle": 0.45,
+    "chair": 0.55,
+    "backpack": 0.45,
+    "handbag": 0.45,
+}
+
+READY_HAILO_ALLOWED_CLASSES = [
+    "person",
+    "car",
+    "truck",
+    "bus",
+    "motorcycle",
+    "bicycle",
+    "chair",
+    "backpack",
+    "handbag",
+]
+
+DETAS_DISABLED_CLASSES = [
+    "person",
+    "rescue_worker",
+]
+
+DETAS_ALLOWED_CLASSES = [
+    "rubble",
+    "blocked_road",
+    "collapsed_building",
+    "damaged_vehicle",
+    "fire_smoke",
+    "open_road",
+    "flood_area",
+]
+
+DETAS_CLASS_THRESHOLDS = {
+    "rubble": 0.70,
+    "blocked_road": 0.75,
+    "collapsed_building": 0.75,
+    "damaged_vehicle": 0.70,
+    "fire_smoke": 0.70,
+    "open_road": 0.80,
+    "flood_area": 0.75,
+    "person": 0.35,
+}
+
+HAILO_CLASS_THRESHOLDS = {
+    "rubble": 0.45,
+    "blocked_road": 0.50,
+    "collapsed_building": 0.35,
+    "damaged_vehicle": 0.45,
+    "fire_smoke": 0.45,
+    "open_road": 0.55,
+    "flood_area": 0.45,
+}
 
 DETECTION_FRAME_INTERVAL = 8
 DETECTION_MAX_COUNT = 20
@@ -47,6 +122,61 @@ DETECTION_MIN_BOX_HEIGHT = 70
 DETECTION_MIN_BOX_AREA = 6000
 DETECTION_MAX_FRAME_AREA_RATIO = 0.85
 DETECTION_MERGE_IOU_THRESHOLD = 0.25
+DETECTION_DEFAULT_CLASS = "afet_tespiti"
+DETECTION_EVENT_MIN_CONFIDENCE = 0.70
+DETECTION_EVENT_CLASS_THRESHOLDS = {
+    "person": 0.50,
+    "collapsed_building": 0.45,
+    "rubble": 0.55,
+    "flood_area": 0.55,
+    "fire_smoke": 0.55,
+    "damaged_vehicle": 0.55,
+}
+DETECTION_EVENT_CLASS_PRIORITIES = {
+    "person": 100,
+    "rubble": 70,
+    "collapsed_building": 70,
+    "blocked_road": 65,
+    "damaged_vehicle": 65,
+    "fire_smoke": 65,
+    "flood_area": 65,
+}
+DETECTION_EVENT_CLASSES = [
+    "person",
+    "rubble",
+    "blocked_road",
+    "collapsed_building",
+    "damaged_vehicle",
+    "fire_smoke",
+    "flood_area",
+]
+DETECTION_EVENT_MAX_ITEMS = 60
+DETECTION_EVENT_DEDUP_SECONDS = 8.0
+DETECTION_EVENT_GPS_EXACT_DEDUP_METERS = 5.0
+DETECTION_EVENT_GPS_NEAR_DEDUP_METERS = 20.0
+DETECTION_EVENT_IMAGE_HASH_MAX_DISTANCE = 14
+DETECTION_EVENT_SNAPSHOT_DIR = BASE_DIR / "static" / "detections"
+
+
+# Dataset feedback / sahada yanlis tespit toplama
+DATASET_FEEDBACK_DIR = BASE_DIR / "dataset_feedback"
+FEEDBACK_IMAGES_DIR = DATASET_FEEDBACK_DIR / "images" / "train"
+FEEDBACK_LABELS_DIR = DATASET_FEEDBACK_DIR / "labels" / "train"
+FEEDBACK_REVIEW_IMAGES_DIR = DATASET_FEEDBACK_DIR / "images" / "review"
+FEEDBACK_REVIEW_LABELS_DIR = DATASET_FEEDBACK_DIR / "labels" / "review"
+FEEDBACK_CROPS_DIR = DATASET_FEEDBACK_DIR / "crops"
+FEEDBACK_METADATA_PATH = DATASET_FEEDBACK_DIR / "metadata.jsonl"
+FEEDBACK_CLASS_NAMES = [
+    "person",
+    "rubble",
+    "blocked_road",
+    "collapsed_building",
+    "damaged_vehicle",
+    "fire_smoke",
+    "rescue_worker",
+    "safe_passage",
+    "flood_area",
+]
 
 
 # Kamera ayarlari
@@ -61,7 +191,7 @@ CAM0_CONFIG = {
     "width": 1280,
     "height": 720,
     "framerate": 30,
-    "extra_controls": ["--hflip", "--vflip"],
+    "extra_controls": ["--hflip", "--vflip", "--ev", "0.4"],
 }
 
 CAM1_CONFIG = {
@@ -115,22 +245,54 @@ THERMISTOR_L = AMG8833_THERMISTOR_L
 THERMISTOR_H = AMG8833_THERMISTOR_H
 
 
-# Pan-Tilt servo numaralari ve PWM limitleri
-SERVO_PAN = 9
-SERVO_TILT = 11
+# Inis yaklasma sensoru
+LANDING_MZ80_GPIO_PIN = 18
+LANDING_MZ80_ACTIVE_LOW = True
+LANDING_MZ80_DETECT_DISTANCE_CM = 80.0
+LANDING_MZ80_READ_INTERVAL = 0.05
 
-PAN_MIN = 700
-PAN_CENTER = 1300
-PAN_MAX = 2300
+LANDING_WARNING_DISTANCE_CM = 80.0
+LANDING_DANGER_DISTANCE_CM = 30.0
 
-TILT_MIN = 650
-TILT_CENTER = 1500
-TILT_MAX = 2000
+# Otomatik inis yardimi
+# Motor PWM'ine dogrudan mudahale edilmez; Cube stabilizasyonu korunarak MAVLink
+# hiz komutu kullanilir. Sahada kalibrasyon yapmadan hizlari yukseltmeyin.
+AUTO_LANDING_ENABLED_DEFAULT = False
+AUTO_LANDING_CONTROL_MODE = "GUIDED_VELOCITY"
+AUTO_LANDING_START_MODE = "GUIDED"
+AUTO_LANDING_HOLD_MODE = "LOITER"
+AUTO_LANDING_REQUIRE_ARMED = True
+AUTO_LANDING_REQUIRE_SENSOR = True
+AUTO_LANDING_SENSOR_TIMEOUT_SEC = 1.2
+AUTO_LANDING_COMMAND_INTERVAL_SEC = 0.35
+AUTO_LANDING_FAST_ABOVE_CM = 120.0
+AUTO_LANDING_SLOW_BELOW_CM = 80.0
+AUTO_LANDING_FINAL_BELOW_CM = 30.0
+AUTO_LANDING_HOLD_BELOW_CM = 18.0
+AUTO_LANDING_TOUCHDOWN_BELOW_CM = 10.0
+AUTO_LANDING_FAST_DESCENT_MPS = 0.45
+AUTO_LANDING_SLOW_DESCENT_MPS = 0.22
+AUTO_LANDING_FINAL_DESCENT_MPS = 0.08
+AUTO_LANDING_DISARM_ON_TOUCHDOWN = False
 
-SERVO_DEFAULT_MIN = 900
-SERVO_DEFAULT_MAX = 2100
-SERVO_MOVE_STEP = 10
-SERVO_MOVE_DELAY = 0.04
+
+# SERVO9 / Orange Cube AUX1 tek eksenli kamera servo ayarlari
+SERVO_CAMERA = 9
+SERVO_PAN = SERVO_CAMERA
+SERVO_TILT = SERVO_CAMERA
+
+PAN_MIN = 1250
+PAN_CENTER = 2400
+PAN_MAX = 2600
+
+TILT_MIN = PAN_MIN
+TILT_CENTER = PAN_CENTER
+TILT_MAX = PAN_MAX
+
+SERVO_DEFAULT_MIN = PAN_MIN
+SERVO_DEFAULT_MAX = PAN_MAX
+SERVO_MOVE_STEP = 50
+SERVO_MOVE_DELAY = 0.45
 SERVO_PWM_DEADBAND = 5
 
 
@@ -138,10 +300,31 @@ SERVO_PWM_DEADBAND = 5
 DEFAULT_EARTHQUAKE_THRESHOLD = 1.5
 THRESHOLD_VALUE_DEFAULT = DEFAULT_EARTHQUAKE_THRESHOLD
 
-AUTO_MISSION_ENABLED_DEFAULT = True
-AUTO_ARM_ON_EARTHQUAKE = True
-AUTO_ARM_COOLDOWN = 6.0
+# Otonom gorev ana ayarlari
+AUTO_MISSION_ENABLED = True
+AUTO_MISSION_START_ON_EARTHQUAKE = True
+AUTO_MISSION_EARTHQUAKE_CONFIRM_SECONDS = 2.0
+AUTO_TAKEOFF_ALTITUDE_M = 15
+AUTO_MISSION_REQUIRE_GPS = True
+AUTO_MISSION_MIN_SATELLITES = 8
+AUTO_MISSION_MIN_BATTERY_VOLTAGE = 14.0
+AUTO_MISSION_RTL_ON_STOP = True
+AUTO_MISSION_RTL_AFTER_FINISH = True
+AUTO_MISSION_RETRIGGER_COOLDOWN_SECONDS = 60
+
+# Eski servis isimleriyle uyumluluk
+AUTO_MISSION_ENABLED_DEFAULT = AUTO_MISSION_ENABLED
+AUTO_ARM_ON_EARTHQUAKE = AUTO_MISSION_START_ON_EARTHQUAKE
+AUTO_ARM_COOLDOWN = AUTO_MISSION_RETRIGGER_COOLDOWN_SECONDS
 AUTO_MISSION_CHECK_INTERVAL = 0.4
+AUTO_MISSION_SEQUENCE_ENABLED = True
+AUTO_MISSION_EARTHQUAKE_CONFIRM_SEC = AUTO_MISSION_EARTHQUAKE_CONFIRM_SECONDS
+AUTO_MISSION_EARTHQUAKE_GAP_TOLERANCE_SEC = 0.8
+AUTO_MISSION_TAKEOFF_ALTITUDE_M = AUTO_TAKEOFF_ALTITUDE_M
+AUTO_MISSION_TAKEOFF_SETTLE_SEC = 8.0
+AUTO_MISSION_SCAN_DURATION_SEC = 45.0
+AUTO_MISSION_SCAN_MIN_ALTITUDE_M = 1.5
+AUTO_MISSION_LAND_AFTER_SCAN = not AUTO_MISSION_RTL_AFTER_FINISH
 
 
 # Log ayarlari
@@ -171,5 +354,7 @@ AUTO_MOTOR_TEST_ON_EARTHQUAKE = False
 AUTO_DISARM_AFTER_MOTOR_TEST = False
 MOTOR_TEST_AUTO_DISARM = False
 AUTO_MISSION_DISARM_AFTER_TEST = False
+AUTO_MISSION_ENABLED_DEFAULT = AUTO_MISSION_ENABLED
+AUTO_ARM_ON_EARTHQUAKE = AUTO_MISSION_START_ON_EARTHQUAKE
+AUTO_ARM_COOLDOWN = AUTO_MISSION_RETRIGGER_COOLDOWN_SECONDS
 # ===== DETAS EARTHQUAKE ARM ONLY MODE END =====
-
