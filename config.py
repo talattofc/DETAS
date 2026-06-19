@@ -114,7 +114,77 @@ HAILO_CLASS_THRESHOLDS = {
     "flood_area": 0.45,
 }
 
-DETECTION_FRAME_INTERVAL = 8
+MODELS_DIR = BASE_DIR / "models"
+YOLO_PT_MODEL_PATH = MODELS_DIR / "best.pt"
+YOLO_ONNX_MODEL_PATH = MODELS_DIR / "best.onnx"
+PERSON_MODEL_PATH = MODELS_DIR / "yolov8n.pt"
+LABELS_PATH = MODELS_DIR / "labels.txt"
+DETECTION_CONFIDENCE = 0.35
+DETECTION_IMGSZ = 640
+YOLO_MODEL_BACKEND = "pt"
+
+DETAS_DISABLED_CLASSES = [
+    "person",
+    "rescue_worker",
+]
+
+DETAS_ALLOWED_CLASSES = [
+    "rubble",
+    "blocked_road",
+    "collapsed_building",
+    "damaged_vehicle",
+    "fire_smoke",
+    "open_road",
+    "flood_area",
+]
+
+DETAS_CLASS_THRESHOLDS = {
+    "rubble": 0.70,
+    "blocked_road": 0.75,
+    "collapsed_building": 0.75,
+    "damaged_vehicle": 0.70,
+    "fire_smoke": 0.70,
+    "open_road": 0.80,
+    "flood_area": 0.75,
+    "person": 0.35,
+}
+
+MODELS_DIR = BASE_DIR / "models"
+YOLO_PT_MODEL_PATH = MODELS_DIR / "best.pt"
+YOLO_ONNX_MODEL_PATH = MODELS_DIR / "best.onnx"
+PERSON_MODEL_PATH = MODELS_DIR / "yolov8n.pt"
+LABELS_PATH = MODELS_DIR / "labels.txt"
+DETECTION_CONFIDENCE = 0.25
+DETECTION_IMGSZ = 640
+YOLO_MODEL_BACKEND = "pt"
+
+DETAS_DISABLED_CLASSES = [
+    "person",
+    "rescue_worker",
+]
+
+DETAS_ALLOWED_CLASSES = [
+    "rubble",
+    "blocked_road",
+    "collapsed_building",
+    "damaged_vehicle",
+    "fire_smoke",
+    "safe_passage",
+    "flood_area",
+]
+
+DETAS_CLASS_THRESHOLDS = {
+    "rubble": 0.70,
+    "blocked_road": 0.75,
+    "collapsed_building": 0.75,
+    "damaged_vehicle": 0.70,
+    "fire_smoke": 0.70,
+    "safe_passage": 0.80,
+    "flood_area": 0.75,
+    "person": 0.35,
+}
+
+DETECTION_FRAME_INTERVAL = 12
 DETECTION_MAX_COUNT = 20
 DETECTION_RESIZE_MAX_WIDTH = 960
 DETECTION_MIN_BOX_WIDTH = 70
