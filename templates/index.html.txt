@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>DETAS Kontrol Paneli</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+<div class="layout">
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">D</div>
+            <div>
+                <h2>DETAS</h2>
+                <span>Afet Analiz Sistemi</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a class="nav-link active" data-target="overview">Genel Durum</a>
+            <a class="nav-link" data-target="cameraSection">CanlÄ± Kamera</a>
+            <a class="nav-link" data-target="mapSection">Operasyon HaritasÄ±</a>
+            <a class="nav-link" data-target="thermalSection">Termal Analiz</a>
+            <a class="nav-link" data-target="cubeSection">UÃ§uÅŸ Kontrol</a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <span>Sistem Durumu</span>
+            <strong id="systemStatus">Aktif</strong>
+        </div>
+    </aside>
+
+    <main class="main">
+        <header class="topbar">
+            <div>
+                <h1>DETAS Kontrol Paneli</h1>
+                <p>Deprem istasyonu, Ä°HA gÃ¶rÃ¼ntÃ¼ analizi, termal keÅŸif ve MAVLink durumu</p>
+            </div>
+
+            <div class="top-actions">
+                <div id="dateBox" class="date-box">-</div>
+                <div class="icon-btn">ğŸ””</div>
+                <div class="icon-btn">ğŸ‘¤</div>
+            </div>
+        </header>
+
+        <section id="overview" class="stats-grid">
+            <div id="eqCard" class="stat-card">
+                <span>Deprem Durumu</span>
+                <h3 id="eqStatusText">NORMAL</h3>
+                <small id="eqStatusSmall">SarsÄ±ntÄ± yok</small>
+            </div>
+
+            <div class="stat-card">
+                <span>Hareket DeÄŸeri</span>
+                <h3 id="movementValue">0.00</h3>
+                <small>EÅŸik: <b id="thresholdValue">0.00</b></small>
+            </div>
+
+            <div class="stat-card">
+                <span>Tespit Edilen Nesne</span>
+                <h3 id="detectedCount">0</h3>
+                <small>AI HAT YOLO</small>
+            </div>
+
+            <div class="stat-card">
+                <span>Termal Maksimum</span>
+                <h3 id="thermalMaxCard">0.0Â°C</h3>
+                <small id="hotspotText">SÄ±cak nokta yok</small>
+            </div>
+        </section>
+
+        <section class="content-grid">
+            <div id="cameraSection" class="panel camera-panel">
+                <div class="panel-header">
+                    <div>
+                        <h2>CanlÄ± Kamera + YOLO</h2>
+                        <p>AI HAT hÄ±zlandÄ±rmalÄ± nesne algÄ±lama</p>
+                    </div>
+
+                    <div class="camera-buttons">
+                        <button id="cam0Btn" class="camera-btn active" onclick="setCamera(0)">CAM0 V3</button>
+                        <button id="cam1Btn" class="camera-btn" onclick="setCamera(1)">CAM1 Gece</button>
+                        <button id="zoomOutBtn" class="camera-btn zoom-btn" onclick="cameraZoomOut()">Zoom -</button>
+                        <button id="zoomResetBtn" class="camera-btn zoom-btn" onclick="cameraZoomReset()">Zoom SÄ±fÄ±rla</button>
+                        <button id="zoomInBtn" class="camera-btn zoom-btn" onclick="cameraZoomIn()">Zoom +</button>
+                    </div>
+                </div>
+
+                <div class="camera-viewport">
+                    <img id="cameraFeed" src="/video" alt="CanlÄ± Kamera">
+                </div>
+
+                <div class="detections-list" id="detectionsList">
+                    <div>HenÃ¼z nesne algÄ±lanmadÄ±</div>
+                </div>
+            </div>
+
+            <div class="right-column">
+                <div class="panel">
+                    <div class="panel-header">
+                        <div>
+                            <h2>GÃ¶rev Durumu</h2>
+                            <p>Ä°stasyon tetikleme ve gÃ¶rev hazÄ±rlÄ±ÄŸÄ±</p>
+                        </div>
+                        <span id="missionBadge" class="badge">BEKLEMEDE</span>
+                    </div>
+
+                    <div id="missionStatusBox" class="mission normal">BEKLEMEDE</div>
+
+                    <div class="mission-actions">
+                        <button id="missionStopBtn" class="mission-stop-btn" onclick="missionStop()">MotorlarÄ± Durdur</button>
+                        <button id="missionResetBtn" class="mission-reset-btn" onclick="missionReset()">GÃ¶revi SÄ±fÄ±rla</button>
+                    </div>
+
+                    <div class="mini-grid">
+                        <div>
+                            <span>Maks. Hareket</span>
+                            <strong id="maxMovementValue">0.00</strong>
+                        </div>
+                        <div>
+                            <span>Mute</span>
+                            <strong id="muteValue">0</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel combo-control-panel">
+                    <div class="panel-header">
+                        <div>
+                            <h2>Analiz ve Kamera Kontrol ModlarÄ±</h2>
+                            <p>AI analiz, pan-tilt slider ve otomatik tarama kontrolÃ¼</p>
+                        </div>
+                        <span class="badge dark">Kontrol</span>
+                    </div>
+
+                    <div class="combo-section ai-combo-section">
+                        <div class="combo-section-title">AI Analiz</div>
+
+                        <div class="donut-wrap combo-donut-wrap">
+                            <div class="donut">
+                                <span id="detectedCountDonut">0</span>
+                                <small>Nesne</small>
+                            </div>
+
+                            <div class="drone-status">
+                                <p><span class="green-dot"></span>AI HAT aktif</p>
+                                <p><span class="cyan-dot"></span>Kamera akÄ±ÅŸÄ± canlÄ±</p>
+                                <p><span class="orange-dot"></span>YOLO postprocess</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="combo-section">
+                        <div class="combo-section-title">Pan-Tilt Slider Kontrol</div>
+
+                        <div class="servo-control combo-servo-control">
+                            <div class="servo-row">
+                                <div>
+                                    <strong>PAN / SaÄŸ-Sol</strong>
+                                    <span id="panValue">1300</span>
+                                </div>
+
+                                <input
+                                    id="panSlider"
+                                    type="range"
+                                    min="450"
+                                    max="2500"
+                                    value="1300"
+                                    step="10"
+                                    oninput="previewServoValue('pan')"
+                                    onchange="sendServoValue('pan')"
+                                >
+
+                                <div class="servo-mini-buttons">
+                                    <button onclick="servoLeft()">Sol</button>
+                                    <button onclick="servoCenter()">Merkez</button>
+                                    <button onclick="servoRight()">SaÄŸ</button>
+                                </div>
+                            </div>
+
+                            <div class="servo-row">
+                                <div>
+                                    <strong>TILT / YukarÄ±-AÅŸaÄŸÄ±</strong>
+                                    <span id="tiltValue">1500</span>
+                                </div>
+
+                                <input
+                                    id="tiltSlider"
+                                    type="range"
+                                    min="650"
+                                    max="2000"
+                                    value="1500"
+                                    step="10"
+                                    oninput="previewServoValue('tilt')"
+                                    onchange="sendServoValue('tilt')"
+                                >
+
+                                <div class="servo-mini-buttons">
+                                    <button onclick="servoDown()">AÅŸaÄŸÄ±</button>
+                                    <button onclick="servoCenter()">Merkez</button>
+                                    <button onclick="servoUp()">YukarÄ±</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="combo-section">
+                        <div class="combo-section-title">Tarama ModlarÄ±</div>
+
+                        <div class="servo-buttons scan-mode-buttons combo-scan-buttons">
+                            <button onclick="servoCenter()">Merkeze Al</button>
+                            <button onclick="servoStop()" class="servo-stop-btn">TaramayÄ± Durdur</button>
+                            <button onclick="servoScanPanSlow()">SaÄŸ-Sol Tarama</button>
+                            <button onclick="servoScanTiltSlow()">YukarÄ±-AÅŸaÄŸÄ± Tarama</button>
+                            <button onclick="servoScanFullSlow()">Tam Tarama</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="lower-grid">
+            <div class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h2>SarsÄ±ntÄ± GrafiÄŸi</h2>
+                        <p>Ä°stasyon telemetri verisi</p>
+                    </div>
+                    <span class="badge dark">CanlÄ±</span>
+                </div>
+
+                <div class="chart-box">
+                    <canvas id="movementChart"></canvas>
+                </div>
+            </div>
+
+            <div id="thermalSection" class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h2>Termal Harita</h2>
+                        <p>AMG8833 8x8 sÄ±caklÄ±k matrisi</p>
+                    </div>
+                    <span id="thermalBadge" class="badge">NORMAL</span>
+                </div>
+
+                <div class="thermal-stats">
+                    <div>
+                        <span>Maksimum</span>
+                        <strong id="thermalMax">0.0Â°C</strong>
+                    </div>
+                    <div>
+                        <span>Minimum</span>
+                        <strong id="thermalMin">0.0Â°C</strong>
+                    </div>
+                </div>
+
+                <div id="thermalGrid" class="thermal-grid"></div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h2>Sistem LoglarÄ±</h2>
+                        <p>CanlÄ± olay kayÄ±tlarÄ±</p>
+                    </div>
+                </div>
+
+                <div id="logsList" class="logs-list">
+                    <div>Log bekleniyor...</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-grid">
+            <div id="mapSection" class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h2>Operasyon HaritasÄ±</h2>
+                        <p>Ä°stasyon, Ä°HA rotasÄ± ve risk bÃ¶lgeleri</p>
+                    </div>
+                    <span class="badge dark">Harita</span>
+                </div>
+
+                <div id="map"></div>
+
+                <div class="legend">
+                    <span><i class="line cyan"></i>Ä°HA RotasÄ±</span>
+                    <span><i class="dot red"></i>Riskli BÃ¶lge</span>
+                    <span><i class="dot orange"></i>Orta Risk</span>
+                    <span><i class="dot green"></i>GÃ¼venli Alan</span>
+                </div>
+            </div>
+
+            <div id="cubeSection" class="panel cube-panel">
+                <div class="panel-header">
+                    <div>
+                        <h2>UÃ§uÅŸ Kontrol Durumu</h2>
+                        <p>Orange Cube MAVLink canlÄ± verisi</p>
+                    </div>
+                    <span id="cubeConnectionBadge" class="cube-badge offline">BAÄLANTI YOK</span>
+                </div>
+
+                <div class="cube-grid">
+                    <div class="cube-item"><span>UÃ§uÅŸ Modu</span><strong id="cubeMode">-</strong></div>
+                    <div class="cube-item"><span>ARM</span><strong id="cubeArmStatus">-</strong></div>
+                    <div class="cube-item"><span>Batarya</span><strong id="cubeBattery">-</strong></div>
+                    <div class="cube-item"><span>GPS</span><strong id="cubeGps">-</strong></div>
+                    <div class="cube-item"><span>Uydu</span><strong id="cubeSatellites">-</strong></div>
+                    <div class="cube-item"><span>Ä°rtifa</span><strong id="cubeAltitude">-</strong></div>
+                    <div class="cube-item"><span>Heading</span><strong id="cubeHeading">-</strong></div>
+                    <div class="cube-item"><span>Throttle</span><strong id="cubeThrottle">-</strong></div>
+                </div>
+
+                <div class="attitude-row">
+                    <div><span>Roll</span><strong id="cubeRoll">-Â°</strong></div>
+                    <div><span>Pitch</span><strong id="cubePitch">-Â°</strong></div>
+                    <div><span>Yaw</span><strong id="cubeYaw">-Â°</strong></div>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="/static/js/dashboard.js"></script>
+</body>
+</html>

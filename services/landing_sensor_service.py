@@ -1,4 +1,16 @@
+<<<<<<< HEAD
 """Inis yaklasma sensoru: MZ80 GPIO."""
+=======
+<<<<<<< HEAD
+"""Inis yaklasma sensoru: MZ80 GPIO."""
+=======
+<<<<<<< HEAD
+"""Inis yaklasma sensorleri: MZ80 GPIO ve Sharp analog mesafe."""
+=======
+"""Inis yaklasma sensoru: MZ80 GPIO."""
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
+>>>>>>> f0d59af20d4cf5734ccecd4ca8398321ce4993b1
 
 import math
 import threading
@@ -11,16 +23,44 @@ from config import (
     LANDING_MZ80_GPIO_PIN,
     LANDING_MZ80_READ_INTERVAL,
     LANDING_WARNING_DISTANCE_CM,
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+    SHARP_ADC_MAX_RAW,
+    SHARP_ADC_MAX_VOLTAGE,
+    SHARP_GP2Y0A41_MAX_VALID_CM,
+    SHARP_GP2Y0A41_MIN_VALID_CM,
+=======
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
+>>>>>>> f0d59af20d4cf5734ccecd4ca8398321ce4993b1
 )
 from services.logger_service import add_log
 from services.state import state
 
 try:
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
+>>>>>>> f0d59af20d4cf5734ccecd4ca8398321ce4993b1
     from services.autonomous_mission_service import update_landing_sensor_status
 except Exception:
     update_landing_sensor_status = None
 
 try:
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
+>>>>>>> f0d59af20d4cf5734ccecd4ca8398321ce4993b1
     from gpiozero import DigitalInputDevice
 
     GPIOZERO_AVAILABLE = True
@@ -48,10 +88,64 @@ def _round_or_none(value, digits=1):
         return None
 
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+def sharp_voltage_to_cm(voltage):
+    """GP2Y0A41SK0F icin yaklasik 4-30 cm donusumu."""
+    try:
+        voltage = float(voltage)
+    except Exception:
+        return None
+
+    if voltage <= 0.05:
+        return None
+
+    # GP2Y0A41SK0F pratik kalibrasyon egrisi; sahada katsayi gerekirse config'e tasinir.
+    distance = 12.08 * (voltage ** -1.058)
+    if distance < SHARP_GP2Y0A41_MIN_VALID_CM or distance > SHARP_GP2Y0A41_MAX_VALID_CM:
+        return None
+    return distance
+
+
+def sharp_raw_to_voltage(raw_value):
+    try:
+        raw = float(raw_value)
+    except Exception:
+        return None
+
+    if raw <= 0:
+        return None
+
+    # Bazı MAVLink alanlari mV tasiyabilir, bazilari ADC count tasir.
+    if raw > SHARP_ADC_MAX_RAW and raw <= 5000:
+        return raw / 1000.0
+
+    return (raw / SHARP_ADC_MAX_RAW) * SHARP_ADC_MAX_VOLTAGE
+
+
+def _compute_proximity(mz80_detected=None, sharp_cm=None):
+    distances = []
+    if mz80_detected:
+        distances.append(float(LANDING_MZ80_DETECT_DISTANCE_CM))
+    if sharp_cm is not None:
+        distances.append(float(sharp_cm))
+=======
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
+>>>>>>> f0d59af20d4cf5734ccecd4ca8398321ce4993b1
 def _compute_proximity(mz80_detected=None):
     distances = []
     if mz80_detected:
         distances.append(float(LANDING_MZ80_DETECT_DISTANCE_CM))
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
+>>>>>>> f0d59af20d4cf5734ccecd4ca8398321ce4993b1
 
     nearest = min(distances) if distances else None
 
@@ -69,7 +163,20 @@ def _update_landing_state(**updates):
 
     snapshot = state.snapshot()
     mz80_detected = updates.get("landing_mz80_detected", snapshot.get("landing_mz80_detected"))
+<<<<<<< HEAD
     nearest, level, text, alert = _compute_proximity(mz80_detected)
+=======
+<<<<<<< HEAD
+    nearest, level, text, alert = _compute_proximity(mz80_detected)
+=======
+<<<<<<< HEAD
+    sharp_cm = updates.get("landing_sharp_distance_cm", snapshot.get("landing_sharp_distance_cm"))
+    nearest, level, text, alert = _compute_proximity(mz80_detected, sharp_cm)
+=======
+    nearest, level, text, alert = _compute_proximity(mz80_detected)
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
+>>>>>>> f0d59af20d4cf5734ccecd4ca8398321ce4993b1
 
     payload = {
         **updates,
@@ -81,6 +188,14 @@ def _update_landing_state(**updates):
     }
     state.update(**payload)
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
+>>>>>>> f0d59af20d4cf5734ccecd4ca8398321ce4993b1
     if update_landing_sensor_status is not None:
         try:
             update_landing_sensor_status(
@@ -95,11 +210,46 @@ def _update_landing_state(**updates):
         except Exception:
             pass
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
+>>>>>>> f0d59af20d4cf5734ccecd4ca8398321ce4993b1
     if level != _last_proximity_level and level in ("warn", "danger"):
         add_log(f"Inis sensor uyarisi: {text} ({payload['landing_nearest_distance_cm']} cm)")
     _last_proximity_level = level
 
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+def update_sharp_distance(distance_cm=None, voltage=None, raw=None, source="mavlink"):
+    if distance_cm is None and voltage is None and raw is not None:
+        voltage = sharp_raw_to_voltage(raw)
+
+    if distance_cm is None and voltage is not None:
+        distance_cm = sharp_voltage_to_cm(voltage)
+
+    updates = {
+        "landing_sharp_connected": distance_cm is not None or voltage is not None or raw is not None,
+        "landing_sharp_distance_cm": _round_or_none(distance_cm, 1),
+        "landing_sharp_voltage": _round_or_none(voltage, 3),
+        "landing_sharp_raw": _round_or_none(raw, 1),
+        "landing_sharp_source": source,
+        "landing_sharp_last_time": time.time(),
+    }
+    _update_landing_state(**updates)
+    return updates
+
+
+=======
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
+>>>>>>> f0d59af20d4cf5734ccecd4ca8398321ce4993b1
 def _read_mz80_loop():
     global _last_mz80_log_state
 

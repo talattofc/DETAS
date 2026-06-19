@@ -13,6 +13,13 @@ from config import (
     AUTO_MISSION_MIN_BATTERY_VOLTAGE,
     AUTO_MISSION_MIN_SATELLITES,
     AUTO_MISSION_RETRIGGER_COOLDOWN_SECONDS,
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+    AUTO_TAKEOFF_ALTITUDE_M,
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
+>>>>>>> f0d59af20d4cf5734ccecd4ca8398321ce4993b1
     MAVLINK_BAUD,
     MAVLINK_HEARTBEAT_TIMEOUT,
     MAVLINK_PORT,
@@ -447,6 +454,39 @@ def _arm_vehicle(timeout=10.0):
         return False, str(exc)
 
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+def _send_takeoff(altitude_m):
+    master = _get_master()
+    if master is None:
+        return False, "MAVLink master yok"
+
+    try:
+        altitude_m = float(altitude_m)
+        target_system, target_component = _target_ids(master)
+        with _command_lock:
+            master.mav.command_long_send(
+                target_system,
+                target_component,
+                mavutil.mavlink.MAV_CMD_NAV_TAKEOFF,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                altitude_m,
+            )
+        return True, None
+    except Exception as exc:
+        return False, str(exc)
+
+
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
+>>>>>>> f0d59af20d4cf5734ccecd4ca8398321ce4993b1
 def _send_mission_start():
     master = _get_master()
     if master is None:
@@ -485,36 +525,110 @@ def _wait_until(predicate, timeout, step=0.25):
     return False
 
 
+<<<<<<< HEAD
 def _auto_survey_mission_loop():
     try:
+=======
+<<<<<<< HEAD
+def _auto_survey_mission_loop():
+    try:
+=======
+def _wait_for_takeoff_altitude(target_altitude_m, timeout=90.0):
+    target_altitude_m = float(target_altitude_m)
+    approach_altitude = max(1.0, target_altitude_m * 0.85)
+
+    def reached():
+        altitude = float(get_status().get("altitude") or 0.0)
+        _set_status(mission_message=f"Kalkis: {altitude:.1f}/{target_altitude_m:.1f} m")
+        return altitude >= approach_altitude
+
+    return _wait_until(reached, timeout=timeout, step=0.5)
+
+
+def _auto_survey_mission_loop():
+    try:
+        target_altitude = float(AUTO_TAKEOFF_ALTITUDE_M)
+
+        _set_mission_phase("guided", "GUIDED moda geciliyor", running=True)
+        ok, error = _set_mode("GUIDED")
+        if not ok:
+            raise RuntimeError(error or "GUIDED moda gecilemedi")
+
+        _set_mission_phase("arming", "ARM ediliyor", running=True)
+        ok, error = _arm_vehicle()
+        if not ok:
+            raise RuntimeError(error or "ARM basarisiz")
+
+        _set_mission_phase(
+            "takeoff",
+            f"{target_altitude:.1f} m irtifaya kalkis komutu gonderiliyor",
+            running=True,
+        )
+        ok, error = _send_takeoff(target_altitude)
+        if not ok:
+            raise RuntimeError(error or "Takeoff komutu gonderilemedi")
+
+        _set_mission_phase("takeoff_wait", "Hedef irtifaya yaklasmasi bekleniyor", running=True)
+        if not _wait_for_takeoff_altitude(target_altitude):
+            raise TimeoutError("Takeoff hedef irtifasina zamaninda yaklasamadi")
+
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
+>>>>>>> f0d59af20d4cf5734ccecd4ca8398321ce4993b1
         _set_mission_phase("auto", "AUTO moda geciliyor", running=True)
         ok, error = _set_mode("AUTO")
         if not ok:
             raise RuntimeError(error or "AUTO moda gecilemedi")
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> f0d59af20d4cf5734ccecd4ca8398321ce4993b1
         _set_mission_phase("arming", "AUTO modda ARM komutu gonderiliyor", running=True)
         ok, error = _arm_vehicle()
         if not ok:
             raise RuntimeError(error or "ARM basarisiz")
 
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
+>>>>>>> f0d59af20d4cf5734ccecd4ca8398321ce4993b1
         _set_mission_phase("mission_start", "Mission start komutu gonderiliyor", running=True)
         ok, error = _send_mission_start()
         if not ok:
             raise RuntimeError(error or "Mission start komutu gonderilemedi")
 
         _set_status(mission_finished_time=time.time())
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> f0d59af20d4cf5734ccecd4ca8398321ce4993b1
         _set_mission_phase(
             "started",
             "AUTO gorev baslatildi; TAKEOFF/waypoint/RTL Cube mission icinden calisacak",
             running=False,
         )
+<<<<<<< HEAD
+=======
+=======
+        _set_mission_phase("started", "Otonom tarama gorevi baslatildi", running=False)
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
+>>>>>>> f0d59af20d4cf5734ccecd4ca8398321ce4993b1
     except Exception as exc:
         _set_status(mission_finished_time=time.time())
         _set_mission_phase("error", "Otonom gorev durdu", error=str(exc), running=False)
 
 
 def start_auto_survey_mission():
+<<<<<<< HEAD
     """Preflight sonrasi AUTO moda gecip ARM ederek yuklu mission'i baslatir."""
+=======
+<<<<<<< HEAD
+    """Preflight sonrasi AUTO moda gecip ARM ederek yuklu mission'i baslatir."""
+=======
+    """Preflight sonrasi GUIDED takeoff + AUTO mission start akisini baslatir."""
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
+>>>>>>> f0d59af20d4cf5734ccecd4ca8398321ce4993b1
     global _mission_thread
 
     now = time.time()

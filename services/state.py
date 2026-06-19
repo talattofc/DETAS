@@ -97,6 +97,21 @@ class AppState:
         self.landing_mz80_detected = False
         self.landing_mz80_distance_cm = None
         self.landing_mz80_last_time = 0.0
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+        self.landing_sharp_connected = False
+        self.landing_sharp_distance_cm = None
+        self.landing_sharp_voltage = None
+        self.landing_sharp_raw = None
+        self.landing_sharp_source = "none"
+        self.landing_sharp_last_time = 0.0
+=======
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
+>>>>>>> f0d59af20d4cf5734ccecd4ca8398321ce4993b1
         self.landing_nearest_distance_cm = None
         self.landing_proximity_level = "unknown"
         self.landing_proximity_text = "Bilinmiyor"
@@ -221,6 +236,21 @@ class AppState:
                 "landing_mz80_detected": self.landing_mz80_detected,
                 "landing_mz80_distance_cm": self.landing_mz80_distance_cm,
                 "landing_mz80_last_time": self.landing_mz80_last_time,
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+                "landing_sharp_connected": self.landing_sharp_connected,
+                "landing_sharp_distance_cm": self.landing_sharp_distance_cm,
+                "landing_sharp_voltage": self.landing_sharp_voltage,
+                "landing_sharp_raw": self.landing_sharp_raw,
+                "landing_sharp_source": self.landing_sharp_source,
+                "landing_sharp_last_time": self.landing_sharp_last_time,
+=======
+>>>>>>> 82cd033 (orange cube entegrasyonu otopilot)
+>>>>>>> b896abad72cec15526c5edf83a4468593bc2771f
+>>>>>>> f0d59af20d4cf5734ccecd4ca8398321ce4993b1
                 "landing_nearest_distance_cm": self.landing_nearest_distance_cm,
                 "landing_proximity_level": self.landing_proximity_level,
                 "landing_proximity_text": self.landing_proximity_text,
