@@ -49,6 +49,25 @@ MOTOR_TEST_THROTTLE_PERCENT = 22
 MOTOR_TEST_DURATION_SEC = 1.0
 MOTOR_TEST_PAUSE_SEC = 0.5
 MOTOR_TEST_MOTOR_COUNT = 4
+AUTO_MISSION_SEQUENCE_ENABLED = getattr(config, "AUTO_MISSION_SEQUENCE_ENABLED", True) if config else True
+AUTO_MISSION_EARTHQUAKE_CONFIRM_SEC = getattr(config, "AUTO_MISSION_EARTHQUAKE_CONFIRM_SEC", 3.0) if config else 3.0
+AUTO_MISSION_EARTHQUAKE_GAP_TOLERANCE_SEC = getattr(config, "AUTO_MISSION_EARTHQUAKE_GAP_TOLERANCE_SEC", 0.8) if config else 0.8
+AUTO_MISSION_TAKEOFF_ALTITUDE_M = getattr(config, "AUTO_MISSION_TAKEOFF_ALTITUDE_M", 3.0) if config else 3.0
+AUTO_MISSION_TAKEOFF_SETTLE_SEC = getattr(config, "AUTO_MISSION_TAKEOFF_SETTLE_SEC", 8.0) if config else 8.0
+AUTO_MISSION_SCAN_DURATION_SEC = getattr(config, "AUTO_MISSION_SCAN_DURATION_SEC", 45.0) if config else 45.0
+AUTO_MISSION_SCAN_MIN_ALTITUDE_M = getattr(config, "AUTO_MISSION_SCAN_MIN_ALTITUDE_M", 1.5) if config else 1.5
+AUTO_MISSION_LAND_AFTER_SCAN = getattr(config, "AUTO_MISSION_LAND_AFTER_SCAN", True) if config else True
+AUTO_MISSION_RTL_ON_STOP = getattr(config, "AUTO_MISSION_RTL_ON_STOP", True) if config else True
+AUTO_MISSION_REQUIRE_GPS = getattr(config, "AUTO_MISSION_REQUIRE_GPS", True) if config else True
+AUTO_MISSION_REQUIRE_HOME = getattr(config, "AUTO_MISSION_REQUIRE_HOME", True) if config else True
+AUTO_MISSION_MIN_SATELLITES = getattr(config, "AUTO_MISSION_MIN_SATELLITES", 8) if config else 8
+AUTO_MISSION_MIN_BATTERY_VOLTAGE = getattr(config, "AUTO_MISSION_MIN_BATTERY_VOLTAGE", 14.0) if config else 14.0
+AUTO_MISSION_MODE_CONFIRM_TIMEOUT_SEC = getattr(config, "AUTO_MISSION_MODE_CONFIRM_TIMEOUT_SEC", 5.0) if config else 5.0
+AUTO_MISSION_ARM_CONFIRM_TIMEOUT_SEC = getattr(config, "AUTO_MISSION_ARM_CONFIRM_TIMEOUT_SEC", 8.0) if config else 8.0
+AUTO_MISSION_START_ACK_TIMEOUT_SEC = getattr(config, "AUTO_MISSION_START_ACK_TIMEOUT_SEC", 3.0) if config else 3.0
+AUTO_MISSION_PREFLIGHT_TIMEOUT_SEC = getattr(config, "AUTO_MISSION_PREFLIGHT_TIMEOUT_SEC", 5.0) if config else 5.0
+AUTO_MISSION_SURVEY_START_RATIO = getattr(config, "AUTO_MISSION_SURVEY_START_RATIO", 0.85) if config else 0.85
+GCS_HEARTBEAT_INTERVAL_SEC = getattr(config, "GCS_HEARTBEAT_INTERVAL_SEC", 1.0) if config else 1.0
 
 
 # ============================================================
@@ -60,6 +79,7 @@ _master_lock = threading.RLock()
 _command_lock = threading.RLock()
 
 _reader_thread_started = False
+_gcs_heartbeat_thread_started = False
 _auto_mission_thread_started = False
 _stop_threads = threading.Event()
 
@@ -74,6 +94,14 @@ _last_status_text = ""
 _auto_event_latched = False
 _last_auto_arm_time = 0.0
 _last_quake_clear_time = 0.0
+_quake_candidate_start_time = 0.0
+_quake_last_seen_time = 0.0
+_auto_sequence_phase = "idle"
+_auto_sequence_started_time = 0.0
+_auto_takeoff_sent_time = 0.0
+_auto_scan_started_time = 0.0
+_auto_landing_started_time = 0.0
+_mission_capture = None
 
 
 # ============================================================
@@ -299,6 +327,13 @@ def request_mavlink_data_streams(master=None):
             mavutil.mavlink.MAVLINK_MSG_ID_RC_CHANNELS: 2,
         }
 
+        for optional_msg_id in [
+            getattr(mavutil.mavlink, "MAVLINK_MSG_ID_HOME_POSITION", None),
+            getattr(mavutil.mavlink, "MAVLINK_MSG_ID_EKF_STATUS_REPORT", None),
+        ]:
+            if optional_msg_id is not None:
+                message_rates[int(optional_msg_id)] = 1
+
         for msg_id, hz in message_rates.items():
             interval_us = int(1_000_000 / hz)
 
@@ -323,6 +358,49 @@ def request_mavlink_data_streams(master=None):
     except Exception as e:
         add_log(f"MAVLink veri akışı isteme hatası: {e}")
         return False
+
+
+def _send_gcs_heartbeat(master=None):
+    if mavutil is None:
+        return False
+
+    try:
+        if master is None:
+            master = get_master()
+
+        master.mav.heartbeat_send(
+            mavutil.mavlink.MAV_TYPE_GCS,
+            mavutil.mavlink.MAV_AUTOPILOT_INVALID,
+            0,
+            0,
+            mavutil.mavlink.MAV_STATE_ACTIVE,
+        )
+        return True
+    except Exception:
+        return False
+
+
+def gcs_heartbeat_loop():
+    add_log("GCS heartbeat thread'i başlatıldı")
+
+    while not _stop_threads.is_set():
+        if not _send_gcs_heartbeat():
+            _state_update(gcs_heartbeat_ok=False)
+        else:
+            _state_update(gcs_heartbeat_ok=True, gcs_heartbeat_last_time=time.time())
+
+        time.sleep(max(0.5, float(GCS_HEARTBEAT_INTERVAL_SEC)))
+
+
+def start_gcs_heartbeat_thread():
+    global _gcs_heartbeat_thread_started
+
+    if _gcs_heartbeat_thread_started:
+        return
+
+    t = threading.Thread(target=gcs_heartbeat_loop, daemon=True)
+    t.start()
+    _gcs_heartbeat_thread_started = True
 
 
 # ============================================================
@@ -416,6 +494,7 @@ def _handle_heartbeat(msg):
         mavlink_connected=True,
         cube_mode=mode,
         mode=mode,
+        cube_last_heartbeat=time.time(),
         cube_last_heartbeat_age=0.0
     )
 
@@ -589,8 +668,7 @@ def _handle_attitude(msg):
 
 def _handle_vfr_hud(msg):
     _state_update(
-        cube_altitude=_round(getattr(msg, "alt", 0), 2),
-        altitude=_round(getattr(msg, "alt", 0), 2),
+        cube_vfr_altitude=_round(getattr(msg, "alt", 0), 2),
         cube_groundspeed=_round(getattr(msg, "groundspeed", 0), 2),
         groundspeed=_round(getattr(msg, "groundspeed", 0), 2),
         cube_heading=_round(getattr(msg, "heading", 0), 1),
@@ -630,6 +708,34 @@ def _handle_statustext(msg):
     add_log(f"Cube: {text}")
 
 
+def _handle_home_position(msg):
+    try:
+        lat = getattr(msg, "latitude", 0) / 1e7
+        lon = getattr(msg, "longitude", 0) / 1e7
+        alt = getattr(msg, "altitude", 0) / 1000.0
+    except Exception:
+        return
+
+    available = bool(lat and lon)
+    _state_update(
+        cube_home_position_available=available,
+        cube_home_lat=lat if available else None,
+        cube_home_lng=lon if available else None,
+        cube_home_altitude_m=_round(alt, 2) if available else None,
+    )
+
+
+def _handle_ekf_status_report(msg):
+    try:
+        flags = int(getattr(msg, "flags", 0))
+    except Exception:
+        flags = 0
+
+    # ArduPilot için position estimate bitleri firmware'e göre değişebilir;
+    # burada 0 dışı flag minimum EKF verisi geldiğini gösteren emniyet sinyalidir.
+    _state_update(cube_ekf_ok=flags > 0, cube_ekf_flags=flags)
+
+
 def _handle_command_ack(msg):
     global _last_ack
 
@@ -649,6 +755,50 @@ def _handle_command_ack(msg):
         cube_last_command=command,
         cube_last_command_result=result
     )
+
+
+def _handle_mission_count(msg):
+    global _mission_capture
+
+    capture = _mission_capture
+    if not capture or not capture.get("active"):
+        return
+
+    try:
+        capture["count"] = int(getattr(msg, "count", 0))
+        capture["last_time"] = time.time()
+    except Exception:
+        capture["count"] = 0
+
+
+def _handle_mission_item(msg):
+    global _mission_capture
+
+    capture = _mission_capture
+    if not capture or not capture.get("active"):
+        return
+
+    try:
+        seq = int(getattr(msg, "seq", -1))
+        command = int(getattr(msg, "command", -1))
+    except Exception:
+        return
+
+    if seq < 0:
+        return
+
+    try:
+        msg_dict = msg.to_dict()
+    except Exception:
+        msg_dict = getattr(msg, "__dict__", {})
+
+    capture.setdefault("items", {})[seq] = {
+        "seq": seq,
+        "command": command,
+        "z": _get_float(msg_dict, "z", 0.0),
+        "last_time": time.time(),
+    }
+    capture["last_time"] = time.time()
 
 
 def _handle_message(msg):
@@ -674,6 +824,14 @@ def _handle_message(msg):
         _handle_statustext(msg)
     elif msg_type == "COMMAND_ACK":
         _handle_command_ack(msg)
+    elif msg_type == "MISSION_COUNT":
+        _handle_mission_count(msg)
+    elif msg_type in ("MISSION_ITEM", "MISSION_ITEM_INT"):
+        _handle_mission_item(msg)
+    elif msg_type == "HOME_POSITION":
+        _handle_home_position(msg)
+    elif msg_type == "EKF_STATUS_REPORT":
+        _handle_ekf_status_report(msg)
 
 
 # ============================================================
@@ -729,6 +887,7 @@ def start_mavlink_thread():
     t.start()
 
     _reader_thread_started = True
+    start_gcs_heartbeat_thread()
 
 
 # ============================================================
@@ -754,13 +913,170 @@ def _wait_ack(command, timeout=3.0):
     return None
 
 
+def _wait_for_state(predicate, timeout=5.0, interval=0.1):
+    deadline = time.time() + float(timeout)
+
+    while time.time() < deadline:
+        data = _state_snapshot()
+        try:
+            if predicate(data):
+                return True, data
+        except Exception:
+            pass
+        time.sleep(interval)
+
+    return False, _state_snapshot()
+
+
+def _wait_mode(mode_name, timeout=None):
+    mode_name = str(mode_name).upper()
+    ok, data = _wait_for_state(
+        lambda d: str(d.get("cube_mode", "") or "").upper() == mode_name,
+        timeout if timeout is not None else AUTO_MISSION_MODE_CONFIRM_TIMEOUT_SEC,
+        0.1,
+    )
+    return ok, data
+
+
+def _wait_armed(armed=True, timeout=None):
+    ok, data = _wait_for_state(
+        lambda d: _as_bool(d.get("cube_armed")) == bool(armed),
+        timeout if timeout is not None else AUTO_MISSION_ARM_CONFIRM_TIMEOUT_SEC,
+        0.1,
+    )
+    return ok, data
+
+
+def _request_home_position(master=None, target_system=None, target_component=None):
+    if mavutil is None:
+        return
+
+    try:
+        if master is None:
+            master = get_master()
+        if target_system is None or target_component is None:
+            target_system, target_component = _target_ids(master)
+
+        msg_id = getattr(mavutil.mavlink, "MAVLINK_MSG_ID_HOME_POSITION", None)
+        if msg_id is None:
+            return
+
+        master.mav.command_long_send(
+            target_system,
+            target_component,
+            mavutil.mavlink.MAV_CMD_REQUEST_MESSAGE,
+            0,
+            int(msg_id),
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+        )
+    except Exception:
+        return
+
+
+def _preflight_ready(timeout=None):
+    timeout = AUTO_MISSION_PREFLIGHT_TIMEOUT_SEC if timeout is None else timeout
+    master = get_master()
+    target_system, target_component = _target_ids(master)
+    _request_home_position(master, target_system, target_component)
+    started = time.time()
+
+    while time.time() - started < float(timeout):
+        data = _state_snapshot()
+        errors = []
+
+        if not _cube_connected():
+            errors.append("MAVLink baglantisi hazir degil")
+
+        gps_fix = int(data.get("cube_gps_fix") or data.get("gps_fix") or 0)
+        satellites = int(data.get("cube_satellites") or data.get("satellites") or 0)
+        battery_voltage = _get_float(data, "cube_battery_voltage", 0.0)
+        status_text = str(data.get("cube_last_status_text") or data.get("cube_status_text") or "").lower()
+
+        if AUTO_MISSION_REQUIRE_GPS:
+            if gps_fix < 3:
+                errors.append(f"GPS fix yetersiz: {gps_fix}")
+            if satellites < int(AUTO_MISSION_MIN_SATELLITES):
+                errors.append(f"Uydu yetersiz: {satellites}/{AUTO_MISSION_MIN_SATELLITES}")
+
+        if battery_voltage and battery_voltage < float(AUTO_MISSION_MIN_BATTERY_VOLTAGE):
+            errors.append(
+                f"Batarya dusuk: {battery_voltage:.2f}V < {AUTO_MISSION_MIN_BATTERY_VOLTAGE:.2f}V"
+            )
+
+        home_available = _as_bool(data.get("cube_home_position_available"))
+        if AUTO_MISSION_REQUIRE_HOME and not home_available:
+            errors.append("Home position hazir degil")
+
+        if "ahrs waiting for home" in status_text or "need position estimate" in status_text:
+            errors.append(f"ArduPilot hazir degil: {status_text}")
+
+        if not errors:
+            _state_update(
+                mission_preflight_ok=True,
+                mission_preflight_error=None,
+                mission_status="PREFLIGHT OK",
+            )
+            add_log("GPS fix OK")
+            add_log("Home position available")
+            return True, "Preflight OK"
+
+        _state_update(mission_preflight_ok=False, mission_preflight_error="; ".join(errors))
+        time.sleep(0.25)
+
+    data = _state_snapshot()
+    error = data.get("mission_preflight_error") or "Preflight timeout"
+    return False, error
+
+
 # ============================================================
 # ARM / DISARM / MODE
 # ============================================================
 
+def _cube_connected():
+    data = _state_snapshot()
+    return _as_bool(data.get("cube_connected") or data.get("mavlink_connected"))
+
+
+def _active_mission_phase():
+    data = _state_snapshot()
+    phase = str(data.get("auto_sequence_phase", _auto_sequence_phase) or "").lower()
+    status = str(data.get("mission_status", "") or "").upper()
+
+    if phase in ("confirmed", "takeoff", "scan", "landing", "mission", "auto", "mission_start"):
+        return True
+    if _as_bool(data.get("auto_landing_active")):
+        return True
+    return any(token in status for token in ("OTONOM", "TARAMA", "KALKIŞ", "INIS", "İNİŞ"))
+
+
+def _in_air_for_disarm_guard():
+    data = _state_snapshot()
+    altitude = _get_float(data, "cube_altitude", 0.0)
+    throttle = _get_float(data, "cube_throttle", 0.0)
+
+    if _active_mission_phase():
+        return True
+    if altitude > 0.5:
+        return True
+    if _cube_armed() and throttle > 5:
+        return True
+    return False
+
+
 def send_arm_command(arm=True):
     if mavutil is None:
         return {"ok": False, "error": "pymavlink yüklü değil"}
+
+    if not arm and _in_air_for_disarm_guard():
+        message = "Havadayken DISARM engellendi"
+        _state_update(mission_status=message)
+        add_log(message)
+        return {"ok": False, "arm": False, "error": message, "blocked": True}
 
     with _command_lock:
         try:
@@ -812,6 +1128,19 @@ def send_disarm_command():
     return send_arm_command(False)
 
 
+def send_rtl_command():
+    add_log("RTL requested")
+    result = set_mode("RTL")
+    if result.get("ok"):
+        ok, _ = _wait_mode("RTL", timeout=5.0)
+        _state_update(
+            mission_status="Görev iptal edildi, RTL başlatıldı" if ok else "RTL komutu gönderildi, doğrulama bekleniyor",
+            auto_sequence_phase="rtl",
+        )
+        add_log("RTL confirmed" if ok else "RTL confirmation timeout")
+    return result
+
+
 def set_mode(mode_name):
     if mavutil is None:
         return {"ok": False, "error": "pymavlink yüklü değil"}
@@ -852,6 +1181,299 @@ def set_alt_hold_mode():
 
 def set_loiter_mode():
     return set_mode("LOITER")
+
+
+def send_guided_descent_velocity(vz_down_mps):
+    """GUIDED modda asagi yonlu hiz istegi gonderir; pozitif z NED'de asagidir."""
+    if mavutil is None:
+        return {"ok": False, "error": "pymavlink yüklü değil"}
+
+    try:
+        vz_down_mps = max(0.0, min(float(vz_down_mps), 1.5))
+    except Exception:
+        vz_down_mps = 0.0
+
+    with _command_lock:
+        try:
+            master = get_master()
+            target_system, target_component = _target_ids(master)
+            mavlink = mavutil.mavlink
+
+            type_mask = (
+                getattr(mavlink, "POSITION_TARGET_TYPEMASK_X_IGNORE", 1)
+                | getattr(mavlink, "POSITION_TARGET_TYPEMASK_Y_IGNORE", 2)
+                | getattr(mavlink, "POSITION_TARGET_TYPEMASK_Z_IGNORE", 4)
+                | getattr(mavlink, "POSITION_TARGET_TYPEMASK_AX_IGNORE", 64)
+                | getattr(mavlink, "POSITION_TARGET_TYPEMASK_AY_IGNORE", 128)
+                | getattr(mavlink, "POSITION_TARGET_TYPEMASK_AZ_IGNORE", 256)
+                | getattr(mavlink, "POSITION_TARGET_TYPEMASK_YAW_IGNORE", 1024)
+                | getattr(mavlink, "POSITION_TARGET_TYPEMASK_YAW_RATE_IGNORE", 2048)
+            )
+            frame = getattr(mavlink, "MAV_FRAME_BODY_NED", mavlink.MAV_FRAME_LOCAL_NED)
+
+            master.mav.set_position_target_local_ned_send(
+                int(time.time() * 1000) & 0xFFFFFFFF,
+                target_system,
+                target_component,
+                frame,
+                type_mask,
+                0,
+                0,
+                0,
+                0,
+                0,
+                vz_down_mps,
+                0,
+                0,
+                0,
+                0,
+                0,
+            )
+            return {"ok": True, "vz_down_mps": vz_down_mps}
+        except Exception as e:
+            add_log(f"GUIDED inis hiz komutu hatasi: {e}")
+            return {"ok": False, "error": str(e), "vz_down_mps": vz_down_mps}
+
+
+def stop_guided_velocity():
+    return send_guided_descent_velocity(0.0)
+
+
+def send_takeoff_command(altitude_m=None):
+    """Manuel debug icindir; otomatik gorev akisi TAKEOFF komutu gondermez."""
+    if mavutil is None:
+        return {"ok": False, "error": "pymavlink yüklü değil"}
+
+    try:
+        altitude_m = float(altitude_m if altitude_m is not None else AUTO_MISSION_TAKEOFF_ALTITUDE_M)
+    except Exception:
+        altitude_m = AUTO_MISSION_TAKEOFF_ALTITUDE_M
+
+    altitude_m = max(1.0, min(altitude_m, 20.0))
+
+    with _command_lock:
+        try:
+            master = get_master()
+            target_system, target_component = _target_ids(master)
+            master.mav.command_long_send(
+                target_system,
+                target_component,
+                mavutil.mavlink.MAV_CMD_NAV_TAKEOFF,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                altitude_m,
+            )
+            add_log(f"Otonom kalkis komutu gonderildi: {altitude_m:.1f} m")
+            return {"ok": True, "altitude_m": altitude_m}
+        except Exception as e:
+            add_log(f"Otonom kalkis komutu hatasi: {e}")
+            return {"ok": False, "error": str(e), "altitude_m": altitude_m}
+
+
+def send_mission_start_command():
+    """Yuklu AUTO mission'i baslatir ve COMMAND_ACK bekler."""
+    if mavutil is None:
+        return {"ok": False, "error": "pymavlink yüklü değil"}
+
+    with _command_lock:
+        try:
+            master = get_master()
+            target_system, target_component = _target_ids(master)
+            _clear_ack()
+            add_log("Mission start requested")
+            master.mav.command_long_send(
+                target_system,
+                target_component,
+                mavutil.mavlink.MAV_CMD_MISSION_START,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+            )
+            ack = _wait_ack(
+                mavutil.mavlink.MAV_CMD_MISSION_START,
+                timeout=float(AUTO_MISSION_START_ACK_TIMEOUT_SEC),
+            )
+            result = ack.get("result") if ack else None
+            ok = result == 0
+            _state_update(
+                mission_start_sent=ok,
+                mission_start_ack_result=result,
+            )
+            add_log("MISSION STARTED" if ok else f"Mission start ACK hatasi: {result}")
+            return {
+                "ok": ok,
+                "ack_result": result,
+                "message": "AUTO mission start komutu gonderildi" if ok else "AUTO mission start onaylanmadi",
+            }
+        except Exception as e:
+            add_log(f"AUTO mission start komutu hatasi: {e}")
+            return {"ok": False, "error": str(e)}
+
+
+def _request_mission_item(master, target_system, target_component, seq):
+    try:
+        master.mav.mission_request_int_send(target_system, target_component, int(seq))
+        return
+    except Exception:
+        pass
+
+    try:
+        master.mav.mission_request_send(target_system, target_component, int(seq))
+    except Exception:
+        pass
+
+
+def _mission_has_takeoff(timeout=8.0):
+    """Yuklu mission icinde TAKEOFF 5m, waypoint 5m ve RTL var mi kontrol eder."""
+    global _mission_capture
+
+    if mavutil is None:
+        return False, "pymavlink yüklü değil"
+
+    with _command_lock:
+        master = get_master()
+        target_system, target_component = _target_ids(master)
+        started = time.time()
+
+        _mission_capture = {
+            "active": True,
+            "count": None,
+            "items": {},
+            "started": started,
+            "last_time": started,
+        }
+
+        try:
+            master.mav.mission_request_list_send(target_system, target_component)
+        except Exception as exc:
+            _mission_capture = None
+            return False, f"Mission listesi istenemedi: {exc}"
+
+        while time.time() - started < timeout:
+            capture = _mission_capture or {}
+            if capture.get("count") is not None:
+                break
+            time.sleep(0.05)
+
+        capture = _mission_capture or {}
+        count = capture.get("count")
+        if count is None:
+            _mission_capture = None
+            return False, "Mission listesi okunamadi"
+
+        try:
+            count = int(count)
+        except Exception:
+            count = 0
+
+        if count <= 0:
+            _mission_capture = None
+            return False, "Yuklu mission bulunamadi"
+
+        max_items = min(count, 60)
+        takeoff_cmd = int(mavutil.mavlink.MAV_CMD_NAV_TAKEOFF)
+        waypoint_cmd = int(mavutil.mavlink.MAV_CMD_NAV_WAYPOINT)
+        rtl_cmd = int(mavutil.mavlink.MAV_CMD_NAV_RETURN_TO_LAUNCH)
+        target_altitude = float(AUTO_MISSION_TAKEOFF_ALTITUDE_M)
+        altitude_tolerance = 0.75
+        takeoff_seq = None
+        rtl_seq = None
+        takeoff_altitude = None
+        waypoint_altitude_errors = []
+
+        for seq in range(max_items):
+            _request_mission_item(master, target_system, target_component, seq)
+            item_deadline = time.time() + 0.45
+
+            while time.time() < item_deadline:
+                capture = _mission_capture or {}
+                item = capture.get("items", {}).get(seq)
+
+                if item:
+                    command = int(item.get("command", -1))
+                    altitude = float(item.get("z") or 0.0)
+                    if command == takeoff_cmd:
+                        takeoff_seq = seq
+                        takeoff_altitude = altitude
+                    elif command == waypoint_cmd and seq > 0 and abs(altitude - target_altitude) > altitude_tolerance:
+                        waypoint_altitude_errors.append({"seq": seq, "altitude": round(altitude, 2)})
+                    elif command == rtl_cmd:
+                        rtl_seq = seq
+                    break
+
+                time.sleep(0.05)
+
+        if takeoff_seq is not None:
+            if abs(float(takeoff_altitude or 0.0) - target_altitude) > altitude_tolerance:
+                _state_update(
+                    mission_takeoff_check="bad_altitude",
+                    mission_item_count=count,
+                    mission_takeoff_seq=takeoff_seq,
+                    mission_rtl_seq=rtl_seq,
+                )
+                _mission_capture = None
+                return (
+                    False,
+                    "Mission TAKEOFF irtifasi 5m degil: "
+                    f"seq={takeoff_seq}, alt={float(takeoff_altitude or 0.0):.1f}m",
+                )
+
+            if waypoint_altitude_errors:
+                _state_update(
+                    mission_takeoff_check="bad_waypoint_altitude",
+                    mission_item_count=count,
+                    mission_takeoff_seq=takeoff_seq,
+                    mission_rtl_seq=rtl_seq,
+                )
+                _mission_capture = None
+                first_error = waypoint_altitude_errors[0]
+                return (
+                    False,
+                    "Mission waypoint irtifasi 5m degil: "
+                    f"seq={first_error['seq']}, alt={first_error['altitude']}m",
+                )
+
+            if rtl_seq is None:
+                _state_update(
+                    mission_takeoff_check="missing_rtl",
+                    mission_item_count=count,
+                    mission_takeoff_seq=takeoff_seq,
+                    mission_rtl_seq=None,
+                )
+                _mission_capture = None
+                return False, f"Mission icinde RTL bulunamadi: count={count}"
+
+            _state_update(
+                mission_takeoff_check="ok",
+                mission_item_count=count,
+                mission_takeoff_seq=takeoff_seq,
+                mission_rtl_seq=rtl_seq,
+            )
+            _mission_capture = None
+            return (
+                True,
+                "Mission TAKEOFF/waypoint/RTL kontrol OK: "
+                f"takeoff_seq={takeoff_seq}, rtl_seq={rtl_seq}, alt={target_altitude:.1f}m",
+            )
+
+        _state_update(
+            mission_takeoff_check="missing",
+            mission_item_count=count,
+            mission_takeoff_seq=None,
+            mission_rtl_seq=rtl_seq,
+        )
+        _mission_capture = None
+        return False, f"Mission icinde TAKEOFF bulunamadi: count={count}"
 
 
 # ============================================================
@@ -909,67 +1531,6 @@ def send_servo_pwm(servo_number, pwm):
         except Exception as e:
             add_log(f"Servo PWM hatası: {e}")
             return {"ok": False, "servo_number": servo_number, "pwm": pwm, "error": str(e)}
-
-
-def detas_set_pan(pwm):
-    return send_servo_pwm(PAN_SERVO_NUMBER, pwm)
-
-
-def detas_set_tilt(pwm):
-    return send_servo_pwm(TILT_SERVO_NUMBER, pwm)
-
-
-def detas_servo_center():
-    pan = detas_set_pan(PAN_CENTER_PWM)
-    time.sleep(0.1)
-    tilt = detas_set_tilt(TILT_CENTER_PWM)
-
-    return {
-        "ok": bool(pan.get("ok") and tilt.get("ok")),
-        "mode": "center",
-        "pan": PAN_CENTER_PWM,
-        "tilt": TILT_CENTER_PWM
-    }
-
-
-def detas_servo_stop():
-    return {"ok": True, "mode": "stop"}
-
-
-def detas_scan_pan_slow():
-    return {"ok": True, "mode": "pan_scan_pasif"}
-
-
-def detas_scan_tilt_slow():
-    return {"ok": True, "mode": "tilt_scan_pasif"}
-
-
-def detas_scan_full_slow():
-    return {"ok": True, "mode": "full_scan_pasif"}
-
-
-def _current_pwm(keys, default):
-    data = _state_snapshot()
-
-    for key in keys:
-        try:
-            value = data.get(key)
-            if value is not None and value != "":
-                return int(value)
-        except Exception:
-            pass
-
-    return int(default)
-
-
-def _move_pan_relative(delta):
-    current = _current_pwm(["servo_pan", "pan_pwm"], PAN_CENTER_PWM)
-    return detas_set_pan(current + int(delta))
-
-
-def _move_tilt_relative(delta):
-    current = _current_pwm(["servo_tilt", "tilt_pwm"], TILT_CENTER_PWM)
-    return detas_set_tilt(current + int(delta))
 
 
 # ============================================================
@@ -1064,10 +1625,209 @@ def _cube_armed():
     return status == "ARMED"
 
 
+def _set_auto_sequence_phase(phase, status=None, error=None):
+    global _auto_sequence_phase
+
+    _auto_sequence_phase = phase
+    _state_update(
+        auto_sequence_phase=phase,
+        auto_sequence_error=error,
+        mission_status=status or phase,
+    )
+
+
+def _quake_confirmed(quake, now):
+    global _quake_candidate_start_time, _quake_last_seen_time
+
+    if quake:
+        _quake_last_seen_time = now
+        if _quake_candidate_start_time <= 0:
+            _quake_candidate_start_time = now
+            _state_update(mission_status="DEPREM DOĞRULANIYOR")
+        return (now - _quake_candidate_start_time) >= float(AUTO_MISSION_EARTHQUAKE_CONFIRM_SEC)
+
+    if _quake_last_seen_time and (now - _quake_last_seen_time) <= float(AUTO_MISSION_EARTHQUAKE_GAP_TOLERANCE_SEC):
+        return (now - _quake_candidate_start_time) >= float(AUTO_MISSION_EARTHQUAKE_CONFIRM_SEC)
+
+    _quake_candidate_start_time = 0.0
+    _quake_last_seen_time = 0.0
+    return False
+
+
+def _start_servo_scan_for_mission():
+    try:
+        from services import servo_service
+
+        return servo_service.servo_scan()
+    except Exception as exc:
+        add_log(f"Otonom tarama baslatma hatasi: {exc}")
+        return {"ok": False, "error": str(exc)}
+
+
+def _stop_servo_scan_for_mission():
+    try:
+        from services import servo_service
+
+        return servo_service.servo_stop()
+    except Exception as exc:
+        add_log(f"Otonom tarama durdurma hatasi: {exc}")
+        return {"ok": False, "error": str(exc)}
+
+
+def _start_auto_landing_for_mission():
+    try:
+        from services.auto_landing_service import start_auto_landing
+
+        return start_auto_landing()
+    except Exception as exc:
+        add_log(f"Otonom inis baslatma hatasi: {exc}")
+        return {"ok": False, "error": str(exc)}
+
+
+def _stop_auto_landing_for_mission():
+    try:
+        from services.auto_landing_service import stop_auto_landing
+
+        return stop_auto_landing()
+    except Exception:
+        return {"ok": False}
+
+
+def _start_autonomous_takeoff(now):
+    global _auto_takeoff_sent_time, _auto_sequence_started_time
+
+    data = _state_snapshot()
+    phase = str(data.get("auto_sequence_phase", _auto_sequence_phase) or "").lower()
+    if phase in ("mission", "scan", "landing", "auto", "mission_start"):
+        add_log("Otonom gorev zaten aktif; yeni tetik yok sayildi")
+        return False
+
+    _auto_sequence_started_time = now
+    _state_update(
+        auto_sequence_started_time=now,
+        auto_mission_enabled=True,
+        auto_mission_stopped=False,
+        mission_status="AUTO GÖREV HAZIRLANIYOR",
+    )
+
+    preflight_ok, preflight_message = _preflight_ready()
+    add_log(preflight_message)
+    if not preflight_ok:
+        _set_auto_sequence_phase("error", "PREFLIGHT HATASI", preflight_message)
+        add_log(f"Auto gorev durdu: {preflight_message}")
+        return False
+
+    mission_ok, mission_message = _mission_has_takeoff()
+    add_log(mission_message)
+    if not mission_ok:
+        _set_auto_sequence_phase("error", "MISSION TAKEOFF YOK", mission_message)
+        add_log(f"Auto gorev durdu: {mission_message}")
+        return False
+
+    add_log("AUTO mode requested")
+    mode_result = set_mode("AUTO")
+    if not mode_result.get("ok"):
+        _set_auto_sequence_phase("error", "AUTO MOD HATASI", mode_result.get("error"))
+        add_log(f"Auto gorev durdu: {mode_result}")
+        return False
+
+    mode_ok, mode_data = _wait_mode("AUTO")
+    if not mode_ok:
+        error = f"AUTO mode confirmation timeout: current={mode_data.get('cube_mode')}"
+        _set_auto_sequence_phase("error", "AUTO MOD DOGRULANAMADI", error)
+        add_log(error)
+        return False
+    add_log("AUTO mode confirmed")
+
+    if not _cube_armed():
+        add_log("ARM requested")
+        arm_result = send_arm_command(True)
+        if not arm_result.get("ok"):
+            _set_auto_sequence_phase("error", "ARM HATASI", arm_result.get("error") or str(arm_result))
+            add_log(f"Auto gorev ARM hatasi: {arm_result}")
+            return False
+
+    armed_ok, armed_data = _wait_armed(True)
+    if not armed_ok:
+        error = f"ARM confirmation timeout: armed={armed_data.get('cube_armed')}"
+        _set_auto_sequence_phase("error", "ARM DOGRULANAMADI", error)
+        add_log(error)
+        return False
+    add_log("ARM confirmed")
+
+    mission_start = send_mission_start_command()
+    if not mission_start.get("ok"):
+        _set_auto_sequence_phase("error", "MISSION START HATASI", mission_start.get("error") or str(mission_start))
+        add_log(f"Auto gorev mission start hatasi: {mission_start}")
+        return False
+
+    _auto_takeoff_sent_time = now
+    _set_auto_sequence_phase("mission", "MISSION STARTED")
+    add_log(f"Takeoff target: {float(AUTO_MISSION_TAKEOFF_ALTITUDE_M):.1f} m")
+    return True
+
+
+def _run_auto_sequence(now):
+    global _auto_scan_started_time, _auto_landing_started_time
+
+    data = _state_snapshot()
+    altitude = _get_float(data, "cube_altitude", 0.0)
+    mode = str(data.get("cube_mode", "") or "").upper()
+
+    if mode in ("RTL", "LAND"):
+        if _auto_sequence_phase in ("mission", "scan"):
+            result = _stop_servo_scan_for_mission()
+            _set_auto_sequence_phase(mode.lower(), f"{mode} MODU - TARAMA DURDU")
+            add_log(f"{mode} modunda tarama durduruldu: {result}")
+            add_log("Landing" if mode == "LAND" else "RTL confirmed")
+        return
+
+    if _auto_sequence_phase in ("mission", "scan") and mode not in ("AUTO", "", "-", "BILINMIYOR", "UNKNOWN"):
+        result = _stop_servo_scan_for_mission()
+        _set_auto_sequence_phase("abort", f"{mode} MODU - GOREV ABORT", f"Mode changed to {mode}")
+        add_log(f"Failsafe/abort detected: mode={mode}, scan_stop={result}")
+        return
+
+    if _auto_sequence_phase in ("mission", "takeoff"):
+        target_altitude = float(AUTO_MISSION_TAKEOFF_ALTITUDE_M)
+        scan_altitude = max(1.0, target_altitude * float(AUTO_MISSION_SURVEY_START_RATIO))
+
+        if altitude >= scan_altitude:
+            result = _start_servo_scan_for_mission()
+            _auto_scan_started_time = now
+            _set_auto_sequence_phase("scan", "TAKEOFF TAMAMLANDI - ŞERİT TARAMA")
+            add_log(
+                "Altitude >= "
+                f"{scan_altitude:.2f} m -> survey started: "
+                f"{altitude:.1f}/{target_altitude:.1f} m, {result}"
+            )
+        else:
+            _state_update(
+                mission_status=(
+                    "AUTO TAKEOFF BEKLENİYOR "
+                    f"{altitude:.1f}/{scan_altitude:.1f} m"
+                )
+            )
+        return
+
+    if _auto_sequence_phase == "scan":
+        elapsed = now - _auto_scan_started_time
+        _state_update(mission_status=f"ŞERİT TARAMA {elapsed:.0f}s")
+        return
+
+    if _auto_sequence_phase == "landing":
+        landing_active = bool(data.get("auto_landing_active"))
+        landing_status = str(data.get("auto_landing_status") or "Otonom iniş")
+        _state_update(mission_status=f"OTONOM İNİŞ - {landing_status}")
+
+        if not landing_active and (now - _auto_landing_started_time) > 2.0:
+            _set_auto_sequence_phase("complete", "GÖREV TAMAMLANDI")
+
+
 def auto_mission_loop():
     global _auto_event_latched, _last_auto_arm_time, _last_quake_clear_time
 
-    add_log("Otomatik deprem ARM thread'i başlatıldı")
+    add_log("Otomatik deprem görev thread'i başlatıldı")
 
     while not _stop_threads.is_set():
         try:
@@ -1075,25 +1835,29 @@ def auto_mission_loop():
             armed = _cube_armed()
             now = time.time()
 
-            if quake:
+            if AUTO_MISSION_SEQUENCE_ENABLED and _auto_sequence_phase in ("mission", "takeoff", "scan", "landing"):
+                _run_auto_sequence(now)
+                time.sleep(0.4)
+                continue
+
+            confirmed = _quake_confirmed(quake, now)
+
+            if confirmed:
                 _last_quake_clear_time = 0.0
 
                 first_trigger = not _auto_event_latched
                 retry_allowed = (not armed) and (now - _last_auto_arm_time > 8)
 
-                if AUTO_ARM_ON_EARTHQUAKE and (first_trigger or retry_allowed):
-                    result = send_arm_command(True)
+                if AUTO_MISSION_SEQUENCE_ENABLED and first_trigger:
+                    _auto_event_latched = True
+                    _last_auto_arm_time = now
+                    _set_auto_sequence_phase("confirmed", "DEPREM DOĞRULANDI")
+                    add_log("Deprem doğrulandı, otonom görev başlıyor")
+                    _start_autonomous_takeoff(now)
+                elif retry_allowed:
                     _last_auto_arm_time = now
                     _auto_event_latched = True
-
-                    _state_update(
-                        auto_arm_sent=True,
-                        auto_mission_enabled=True,
-                        auto_mission_stopped=False,
-                        mission_status="ARM KOMUTU GÖNDERİLDİ"
-                    )
-
-                    add_log(f"Deprem tetikleme ARM sonucu: {result}")
+                    add_log("Deprem tetigi tekrar geldi; duz ARM gonderilmedi")
 
             else:
                 if _auto_event_latched:
@@ -1101,9 +1865,10 @@ def auto_mission_loop():
                         _last_quake_clear_time = now
 
                     if now - _last_quake_clear_time >= 2.0:
-                        _auto_event_latched = False
-                        _state_update(auto_arm_sent=False)
-                        add_log("Deprem tetikleme sistemi tekrar hazır")
+                        if _auto_sequence_phase in ("idle", "confirmed", "complete", "error"):
+                            _auto_event_latched = False
+                            _state_update(auto_arm_sent=False)
+                            add_log("Deprem tetikleme sistemi tekrar hazır")
 
             time.sleep(0.4)
 
@@ -1138,112 +1903,40 @@ def stop_service():
     close_mavlink()
 
 
-def servo_pan(pwm):
-    return detas_set_pan(pwm)
-
-
-def servo_tilt(pwm):
-    return detas_set_tilt(pwm)
-
-
-def set_pan(pwm):
-    return detas_set_pan(pwm)
-
-
-def set_tilt(pwm):
-    return detas_set_tilt(pwm)
-
-
-def servo_left():
-    return _move_pan_relative(-SERVO_STEP_PWM)
-
-
-def servo_right():
-    return _move_pan_relative(SERVO_STEP_PWM)
-
-
-def servo_up():
-    return _move_tilt_relative(-SERVO_STEP_PWM)
-
-
-def servo_down():
-    return _move_tilt_relative(SERVO_STEP_PWM)
-
-
-def pan_left():
-    return servo_left()
-
-
-def pan_right():
-    return servo_right()
-
-
-def tilt_up():
-    return servo_up()
-
-
-def tilt_down():
-    return servo_down()
-
-
-def servo_center():
-    return detas_servo_center()
-
-
-def center_servo():
-    return detas_servo_center()
-
-
-def center_servos():
-    return detas_servo_center()
-
-
-def servo_stop():
-    return detas_servo_stop()
-
-
-def stop_servo():
-    return detas_servo_stop()
-
-
-def stop_servo_scan():
-    return detas_servo_stop()
-
-
-def servo_scan():
-    return detas_scan_full_slow()
-
-
-def scan_servo():
-    return detas_scan_full_slow()
-
-
-def start_servo_scan():
-    return detas_scan_full_slow()
-
-
-def servo_scan_full():
-    return detas_scan_full_slow()
-
-
-def servo_scan_pan_slow():
-    return detas_scan_pan_slow()
-
-
-def servo_scan_tilt_slow():
-    return detas_scan_tilt_slow()
-
-
-def servo_scan_full_slow():
-    return detas_scan_full_slow()
-
-
 def mission_arm():
-    return send_arm_command(True)
+    ok = _start_autonomous_takeoff(time.time())
+    data = _state_snapshot()
+    return {
+        "ok": bool(ok),
+        "message": data.get("mission_status", "AUTO+ARM akisi tamamlandi" if ok else "AUTO+ARM akisi baslatilamadi"),
+        "auto_sequence_phase": data.get("auto_sequence_phase", _auto_sequence_phase),
+        "mission_takeoff_check": data.get("mission_takeoff_check"),
+        "mission_item_count": data.get("mission_item_count"),
+    }
 
 
 def mission_stop():
-    return send_arm_command(False)
+    _stop_servo_scan_for_mission()
+    _stop_auto_landing_for_mission()
+
+    rtl_result = None
+    mission_active = _active_mission_phase()
+    should_rtl = AUTO_MISSION_RTL_ON_STOP and _cube_connected() and (mission_active or _cube_armed())
+    if should_rtl:
+        rtl_result = send_rtl_command()
+
+    status = "Görev iptal edildi, RTL başlatıldı" if should_rtl and rtl_result and rtl_result.get("ok") else "DURDURULDU"
+    _state_update(
+        auto_mission_stopped=True,
+        auto_sequence_phase="stopped",
+        mission_status=status,
+    )
+    return {
+        "ok": True if rtl_result is None else bool(rtl_result.get("ok")),
+        "message": status,
+        "rtl_sent": bool(rtl_result and rtl_result.get("ok")),
+        "rtl_result": rtl_result,
+    }
 
 
 def mission_disarm():
@@ -1252,21 +1945,50 @@ def mission_disarm():
 
 def mission_reset():
     global _auto_event_latched, _last_auto_arm_time, _last_quake_clear_time
+    global _quake_candidate_start_time, _quake_last_seen_time
+    global _auto_sequence_phase, _auto_sequence_started_time, _auto_takeoff_sent_time
+    global _auto_scan_started_time, _auto_landing_started_time
 
     _auto_event_latched = False
     _last_auto_arm_time = 0.0
     _last_quake_clear_time = 0.0
+    _quake_candidate_start_time = 0.0
+    _quake_last_seen_time = 0.0
+    _auto_sequence_phase = "idle"
+    _auto_sequence_started_time = 0.0
+    _auto_takeoff_sent_time = 0.0
+    _auto_scan_started_time = 0.0
+    _auto_landing_started_time = 0.0
+
+    _stop_servo_scan_for_mission()
+    _stop_auto_landing_for_mission()
+
+    rtl_result = None
+    mission_active = _active_mission_phase()
+    should_rtl = AUTO_MISSION_RTL_ON_STOP and _cube_connected() and (mission_active or _cube_armed())
+    if should_rtl:
+        rtl_result = send_rtl_command()
+
+    status = "Görev iptal edildi, RTL başlatıldı" if should_rtl and rtl_result and rtl_result.get("ok") else "BEKLEMEDE"
 
     _state_update(
-        mission_status="BEKLEMEDE",
+        mission_status=status,
         auto_arm_sent=False,
         auto_mission_stopped=False,
-        auto_mission_enabled=True
+        auto_mission_enabled=True,
+        auto_sequence_phase="idle",
+        auto_sequence_started_time=0.0,
+        auto_sequence_error=None,
     )
 
-    add_log("Görev durumu sıfırlandı")
+    add_log(status if should_rtl else "Görev durumu sıfırlandı")
 
-    return {"ok": True, "message": "Görev durumu sıfırlandı"}
+    return {
+        "ok": True if rtl_result is None else bool(rtl_result.get("ok")),
+        "message": status,
+        "rtl_sent": bool(rtl_result and rtl_result.get("ok")),
+        "rtl_result": rtl_result,
+    }
 
 
 def arm():
@@ -1294,7 +2016,7 @@ def disarm_motors():
 
 
 def stop_mission():
-    return send_arm_command(False)
+    return mission_stop()
 
 
 def reset_mission():

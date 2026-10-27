@@ -1,0 +1,54 @@
+{
+  "project": "DETAS",
+  "model_name": "detas_v3_7class_yolov8s_hailo8l_raw_heads",
+  "model_file": "detas_v3_7class_yolov8s_hailo8l_raw_heads.hef",
+  "model_sha256": "74a63e1559e8c3033811670dbad58343aa9dc4c3761582aa840636af1282f490",
+  "target_hardware": "Raspberry Pi 5 AI HAT 13 TOPS / Hailo-8L",
+  "input": {
+    "width": 640,
+    "height": 640,
+    "channels": 3,
+    "color_order": "RGB",
+    "dtype": "uint8",
+    "letterbox": true,
+    "letterbox_padding_value": 114,
+    "normalization": "HEF içinde 0-255 / 255.0"
+  },
+  "classes": [
+    "rubble",
+    "blocked_road",
+    "collapsed_building",
+    "damaged_vehicle",
+    "fire_smoke",
+    "open_road",
+    "flood_area"
+  ],
+  "class_count": 7,
+  "raw_output_heads": [
+    {
+      "stride": 8,
+      "bbox_channels": 64,
+      "class_channels": 7
+    },
+    {
+      "stride": 16,
+      "bbox_channels": 64,
+      "class_channels": 7
+    },
+    {
+      "stride": 32,
+      "bbox_channels": 64,
+      "class_channels": 7
+    }
+  ],
+  "postprocess": {
+    "location": "Raspberry Pi Python tarafı",
+    "decode": "YOLOv8 DFL decode",
+    "class_activation": "sigmoid",
+    "nms": "class-aware NMS",
+    "confidence_threshold": 0.5,
+    "nms_iou_threshold": 0.45,
+    "max_detections": 20
+  },
+  "note": "Bu HEF raw detection-head cikislarini verir. NMS HEF icinde degildir."
+}

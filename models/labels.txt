@@ -1,0 +1,7 @@
+rubble
+blocked_road
+collapsed_building
+damaged_vehicle
+fire_smoke
+open_road
+flood_area
